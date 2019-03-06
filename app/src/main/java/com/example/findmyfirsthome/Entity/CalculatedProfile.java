@@ -15,7 +15,7 @@ public class CalculatedProfile {
     private double maxPurchasePrice;
     private int maxMortgageTerm;
 
-    private HashMap calProfileDetails;
+    private HashMap<String, Object> calProfileDetails;
 
     //AHG get set
     public double getAHG()
@@ -72,10 +72,36 @@ public class CalculatedProfile {
         this.maxMortgageTerm = maxMortgageTerm;
     }
 
+    //Calculated Profile content in list get set
     public HashMap getCalProfileDetails()
     {
-        calProfileDetails = new HashMap();
+        this.calProfileDetails = new HashMap();
 
-        return calProfileDetails;
+        //get all fields and return as HashMap
+        //key of HashMap is the same as attribute
+        this.calProfileDetails.put("AHG", this.AHG);
+        this.calProfileDetails.put("SHG", this.SHG);
+        this.calProfileDetails.put("maxMortgageAmt", this.maxMortgageAmt);
+        this.calProfileDetails.put("maxPurchasePrice", this.maxPurchasePrice);
+        this.calProfileDetails.put("maxMortgageTerm", this.maxMortgageTerm);
+
+        return this.calProfileDetails;
+    }
+
+    public void setCalProfileDetails(HashMap calProfileDetails)
+    {
+        Object temp;
+
+        //set all fields from HashMap
+        temp = calProfileDetails.get("AHG");
+        this.AHG = temp == null ? 0 : (Double)temp;
+        temp = calProfileDetails.get("SHG");
+        this.SHG = temp == null ? 0 : (Double)temp;
+        temp = calProfileDetails.get("maxMortgageAmt");
+        this.maxMortgageAmt = temp == null ? 0 : (Double)temp;
+        temp = calProfileDetails.get("maxPurchasePrice");
+        this.maxPurchasePrice = temp == null ? 0 : (Double)temp;
+        temp = calProfileDetails.get("maxMortgageTerm");
+        this.maxMortgageTerm = temp == null ? 0 : (Integer) temp;
     }
 }
