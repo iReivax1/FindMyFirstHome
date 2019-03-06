@@ -32,7 +32,7 @@ public class AffordabilityReport {
         //put all the required data for report from CalculatedProfile entity and  HDBDevelopment entity
         this.initalReportDetails.put("CalculatedProfile", cp.getCalProfileDetails());
         //for each Loop
-        this.initalReportDetails.forEach((hdbd) -> this.hdbdForReportDetails.add(hdbd.getCalProfileDetails()));
+        this.initalReportDetails.forEach((hdbd) -> this.hdbdForReportDetails.add(hdbd.getDevelopmentDetails()));
         this.initalReportDetails.put("HDBDevelopment", hdbdForReportDetails);
 
         return initalReportDetails;
