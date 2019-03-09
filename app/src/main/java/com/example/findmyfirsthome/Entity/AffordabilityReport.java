@@ -6,8 +6,8 @@ import java.util.HashMap;
 public class AffordabilityReport {
     private CalculatedProfile cp;
     private ArrayList<HDBDevelopment> hdbdList;
-    private HashMap initalReportDetails;
-    private ArrayList<HashMap<String, Object>> hdbdForReportDetails;
+    private HashMap<String, Object> initalReportDetails;
+    private ArrayList<ArrayList> hdbForReportDetails;
 
 
     //CalculatedProfile association object Get Set
@@ -22,13 +22,16 @@ public class AffordabilityReport {
     {
         //initialize
         this.initalReportDetails = new HashMap<String, Object>();
-        this.hdbdForReportDetails = new ArrayList<HashMap<String, Object>>();
+        this.hdbForReportDetails = new ArrayList<ArrayList>();
 
         //put all the required data for report from CalculatedProfile entity and  HDBDevelopment entity
         this.initalReportDetails.put("CalculatedProfile", cp.getCalProfileDetails());
         //for each Loop
-        this.initalReportDetails.forEach((hdbd) -> this.hdbdForReportDetails.add(hdbd.getDevelopmentDetails()));
-        this.initalReportDetails.put("HDBDevelopment", hdbdForReportDetails);
+        for(HDBDevelopment hdbd : hdbdList)
+        {
+            this.hdbForReportDetails.add(hdbd.getDevelopmentDetails());
+        }
+        this.initalReportDetails.put("HDBDevelopment", hdbForReportDetails);
 
         return initalReportDetails;
     }

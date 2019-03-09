@@ -14,7 +14,7 @@ public class HDBDevelopment {
     private ArrayList<LatLng> coordinates;
     private ArrayList<MapData> amenities;
 
-    private HashMap<String, Object> developmentDetails;
+    private ArrayList developmentDetails;
 
     public HDBDevelopment() {}
 
@@ -110,11 +110,21 @@ public class HDBDevelopment {
         this.amenities = amenities;
     }
 
-    public HashMap<String, Object> getDevelopmentDetails()
+    public ArrayList getDevelopmentDetails()
     {
-        this.developmentDetails = new HashMap<String, Object>();
+        //initialize
+        this.developmentDetails = new ArrayList();
 
-        this.developmentDetails.put("")
+        //put them in ArrayList as ArrayList object does not inherit from Object class so cannot use HashMap
+        //added into ArrayList in order like the order of the attributes in this class
+        this.developmentDetails.add(getHDBFlatTypeDetailsList());
+        this.developmentDetails.add(this.developmentName);
+        this.developmentDetails.add(developmentDescription);
+        this.developmentDetails.add(this.affordable);
+        this.developmentDetails.add(this.coordinates);
+        this.developmentDetails.add(this.amenities);
+
+        return developmentDetails;
     }
 
 }
