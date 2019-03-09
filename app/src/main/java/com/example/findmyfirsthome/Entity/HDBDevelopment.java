@@ -11,15 +11,15 @@ public class HDBDevelopment {
     private String developmentName;
     private String developmentDescription;
     private boolean affordable;
-    private ArrayList<LatLng> coordinates;
+    private LatLng coordinates;
     private ArrayList<MapData> amenities;
 
-    private ArrayList developmentDetails;
+    private ArrayList developmentDetails ;
 
     public HDBDevelopment() {}
 
     public HDBDevelopment(ArrayList<HashMap<String, Object>> flatTypeList, String developmentName, String developmentDescription,
-                          boolean affordable, ArrayList<LatLng> coordinates, ArrayList<MapData> amenities)
+                          boolean affordable, LatLng coordinates, ArrayList<MapData> amenities)
     {
         //set data
         setHDBFlatTypeList(flatTypeList);
@@ -89,12 +89,12 @@ public class HDBDevelopment {
     }
 
     //coordinates GET SET
-    public ArrayList<LatLng> getCoordinates()
+    public LatLng getCoordinates()
     {
         return this.coordinates;
     }
 
-    public void setCoordinates(ArrayList<LatLng> coordinates)
+    public void setCoordinates(LatLng coordinates)
     {
         this.coordinates = coordinates;
     }
@@ -108,6 +108,14 @@ public class HDBDevelopment {
     public void setAmenities(ArrayList<MapData> amenities)
     {
         this.amenities = amenities;
+    }
+
+    public void setHdbFlatTypeList(ArrayList<HDBFlatType> hdbFlatTypeList) {
+        this.hdbFlatTypeList = hdbFlatTypeList;
+    }
+
+    public ArrayList<HDBFlatType> getHdbFlatTypeList() {
+        return hdbFlatTypeList;
     }
 
     public ArrayList getDevelopmentDetails()

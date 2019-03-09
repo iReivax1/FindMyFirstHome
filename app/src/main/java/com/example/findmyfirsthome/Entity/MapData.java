@@ -7,13 +7,13 @@ import java.util.ArrayList;
 public class MapData {
     private String amenitiesName;
     private String amenityType;
-    private ArrayList<LatLng> Coordinates;
+    private LatLng Coordinates;
 
     private ArrayList mapdataDetails;
 
     public MapData() {}
 
-    public MapData(String amenitiesName, String amenityType, ArrayList<LatLng> Coordinates)
+    public MapData(String amenitiesName, String amenityType, LatLng Coordinates)
     {
         this.amenitiesName = amenitiesName;
         this.amenityType = amenityType;
@@ -43,12 +43,12 @@ public class MapData {
     }
 
     //Coordinates GET SET
-    public ArrayList<LatLng> getCoordinatese()
+    public LatLng getCoordinates()
     {
         return this.Coordinates;
     }
 
-    public void setCoordinates(ArrayList<LatLng> Coordinates)
+    public void setCoordinates(LatLng Coordinates)
     {
         this.Coordinates = Coordinates;
     }

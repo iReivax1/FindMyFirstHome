@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class HDBFlatType {
     private double price;
-    private double flatType; //number of rooms
+    private int flatType; //number of rooms
     private boolean affordability;
 
     private HashMap<String, Object> flatTypeDetails;
@@ -20,7 +20,7 @@ public class HDBFlatType {
         temp = hdbFlatTypeDetails.get("price");
         this.price = temp == null ? 0 : (Double)temp;
         temp = hdbFlatTypeDetails.get("FlatType");
-        this.flatType = temp == null ? 0 : (Double)temp;
+        this.flatType = temp == null ? 0 : (int)temp;
         temp = hdbFlatTypeDetails.get("affordability");
         this.affordability = temp == null ? false : (Boolean)temp;
     }
@@ -37,12 +37,12 @@ public class HDBFlatType {
     }
 
     //flatType GET SET
-    public double getFlatType()
+    public int getFlatType()
     {
         return this.flatType;
     }
 
-    public void setFlatType(double flatType)
+    public void setFlatType(int flatType)
     {
         this.flatType = flatType;
     }

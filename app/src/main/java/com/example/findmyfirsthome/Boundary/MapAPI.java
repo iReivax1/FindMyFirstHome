@@ -22,10 +22,11 @@ import com.google.android.gms.maps.LocationSource;
 
 
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationSource{
+public class MapAPI extends FragmentActivity implements OnMapReadyCallback, LocationSource{
 
 
     private GoogleMap mMap;
+
 
     public void onPause() {
         super.onPause();
@@ -61,7 +62,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng Singapore = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(Singapore).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(Singapore));
- //     map.setLocationSource(mLocationSource);
+        //     map.setLocationSource(mLocationSource);
 //      map.setOnMapLongClickListener(mLocationSource);
 //      map.setMyLocationEnabled(true);
     }
