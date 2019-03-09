@@ -3,25 +3,112 @@ package com.example.findmyfirsthome.Entity;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class HDBDevelopment {
-    ArrayList<HDBFlatType> flatType;
-    String developmentName;
-    String developmentDescription;
-    boolean affordable;
-    ArrayList<LatLng> coordinates;
-    ArrayList<MapData> amenities;
+    private ArrayList<HDBFlatType> hdbFlatTypeList;
+    private ArrayList<HashMap<String, Object>> hdbFlatTypeDetailsList;
+    private String developmentName;
+    private String developmentDescription;
+    private boolean affordable;
+    private ArrayList<LatLng> coordinates;
+    private ArrayList<MapData> amenities;
 
-    //constructor
-    public HDBDevelopment()
+    public HDBDevelopment() {}
+
+    public HDBDevelopment(ArrayList<HashMap<String, Object>> flatTypeList, String developmentName, String developmentDescription,
+                          boolean affordable, ArrayList<LatLng> coordinates, ArrayList<MapData> amenities)
     {
-        this.flatType = fT;
-        this.developmentName = dN;
-        this.developmentDescription = dD;
+        //set data
+        setHDBFlatTypeList(flatTypeList);
+        this.developmentName = developmentName;
+        this.developmentDescription = developmentDescription;
         this.affordable = affordable;
-        this.coordinates = coord;
-        this.amenities = amen;
+        this.coordinates = coordinates;
+        this.amenities = amenities;
     }
+
+    //hdbFlatTypeDetailsList GET
+    public ArrayList<HashMap<String, Object>> getHDBFlatTypeDetailsList()
+    {
+        //initialize
+        this.hdbFlatTypeDetailsList = new ArrayList<HashMap<String, Object>>();
+
+        //get HashMap of data of each HDBFlatType
+        for(HDBFlatType hdbFlatType : hdbFlatTypeList)
+        {
+            this.hdbFlatTypeDetailsList.add(hdbFlatType.getFlatTypeDetails());
+        }
+
+        return this.hdbFlatTypeDetailsList;
+    }
+
+    //hdbFlatTypeList CREATE FlatType
+    public void setHDBFlatTypeList(ArrayList<HashMap<String, Object>> flatTypeList)
+    {
+        for(HashMap<String, Object>  hdbFlatTypeDetails :  flatTypeList)
+        {
+            //create HDBFlatType and add into the ArrayList
+            this.hdbFlatTypeList.add(new HDBFlatType(hdbFlatTypeDetails));
+        }
+    }
+
+    //developmentName GET SET
+    public String getDevelopmentName()
+    {
+        return this.developmentName;
+    }
+
+    public void setDevelopmentName(String developmentName)
+    {
+       this.developmentName = developmentName;
+    }
+
+    //developmentDescription GET SET
+    public String getDevelopmentDescription()
+    {
+        return this.developmentDescription;
+    }
+
+    public void setDevelopmentDescription(String developmentDescription)
+    {
+        this.developmentDescription = developmentDescription;
+    }
+
+    //affordable GET SET
+    public Boolean getAffordable()
+    {
+        return this.affordable;
+    }
+
+    public void setAffordable(Boolean affordable)
+    {
+        this.affordable = affordable;
+    }
+
+    //coordinates GET SET
+    public ArrayList<LatLng> getCoordinates()
+    {
+        return this.coordinates;
+    }
+
+    public void setCoordinates(ArrayList<LatLng> coordinates)
+    {
+        this.coordinates = coordinates;
+    }
+
+    //amenities GET SET
+    public ArrayList<MapData> getAmenities()
+    {
+        return this.amenities;
+    }
+
+    public void setAmenities(ArrayList<MapData> amenities)
+    {
+        this.amenities = amenities;
+    }
+
+    public void setData()
 
     public HDBDevelopment getHDB(){
         return this;

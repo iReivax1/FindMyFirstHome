@@ -17,11 +17,6 @@ public class AffordabilityReport {
     }
 
     //HDBDevelopment association object Get Set
-    public void setHDBDevelopmentList(ArrayList<HDBDevelopment> hdbDevelopmentList)
-    {
-        this.hdbdList = hdbDevelopmentList;
-    }
-
     //returns HashMap of data in List of Strings and Values
     public HashMap getInitalReportDetails()
     {
@@ -36,5 +31,10 @@ public class AffordabilityReport {
         this.initalReportDetails.put("HDBDevelopment", hdbdForReportDetails);
 
         return initalReportDetails;
+    }
+
+    public void setHDBDevelopmentList(ArrayList<HDBDevelopment> hdbDevelopmentList)
+    {
+        this.hdbdList = hdbDevelopmentList;
     }
 }
