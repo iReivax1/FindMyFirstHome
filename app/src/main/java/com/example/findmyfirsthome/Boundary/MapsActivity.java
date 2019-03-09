@@ -1,6 +1,5 @@
-package com.example.findmyfirsthome.Controller;
+package com.example.findmyfirsthome.Boundary;
 
-import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -77,6 +76,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .center(HDBLocation)
                 .radius(150000)
                 .visible(false));
+
+    }
+
+    @Override
+    public void activate(OnLocationChangedListener onLocationChangedListener) {
+    }
+
+    @Override
+    public void deactivate() {
 
     }
 }
