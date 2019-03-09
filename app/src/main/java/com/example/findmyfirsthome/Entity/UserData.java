@@ -42,7 +42,7 @@ public class UserData {
         this.isFirstTimeBuyer = isFirstTimeBuyer;
     }
 
-    //isSingaporean get set
+    //isSingaporean GET SET
     public boolean getIsSingaporean()
     {
         return this.isSingaporean;
@@ -53,7 +53,7 @@ public class UserData {
         this.isSingaporean = isSingaporean;
     }
 
-    //age get set
+    //age GET SET
     public int getAge()
     {
         return this.age;
@@ -64,7 +64,7 @@ public class UserData {
         this.age = age;
     }
 
-    //grossSalary get set
+    //grossSalary GET SET
     public double getGrossSalary()
     {
         return this.grossSalary;
@@ -75,7 +75,7 @@ public class UserData {
         this.grossSalary = grossSalary;
     }
 
-    //carLoan get set
+    //carLoan GET SET
     public double getCarLoan()
     {
         return this.carLoan;
@@ -86,7 +86,7 @@ public class UserData {
         this.carLoan = carLoan;
     }
 
-    //creditLoan get set
+    //creditLoan GET SET
     public double getCreditLoan()
     {
         return this.creditLoan;
@@ -97,7 +97,7 @@ public class UserData {
         this.creditLoan = creditLoan;
     }
 
-    //studyLoan get set
+    //studyLoan GET SET
     public double getStudyLoan()
     {
         return this.studyLoan;
@@ -108,7 +108,7 @@ public class UserData {
         this.studyLoan = studyLoan;
     }
 
-    //otherCommittment get set
+    //otherCommittment GET SET
     public double getOtherCommittment()
     {
         return this.otherCommittment;
@@ -119,7 +119,7 @@ public class UserData {
         this.otherCommittment = otherCommittment;
     }
 
-    //buyer1CPF get set
+    //buyer1CPF GET SET
     public double getBuyer1CPF()
     {
         return this.buyer1CPF;
@@ -130,7 +130,7 @@ public class UserData {
         this.buyer1CPF = buyer1CPF;
     }
 
-    //buyer2CPF get set
+    //buyer2CPF GET SET
     public double getBuyer2CPF()
     {
         return this.buyer2CPF;
@@ -141,7 +141,7 @@ public class UserData {
         this.buyer2CPF = buyer2CPF;
     }
 
-    //numberOfAdditionalHouseholdMemeber get set
+    //numberOfAdditionalHouseholdMemeber GET SET
     public int getNumberOfAdditionalHouseholdMemeber()
     {
         return this.numberOfAdditionalHouseholdMemeber;
@@ -152,7 +152,7 @@ public class UserData {
         this.numberOfAdditionalHouseholdMemeber = numberOfAdditionalHouseholdMemeber;
     }
 
-    //membersSalaryList get set
+    //membersSalaryList GET SET
     public ArrayList<Double> getMembersSalaryList()
     {
         return this.membersSalaryList;

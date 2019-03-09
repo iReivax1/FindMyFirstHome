@@ -5,7 +5,72 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 
 public class MapData {
-    String amenitiesName;
-    String amenityType;
-    ArrayList<LatLng> Coordinates;
+    private String amenitiesName;
+    private String amenityType;
+    private ArrayList<LatLng> Coordinates;
+
+    private ArrayList mapdataDetails;
+
+    public MapData() {}
+
+    public MapData(String amenitiesName, String amenityType, ArrayList<LatLng> Coordinates)
+    {
+        this.amenitiesName = amenitiesName;
+        this.amenityType = amenityType;
+        this.Coordinates = Coordinates;
+    }
+
+    //amenitiesName GET SET
+    public String getAmenitiesName()
+    {
+        return this.amenitiesName;
+    }
+
+    public void setAmenitiesName(String amenitiesName)
+    {
+        this.amenitiesName = amenitiesName;
+    }
+
+    //amenityType GET SET
+    public String getAmenityType()
+    {
+        return this.amenityType;
+    }
+
+    public void setAmenityType(String amenityType)
+    {
+        this.amenityType = amenityType;
+    }
+
+    //Coordinates GET SET
+    public ArrayList<LatLng> getCoordinatese()
+    {
+        return this.Coordinates;
+    }
+
+    public void setCoordinates(ArrayList<LatLng> Coordinates)
+    {
+        this.Coordinates = Coordinates;
+    }
+
+    //mapdataDetails GET SET
+    public ArrayList getMapdataDetails()
+    {
+        //initailize
+        this.mapdataDetails = new ArrayList();
+
+        //using ArrayList instead of HashMap as coordinates is ArrayList which cannot be converted into Object
+        //add data of attributes into ArrayList in the order of attributes in this class
+        this.mapdataDetails.add(this.amenitiesName);
+        this.mapdataDetails.add(this.amenityType);
+        this.mapdataDetails.add(this.Coordinates);
+
+        return this.mapdataDetails;
+    }
+
+    public void addMapdataDetails(ArrayList mapdataDetails)
+    {
+        this.mapdataDetails = mapdataDetails;
+    }
+
 }

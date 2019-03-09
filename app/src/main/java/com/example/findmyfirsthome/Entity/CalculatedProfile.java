@@ -17,7 +17,7 @@ public class CalculatedProfile {
 
     private HashMap<String, Object> calProfileDetails;
 
-    //AHG get set
+    //AHG GET SET
     public double getAHG()
     {
         return this.AHG;
@@ -28,7 +28,7 @@ public class CalculatedProfile {
         this.AHG = AHG;
     }
 
-    //SHG get set
+    //SHG GET SET
     public double getSHG()
     {
         return this.SHG;
@@ -39,7 +39,7 @@ public class CalculatedProfile {
         this.SHG = SHG;
     }
 
-    //maxMortgageAmt get set
+    //maxMortgageAmt GET SET
     public double getMaxMortgageAmt()
     {
         return this.maxMortgageAmt;
@@ -50,7 +50,7 @@ public class CalculatedProfile {
         this.maxMortgageAmt = maxMortgageAmt;
     }
 
-    //maxPurchasePrice get set
+    //maxPurchasePrice GET SET
     public double getMaxPurchasePrice()
     {
         return this.maxPurchasePrice;
@@ -61,7 +61,7 @@ public class CalculatedProfile {
         this.maxPurchasePrice = maxPurchasePrice;
     }
 
-    //maxPurchasePrice get set
+    //maxPurchasePrice GET SET
     public int getMaxMortgageTerm()
     {
         return this.maxMortgageTerm;
@@ -72,7 +72,7 @@ public class CalculatedProfile {
         this.maxMortgageTerm = maxMortgageTerm;
     }
 
-    //Calculated Profile content in list get set
+    //Calculated Profile content in list GET SET
     public HashMap<String, Object> getCalProfileDetails()
     {
         this.calProfileDetails = new HashMap<String, Object>();
