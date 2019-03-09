@@ -73,9 +73,9 @@ public class CalculatedProfile {
     }
 
     //Calculated Profile content in list get set
-    public HashMap getCalProfileDetails()
+    public HashMap<String, Object> getCalProfileDetails()
     {
-        this.calProfileDetails = new HashMap();
+        this.calProfileDetails = new HashMap<String, Object>();
 
         //get all fields and return as HashMap
         //key of HashMap is the same as attribute
@@ -88,7 +88,7 @@ public class CalculatedProfile {
         return this.calProfileDetails;
     }
 
-    public void setCalProfileDetails(HashMap calProfileDetails)
+    public void setCalProfileDetails(HashMap<String, Object> calProfileDetails)
     {
         Object temp;
 

@@ -7,7 +7,7 @@ public class AffordabilityReport {
     private CalculatedProfile cp;
     private ArrayList<HDBDevelopment> hdbdList;
     private HashMap initalReportDetails;
-    private ArrayList<HashMap> hdbdForReportDetails;
+    private ArrayList<HashMap<String, Object>> hdbdForReportDetails;
 
 
     //CalculatedProfile association object Get Set
@@ -21,8 +21,8 @@ public class AffordabilityReport {
     public HashMap getInitalReportDetails()
     {
         //initialize
-        this.initalReportDetails = new HashMap();
-        this.hdbdForReportDetails = new ArrayList<HashMap>();
+        this.initalReportDetails = new HashMap<String, Object>();
+        this.hdbdForReportDetails = new ArrayList<HashMap<String, Object>>();
 
         //put all the required data for report from CalculatedProfile entity and  HDBDevelopment entity
         this.initalReportDetails.put("CalculatedProfile", cp.getCalProfileDetails());

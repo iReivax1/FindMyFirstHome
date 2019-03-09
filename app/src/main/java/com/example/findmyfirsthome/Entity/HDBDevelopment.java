@@ -14,6 +14,8 @@ public class HDBDevelopment {
     private ArrayList<LatLng> coordinates;
     private ArrayList<MapData> amenities;
 
+    private HashMap<String, Object> developmentDetails;
+
     public HDBDevelopment() {}
 
     public HDBDevelopment(ArrayList<HashMap<String, Object>> flatTypeList, String developmentName, String developmentDescription,
@@ -108,10 +110,11 @@ public class HDBDevelopment {
         this.amenities = amenities;
     }
 
-    public void setData()
+    public HashMap<String, Object> getDevelopmentDetails()
+    {
+        this.developmentDetails = new HashMap<String, Object>();
 
-    public HDBDevelopment getHDB(){
-        return this;
+        this.developmentDetails.put("")
     }
 
 }
