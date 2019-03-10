@@ -80,6 +80,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
     {
         return true;
     }
+
 }
 
 

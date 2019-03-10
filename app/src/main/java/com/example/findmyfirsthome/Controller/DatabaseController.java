@@ -2,6 +2,7 @@ package com.example.findmyfirsthome.Controller;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
@@ -14,6 +15,8 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 
 //Basically this is our DAO;
+//Need to refactor this class to an interface class.
+//have all controllers implement this class
 public class DatabaseController extends SQLiteOpenHelper {
 
 
@@ -91,6 +94,7 @@ public class DatabaseController extends SQLiteOpenHelper {
         return HDBList;
     }
 
+    //should create a new
     public boolean writeHDBata(HDBDevelopment HDBD) {
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
@@ -132,6 +136,49 @@ public class DatabaseController extends SQLiteOpenHelper {
         db.close();
         return true;
     }
+
+     // TODO: GetData;
+
+    public void getHDBData(){
+        SQLiteDatabase db = getReadableDatabase();
+
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                BaseColumns._ID, //whats this
+                HDBDevelopmentName,
+                HDBDevelopmentDescription,
+                HDBDevelopmentLongitude,
+                HDBDevelopmentLatitude,
+                HDBFlatType,
+                HDBFlatPrice,
+                AmenitiesName,
+                AmenitiesLongitude,
+                AmenitiesLatitude
+        };
+
+        // Filter results WHERE "title" = 'My Title'
+        String selection = HDBDevelopmentName + " = ?";
+        String[] selectionArgs = { "My Title" };
+
+        // How you want the results sorted in the resulting Cursor
+        String sortOrder =
+                HDBDevelopmentDescription + " DESC";
+
+        Cursor cursor = db.query(
+                TABLE_NAME,   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                sortOrder               // The sort order
+        );
+
+
+    }
+
+
 
 }
 
