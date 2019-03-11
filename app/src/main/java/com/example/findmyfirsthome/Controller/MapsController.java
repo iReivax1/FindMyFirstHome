@@ -12,20 +12,16 @@ import java.util.ArrayList;
 
 public class MapsController extends Application {
 
-    private static Application Application;
 
-    public static Application getApplication() {
-        return Application;
-    }
 
-    public static Context getContext() {
-        return getApplication().getApplicationContext();
+
+    public Context getContext() {
+        return this.getBaseContext();
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Application = this;
     }
 
     //create controller
