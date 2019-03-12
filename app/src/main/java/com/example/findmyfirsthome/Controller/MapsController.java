@@ -14,25 +14,24 @@ public class MapsController extends Application {
 
 
 
-
+    DatabaseController db = new DatabaseController(getContext());
+    ArrayList<HDBDevelopment> HDBDevelopmentlist;
     public Context getContext() {
         return this.getBaseContext();
     }
 
     @Override
     public void onCreate() {
+
         super.onCreate();
+        //create controller
+         HDBDevelopmentlist = getHDBList();
     }
 
-    //create controller
-    DatabaseController db = new DatabaseController(getContext());
 
-
-
-    ArrayList<HDBDevelopment> HDBDevelopmentlist;
 
     public void getHDBList(){
-        this.HDBDevelopmentlist = db.getHDBList();
+        this.HDBDevelopmentlist = db.getHDBData();
     }
 
     public void writeHDBCoordinates(){
