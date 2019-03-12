@@ -9,10 +9,7 @@ import android.content.Context;
 import java.util.ArrayList;
 
 
-
 public class MapsController extends Application {
-
-
 
     DatabaseController db = new DatabaseController(getContext());
     ArrayList<HDBDevelopment> HDBDevelopmentlist;
@@ -30,8 +27,9 @@ public class MapsController extends Application {
 
 
 
-    public void getHDBList(){
-        this.HDBDevelopmentlist = db.getHDBData();
+    public ArrayList<HDBDevelopment>  getHDBList(){
+        ArrayList<HDBDevelopment> HDBDevelopmentlist = db.getHDBData();
+        return HDBDevelopmentlist;
     }
 
     public void writeHDBCoordinates(){

@@ -19,21 +19,25 @@ import org.jsoup.select.Elements;
 
 
 public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
+
+    //var init;
+    //need to get more of this, each development have different details url
     private String urlDetails = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTO_page_6280/$file/about0.html";
     private String urlMain = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTO_page_6280/$file/about0.html";
     private ProgressDialog mProgressDialog;
-    ArrayList<String> HDBDevelopmentName = new ArrayList<String>();
-    ArrayList<String> temp;
-    ArrayList<HashMap<String, Object>>ListFlatTypePrice = new ArrayList<HashMap<String, Object>>();
-    String descriptionText;
+    private ArrayList<String> HDBDevelopmentName = new ArrayList<String>();
+    private ArrayList<String> temp;
+    private ArrayList<HashMap<String, Object>>ListFlatTypePrice = new ArrayList<HashMap<String, Object>>();
+    private String descriptionText;
 
+    //useless constructor
     public HDBDetailsManager(){
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mProgressDialog.setTitle("Android Basic JSoup Tutorial");
+        mProgressDialog.setTitle("Scraping from HDB now");
         mProgressDialog.setMessage("Loading...");
         mProgressDialog.setIndeterminate(false);
         mProgressDialog.show();
@@ -71,20 +75,30 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         mProgressDialog.dismiss();
     }
 
-    public boolean createHDBDevelopment(){
+
+    public ArrayList<HDBDevelopment> getHDBData(){
+        return createHDBDevelopment();
+    }
+
+
+    public ArrayList<HDBDevelopment> createHDBDevelopment(){
         int index = 0;
+        HDBDevelopment HDBD = null;
+        ArrayList<HDBDevelopment> HDBDList = new ArrayList<HDBDevelopment>();
         if(HDBDevelopmentName.isEmpty()){
-            return false;
+            return null;
         }else{
             while(HDBDevelopmentName.get(index) != null){
-                HDBDevelopment HDBD = new HDBDevelopment(ListFlatTypePrice, HDBDevelopmentName.get(index), descriptionText,
+                HDBD = new HDBDevelopment(ListFlatTypePrice, HDBDevelopmentName.get(index), descriptionText,
                         false, null, null);
+                HDBDList.add(HDBD);
                 index++;
             }
         }
-        return true;
+        return HDBDList;
     }
 
+    //hold this first
     public boolean writesData(ArrayList<HDBDevelopment> dev){
         MapsController mc = new MapsController();
         Context context = mc.getContext();
@@ -98,11 +112,6 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         return true;
     }
 
-    //method overload
-    public boolean writesData(HDBFlatType flat)
-    {
-        return true;
-    }
 
     public String description(String url, String developmentName1, String developmentName2) throws IOException {
         Document document = Jsoup.connect(url).get();
@@ -214,7 +223,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
             target.add(temp.get(i));
         }
     }
-
+//    ----------------------------DEBUG PRINT METHODS----------------------------
     public void print(ArrayList<String> stringList) {
         System.out.println("-----------------Inside the arrayList-----------------");
         for (int i = 0; i < stringList.size(); i++) {
