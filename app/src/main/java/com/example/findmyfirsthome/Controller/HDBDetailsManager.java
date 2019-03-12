@@ -1,12 +1,10 @@
 package com.example.findmyfirsthome.Controller;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
 import com.example.findmyfirsthome.Entity.HDBFlatType;
-import com.example.findmyfirsthome.Entity.MapData;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,6 +22,10 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
     private String urlDetails = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTO_page_6280/$file/about0.html";
     private String urlMain = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTO_page_6280/$file/about0.html";
     private ProgressDialog mProgressDialog;
+    ArrayList<String> HDBEstateName = new ArrayList<String>();
+    ArrayList<String> temp;
+    ArrayList<HashMap<String, Object>>ListFlatTypePrice = new ArrayList<HashMap<String, Object>>();
+    String descriptionText;
 
     public HDBDetailsManager(){
     }
@@ -39,25 +41,27 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
 
     //scrap data happens here
     @Override
-    protected Void doInBackground(String... url) throws IOException {
+    protected Void doInBackground(String... url) {
 
-        ArrayList<String> HDBEstateName = new ArrayList<String>();
-        ArrayList<String> temp;
         //BoonLay & Jurong west
         temp = (scrapDevelopmentName(urlMain, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
         addToList(temp,HDBEstateName);
-        print(scrapFlatType(urlMain,0 ,3,4, 8 ));
+        ListFlatTypePrice.add(scrapFlatType(urlMain,0 ,3,4, 8 ));
         //SK
         temp = (scrapDevelopmentName(urlMain, 0, 8, 1));
         addToList(temp,HDBEstateName);
-        print(scrapFlatType(urlMain,0,8,9, 13));
+        ListFlatTypePrice.add(scrapFlatType(urlMain,0,8,9, 13));
         //Kallang
         temp = (scrapDevelopmentName(urlMain, 0, 4, 1));
         addToList(temp,HDBEstateName);
-        print(scrapFlatType(urlMain,0,8,9, 13));
+        ListFlatTypePrice.add(scrapFlatType(urlMain,0,8,9, 13));
         print(HDBEstateName);
 
-        description(urlDetails, "Jurong West Jewel", "Boon Lay Glade");
+        try {
+            descriptionText = description(urlDetails, "Jurong West Jewel", "Boon Lay Glade");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return null;
     }
@@ -65,10 +69,13 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
     @Override
     protected void onPostExecute(Void result) {
         mProgressDialog.dismiss();
-        HDBDevelopment HDBD = new HDBDevelopment(flatTypeList, developmentName, developmentDescription,
-        false, LatLng coordinates, ArrayList<MapData > amenities)
     }
 
+    public boolean createHDBDevelopment(){
+        HDBDevelopment HDBD = new HDBDevelopment(ListFlatTypePrice, HDBEstateName.get(0), descriptionText,
+                false, null, null);
+        return true;
+    }
 
     public boolean writesData(ArrayList<HDBDevelopment> dev){
         MapsController mc = new MapsController();
@@ -89,39 +96,42 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         return true;
     }
 
-    public  void description(String url, String developmentName1, String developmentName2) throws IOException {
+    public String description(String url, String developmentName1, String developmentName2) throws IOException {
         Document document = Jsoup.connect(url).get();
         for(int i = 0; i <  document.select("p").size(); i ++) {
             Element paragraphs = document.select("p").get(i);
             if(paragraphs.text().length() > 150) {
                 String description = paragraphs.text();
                 if(description.contains(developmentName1)) {
-                    System.out.println(developmentName1 + ": " + description);
+                    return(developmentName1 + ": " + description);
                 }else if(description.contains(developmentName2)) {
                     System.out.println('\n');
-                    System.out.println(developmentName2 + ": " + description);
+                    return('\n' + developmentName2 + ": " + description);
                 }
 
             }
         }
+        return "";
     }
 
     //overloading cuz HDB a bitch
-    public  void description(String url, String developmentName1) throws IOException {
+    public String description(String url, String developmentName1) throws IOException {
         Document document = Jsoup.connect(url).get();
         for (int i = 0; i < document.select("p").size(); i++) {
             Element paragraphs = document.select("p").get(i);
             if (paragraphs.text().length() > 150) {
                 String description = paragraphs.text();
                 if (description.contains(developmentName1)) {
-                    System.out.println(developmentName1 + ": " + description);
+                    return(developmentName1 + ": " + description);
                 }
             }
         }
+
+        return "";
     }
 
-    public  HashMap<String, String> scrapFlatType(String url, int tableNumber, int firstRowNumber, int rowStart, int rowEnd){
-        HashMap<String, String> flatType = new HashMap<String, String>();
+    public HashMap<String, Object> scrapFlatType(String url, int tableNumber, int firstRowNumber, int rowStart, int rowEnd){
+        HashMap<String, Object> flatType = new HashMap<String, Object>();
         try {
             Document document = Jsoup.connect(url).get();
             Element table = document.select("table").get(tableNumber); //select the first table.
