@@ -22,7 +22,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
     private String urlDetails = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTO_page_6280/$file/about0.html";
     private String urlMain = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTO_page_6280/$file/about0.html";
     private ProgressDialog mProgressDialog;
-    ArrayList<String> HDBEstateName = new ArrayList<String>();
+    ArrayList<String> HDBDevelopmentName = new ArrayList<String>();
     ArrayList<String> temp;
     ArrayList<HashMap<String, Object>>ListFlatTypePrice = new ArrayList<HashMap<String, Object>>();
     String descriptionText;
@@ -45,17 +45,17 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
 
         //BoonLay & Jurong west
         temp = (scrapDevelopmentName(urlMain, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
-        addToList(temp,HDBEstateName);
+        addToList(temp,HDBDevelopmentName);
         ListFlatTypePrice.add(scrapFlatType(urlMain,0 ,3,4, 8 ));
         //SK
         temp = (scrapDevelopmentName(urlMain, 0, 8, 1));
-        addToList(temp,HDBEstateName);
+        addToList(temp,HDBDevelopmentName);
         ListFlatTypePrice.add(scrapFlatType(urlMain,0,8,9, 13));
         //Kallang
         temp = (scrapDevelopmentName(urlMain, 0, 4, 1));
-        addToList(temp,HDBEstateName);
+        addToList(temp,HDBDevelopmentName);
         ListFlatTypePrice.add(scrapFlatType(urlMain,0,8,9, 13));
-        print(HDBEstateName);
+        print(HDBDevelopmentName);
 
         try {
             descriptionText = description(urlDetails, "Jurong West Jewel", "Boon Lay Glade");
@@ -72,8 +72,16 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
     }
 
     public boolean createHDBDevelopment(){
-        HDBDevelopment HDBD = new HDBDevelopment(ListFlatTypePrice, HDBEstateName.get(0), descriptionText,
-                false, null, null);
+        int index = 0;
+        if(HDBDevelopmentName.isEmpty()){
+            return false;
+        }else{
+            while(HDBDevelopmentName.get(index) != null){
+                HDBDevelopment HDBD = new HDBDevelopment(ListFlatTypePrice, HDBDevelopmentName.get(index), descriptionText,
+                        false, null, null);
+                index++;
+            }
+        }
         return true;
     }
 
