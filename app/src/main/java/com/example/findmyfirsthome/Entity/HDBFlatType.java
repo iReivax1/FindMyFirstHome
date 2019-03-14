@@ -8,8 +8,7 @@ public class HDBFlatType {
     private int flatType; //number of rooms
     private boolean affordability;
 
-
-
+    //i.e 3000000, 4room, false;
     private HashMap<String, Object> flatTypeDetails;
 
     public HDBFlatType() {}

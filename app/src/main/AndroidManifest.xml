@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
-        android:name="com.example.findmyfirsthome.Controller.MapsController"
+        android:name=".Controller.MapsController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -32,7 +32,7 @@
 
         <activity
             android:name=".Boundary.MapAPI"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".SplashScreenUI"
             android:label="@string/app_name"

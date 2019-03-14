@@ -12,6 +12,7 @@ import com.example.findmyfirsthome.Entity.HDBFlatType;
 import com.example.findmyfirsthome.Entity.MapData;
 import com.google.android.gms.maps.model.LatLng;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -49,6 +50,7 @@ public class DatabaseController extends SQLiteOpenHelper {
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
+    private static int numID = 0;
     //use this to create the databaseContoller to write and get data; Like so;
     //DatabaseController dbC = new DatabaseController(getContext()); check out mapsControlelr
     //getContext() - Returns the context view only current running activity.
@@ -88,7 +90,6 @@ public class DatabaseController extends SQLiteOpenHelper {
     public boolean writeHDBata(HDBDevelopment HDBD) {
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
-        static int idNum = 0;
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(HDBDevelopmentName, HDBD.getDevelopmentName());
@@ -122,8 +123,8 @@ public class DatabaseController extends SQLiteOpenHelper {
         //The second argument tells the framework what to do if ContentValues is empty
         //Third argument is  content;
         // Insert the new row, returning the primary key value of the new row
-        values.put(ID, idNum);
-        idNum++;
+        values.put(ID, numID);
+        numID++;
         long newRowId = db.insert(TABLE_NAME, null, values);
         db.close();
         return true;
@@ -159,8 +160,9 @@ public class DatabaseController extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
-
         HashMap<String, Object> flatTypeDetails = null;
+        ArrayList<HDBFlatType> HDBFTList = new ArrayList<HDBFlatType>();
+
         while(cursor.moveToNext() && cursor != null) {
 
             int index;
@@ -177,16 +179,25 @@ public class DatabaseController extends SQLiteOpenHelper {
             flatTypeDetails.put("price", Double.parseDouble(HDBFlatPrice));
             flatTypeDetails.put("flatType", Double.parseDouble(HDBFlatType));
             flatTypeDetails.put("affordability", false);
-
+            HDBFTList.add(new HDBFlatType(flatTypeDetails));
         }
         cursor.close();
 
-        HDBFlatType HDBFT = new HDBFlatType(flatTypeDetails);
-        HDBDevelopment HDBD =  new HDBDevelopment(flatTypeList, String developmentName, String developmentDescription,
-        boolean affordable, LatLng coordinates, ArrayList<MapData> amenities);
+        //TODO: Return created objects by calling the creation method
+        return null;
+
     }
 
-        //getdata from just an estate
+    private HDBDevelopment createHDBDevelopmentObject(ArrayList<HashMap<String, Object>> HDBFTList, String HDBDevelopmentName, String HDBDevelopmentDescription,
+                                                     boolean affordable, LatLng coordinates, ArrayList<MapData> amenities){
+        HDBDevelopment HDBD =  new HDBDevelopment(HDBFTList, HDBDevelopmentName,  HDBDevelopmentDescription,
+                false, coordinates, amenities);
+        return HDBD;
+    }
+
+    public LatLng getHDBDevelopmentCoordinates(HDBDevelopment HDBD){
+        return null;
+    }
 
 
 
