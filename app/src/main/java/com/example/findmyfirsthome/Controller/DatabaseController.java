@@ -285,7 +285,7 @@ public class DatabaseController extends SQLiteOpenHelper {
         return HDBFTList;
     }
 
-    private HDBDevelopment createHDBDevelopmentObject(ArrayList<HashMap<String, Object>> HDBFTList, String HDBDevelopmentName, String HDBDevelopmentDescription,
+    private HDBDevelopment createHDBDevelopmentObject(ArrayList<HDBFlatType> HDBFTList, String HDBDevelopmentName, String HDBDevelopmentDescription,
                                                      boolean affordable, LatLng coordinates, ArrayList<MapData> amenities){
         HDBDevelopment HDBD =  new HDBDevelopment(HDBFTList, HDBDevelopmentName,  HDBDevelopmentDescription,
                 false, coordinates, amenities);

@@ -1,5 +1,6 @@
 package com.example.findmyfirsthome.Controller;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
+import com.example.findmyfirsthome.Entity.HDBFlatType;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -19,14 +20,14 @@ import org.jsoup.select.Elements;
 
 public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
 
-    //var init;
-    //need to get more of this, each development have different details url
-    private String urlDetails = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTO_page_6280/$file/about0.html";
+    //variables init;
+    //url to be given by startUp controller
+    private String urlDetails = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTO_page_6280/$file/about0.html"; //need to get more of this, each development have different details url
     private String urlMain = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTO_page_6280/$file/about0.html";
     private ProgressDialog mProgressDialog;
-    private ArrayList<String> HDBDevelopmentName = new ArrayList<String>();
+    private ArrayList<String> HDBDevelopmentNames = new ArrayList<String>();
     private ArrayList<String> temp;
-    private ArrayList<HashMap<String, Object>>ListFlatTypePrice = new ArrayList<HashMap<String, Object>>();
+    private ArrayList<HDBFlatType>ListFlatTypePrice = new ArrayList<HDBFlatType>();
     private String descriptionText;
 
 
@@ -45,17 +46,17 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
 
         //BoonLay & Jurong west
         temp = (scrapDevelopmentName(urlMain, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
-        addToList(temp,HDBDevelopmentName);
-        ListFlatTypePrice.add(scrapFlatType(urlMain,0 ,3,4, 8 ));
+        addToList(temp,HDBDevelopmentNames);
+        ListFlatTypePrice.add(new HDBFlatType(scrapFlatType(urlMain,0 ,3,4, 8 )));
         //SK
         temp = (scrapDevelopmentName(urlMain, 0, 8, 1));
-        addToList(temp,HDBDevelopmentName);
-        ListFlatTypePrice.add(scrapFlatType(urlMain,0,8,9, 13));
+        addToList(temp,HDBDevelopmentNames);
+        ListFlatTypePrice.add(new HDBFlatType(scrapFlatType(urlMain,0,8,9, 13)));
         //Kallang
         temp = (scrapDevelopmentName(urlMain, 0, 4, 1));
-        addToList(temp,HDBDevelopmentName);
-        ListFlatTypePrice.add(scrapFlatType(urlMain,0,8,9, 13));
-        print(HDBDevelopmentName);
+        addToList(temp,HDBDevelopmentNames);
+        ListFlatTypePrice.add(new HDBFlatType(scrapFlatType(urlMain,0,8,9, 13)));
+        print(HDBDevelopmentNames);
 
         try {
             descriptionText = description(urlDetails, "Jurong West Jewel", "Boon Lay Glade");
@@ -81,11 +82,11 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         int index = 0;
         HDBDevelopment HDBD = null;
         ArrayList<HDBDevelopment> HDBDList = new ArrayList<HDBDevelopment>();
-        if(HDBDevelopmentName.isEmpty()){
+        if(HDBDevelopmentNames.isEmpty()){
             return null;
         }else{
-            while(HDBDevelopmentName.get(index) != null){
-                HDBD = new HDBDevelopment(ListFlatTypePrice, HDBDevelopmentName.get(index), descriptionText,
+            while(HDBDevelopmentNames.get(index) != null){
+                HDBD = new HDBDevelopment(ListFlatTypePrice, HDBDevelopmentNames.get(index), descriptionText,
                         false, null, null);
                 HDBDList.add(HDBD);
                 index++;
@@ -150,8 +151,11 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
     }
 
     protected HashMap<String, Object> scrapFlatType(String url, int tableNumber, int firstRowNumber, int rowStart, int rowEnd){
+
+
         HashMap<String, Object> flatType = new HashMap<String, Object>();
         try {
+            //Connect to the page
             Document document = Jsoup.connect(url).get();
             Element table = document.select("table").get(tableNumber); //select the first table.
 
@@ -177,6 +181,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
                 rooms = cols.get(0).text();
                 price = cols.get(1).text();
                 flatType.put(rooms,price);
+
             }
 
         }catch (IOException e) {

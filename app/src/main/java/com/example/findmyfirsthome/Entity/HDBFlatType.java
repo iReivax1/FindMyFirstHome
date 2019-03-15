@@ -11,7 +11,7 @@ public class HDBFlatType {
     //i.e 3000000, 4room, false;
     private HashMap<String, Object> flatTypeDetails;
 
-
+    //constructor
     public HDBFlatType(HashMap<String, Object> hdbFlatTypeDetails)
     {
         Object temp;
@@ -23,6 +23,7 @@ public class HDBFlatType {
         this.flatType = temp == null ? 0 : (int)temp;
         temp = hdbFlatTypeDetails.get("affordability");
         this.affordability = temp == null ? false : (Boolean)temp;
+        setFlatTypeDetails();
     }
 
     //price GET SET
@@ -58,7 +59,7 @@ public class HDBFlatType {
         this.affordability = affordability;
     }
 
-    public HashMap<String, Object> getFlatTypeDetails()
+    public HashMap<String, Object> setFlatTypeDetails()
     {
         //initialize
         this.flatTypeDetails = new HashMap<String, Object>();
@@ -69,6 +70,10 @@ public class HDBFlatType {
         this.flatTypeDetails.put("flatType", this.flatType);
         this.flatTypeDetails.put("affordability", this.affordability);
 
+        return this.flatTypeDetails;
+    }
+
+    public HashMap<String, Object> getFlatTypeDetails(){
         return this.flatTypeDetails;
     }
 
