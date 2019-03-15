@@ -17,7 +17,6 @@ public class HDBDevelopment {
 
     private ArrayList developmentDetails ;
 
-    public HDBDevelopment() {}
 
     public HDBDevelopment(ArrayList<HashMap<String, Object>> flatTypeList, String developmentName, String developmentDescription,
                           boolean affordable, LatLng coordinates, ArrayList<MapData> amenities)
