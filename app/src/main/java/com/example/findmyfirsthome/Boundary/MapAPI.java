@@ -1,8 +1,10 @@
 package com.example.findmyfirsthome.Boundary;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 
 import com.example.findmyfirsthome.Controller.MapsController;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
@@ -16,12 +18,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-
-
+import java.util.List;
 
 
 public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
@@ -30,6 +30,7 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
     private GoogleMap mMap;
     private MapsController MC = new MapsController();
     private String[] DevelopmentName;
+    LatLng point;
 
     public void onPause() {
         super.onPause();
@@ -92,10 +93,28 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
         return Coordiantes;
     }
 
-    //self call
+    //self call GeoCooding
     private LatLng getCoordinates(String name){
-        return null;
+        Context context = getApplicationContext();
+        Geocoder gc = new Geocoder(context);
+        List<Address> addresses = null;
+        point = null;
+        try {
+            addresses = gc.getFromLocationName(name, 5);
+            assert addresses != null; //make sure that addresss is not null
+            Address location = addresses.get(0);
+            point = new LatLng(location.getLatitude(), location.getLongitude() );
+            for ( Address a : addresses )
+                mMap.addMarker( new MarkerOptions().position( new LatLng( a.getLatitude(), a.getLongitude() ) ).title( "HDB" ) );
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return point;
     }
+
+
 
 }
 
