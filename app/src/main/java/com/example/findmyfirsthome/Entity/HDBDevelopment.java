@@ -9,7 +9,8 @@ import java.util.HashMap;
 public class HDBDevelopment {
 
     private ArrayList<HDBFlatType> hdbFlatTypeList;
-    private ArrayList<HashMap<String, Object>> hdbFlatTypeDetailsList = new ArrayList<HashMap<String, Object>>() ;
+    //HDBDevelopment is aggregated to FlatType , hence FlatType is added through reference not created here.
+    private ArrayList<HashMap<String, Object>> hdbFlatTypeDetailsList;
     private String developmentName;
     private String developmentDescription;
     private boolean affordable;
@@ -18,7 +19,7 @@ public class HDBDevelopment {
     private ArrayList developmentDetails ;
 
 
-    public HDBDevelopment(ArrayList<HDBFlatType> flatTypeList, String developmentName, String developmentDescription,
+    public HDBDevelopment(ArrayList<HashMap<String, Object>> flatTypeList, String developmentName, String developmentDescription,
                           boolean affordable, LatLng coordinates, ArrayList<MapData> amenities)
     {
         //set data
@@ -30,12 +31,12 @@ public class HDBDevelopment {
         this.amenities = amenities;
     }
 
-    //hdbFlatTypeDetailsList GET
+    //hdbFlatTypeDetailsList GET, added through reference.
     public ArrayList<HashMap<String, Object>> getHDBFlatTypeDetailsList(ArrayList<HDBFlatType> hdbFlatTypeList)
     {
         hdbFlatTypeDetailsList = new ArrayList<HashMap<String, Object>>();
         for(HDBFlatType flat: hdbFlatTypeList ){
-            this.hdbFlatTypeDetailsList.add(flat.getFlatTypeDetails());
+            this.hdbFlatTypeDetailsList.add(flat.setFlatTypeDetails());
         }
 
         return this.hdbFlatTypeDetailsList;
@@ -43,12 +44,27 @@ public class HDBDevelopment {
     }
 
     //hdbFlatTypeList CREATE FlatType
-    public void setHDBFlatTypeList(ArrayList<HDBFlatType> flatTypeList)
+    public ArrayList<HashMap<String, Object>> getHDBFlatTypeDetailsList()
     {
-        for(HDBFlatType hdbFlatTypeDetails :  flatTypeList)
+        //initialize
+        this.hdbFlatTypeDetailsList = new ArrayList<HashMap<String, Object>>();
+
+        //get HashMap of data of each HDBFlatType
+        for(HDBFlatType hdbFlatType : hdbFlatTypeList)
+        {
+            this.hdbFlatTypeDetailsList.add(hdbFlatType.setFlatTypeDetails());
+        }
+
+        return this.hdbFlatTypeDetailsList;
+    }
+
+    //hdbFlatTypeList CREATE FlatType
+    public void setHDBFlatTypeList(ArrayList<HashMap<String, Object>> flatTypeList)
+    {
+        for(HashMap<String, Object>  hdbFlatTypeDetails :  flatTypeList)
         {
             //create HDBFlatType and add into the ArrayList
-            this.hdbFlatTypeList.add(new HDBFlatType(hdbFlatTypeDetails.setFlatTypeDetails()));
+            this.hdbFlatTypeList.add(new HDBFlatType(hdbFlatTypeDetails));
         }
     }
 

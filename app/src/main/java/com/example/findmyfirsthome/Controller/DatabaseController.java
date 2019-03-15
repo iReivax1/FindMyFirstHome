@@ -156,7 +156,7 @@ public class DatabaseController extends SQLiteOpenHelper {
 
         ArrayList<HDBDevelopment> HDBDList = null;
         ArrayList<MapData> mdList = null;
-        ArrayList<HDBFlatType> HDBFTList = null;
+        ArrayList<HashMap<String, Object>> HDBFTList = null;
         LatLng coord = null;
         String DevelopmentName = "";
         String DevelopmentDescription = "";
@@ -244,8 +244,10 @@ public class DatabaseController extends SQLiteOpenHelper {
         return md;
     }
 
-    private ArrayList<HDBFlatType> readHDBFlatType(String name){
+    private ArrayList<HashMap<String, Object>> readHDBFlatType(String name){
+        assert getReadableDatabase() != null;
         SQLiteDatabase db = getReadableDatabase();
+
         String[] projection = {
                 BaseColumns._ID,
                 ID,
@@ -253,13 +255,12 @@ public class DatabaseController extends SQLiteOpenHelper {
                 HDBFlatPrice
         };
 
+        HashMap<String, Object> flatTypeDetails = null;
+        ArrayList<HashMap<String, Object>> HDBFlatTypedetailsList = new ArrayList<HashMap<String, Object>>();
 
         String rawQuery = "SELECT HDBFlatType, HDBFlatPrice FROM "+ TABLE_NAME + "as D, " + HDBFlatType + "as FT WHERE name = FT.HDBDevelopmentName";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
-
-        HashMap<String, Object> flatTypeDetails = null;
-        ArrayList<HDBFlatType> HDBFTList = null;
 
         while(cursor.moveToNext() && cursor != null) {
 
@@ -277,15 +278,16 @@ public class DatabaseController extends SQLiteOpenHelper {
             flatTypeDetails.put("price", Double.parseDouble(HDBFlatPrice));
             flatTypeDetails.put("flatType", Double.parseDouble(HDBFlatType));
             flatTypeDetails.put("affordability", false);
-            HDBFTList.add(new HDBFlatType(flatTypeDetails));
+            HDBFlatTypedetailsList.add(flatTypeDetails);
         }
 
-        assert HDBFTList != null;
+        assert HDBFlatTypedetailsList != null;
         cursor.close();
-        return HDBFTList;
+
+        return HDBFlatTypedetailsList;
     }
 
-    private HDBDevelopment createHDBDevelopmentObject(ArrayList<HDBFlatType> HDBFTList, String HDBDevelopmentName, String HDBDevelopmentDescription,
+    private HDBDevelopment createHDBDevelopmentObject(ArrayList<HashMap<String, Object>> HDBFTList, String HDBDevelopmentName, String HDBDevelopmentDescription,
                                                      boolean affordable, LatLng coordinates, ArrayList<MapData> amenities){
         HDBDevelopment HDBD =  new HDBDevelopment(HDBFTList, HDBDevelopmentName,  HDBDevelopmentDescription,
                 false, coordinates, amenities);

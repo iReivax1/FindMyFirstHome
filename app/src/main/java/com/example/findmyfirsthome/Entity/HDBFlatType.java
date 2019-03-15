@@ -73,9 +73,7 @@ public class HDBFlatType {
         return this.flatTypeDetails;
     }
 
-    public HashMap<String, Object> getFlatTypeDetails(){
-        return this.flatTypeDetails;
-    }
+
 
 
 }
