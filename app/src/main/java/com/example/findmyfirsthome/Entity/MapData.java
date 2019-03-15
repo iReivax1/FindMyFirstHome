@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class MapData {
     private String amenitiesName;
     private String amenityType;
+    //TODO: get coordinates from mapAPI;
     private LatLng Coordinates;
 
     private ArrayList mapdataDetails;

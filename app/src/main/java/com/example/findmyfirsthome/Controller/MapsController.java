@@ -38,7 +38,7 @@ public class MapsController extends Application {
 
     public HashMap<String, LatLng> getHDBListCoord(){
 
-        ArrayList<HDBDevelopment> HDBDevelopmentlist = db.getHDBData();
+        ArrayList<HDBDevelopment> HDBDevelopmentlist = db.readHDBData();
         HashMap<String, LatLng> HDBCoord = new HashMap<String, LatLng>();
         LatLng coordinates;
         String HDBDevelopmentName;

@@ -35,6 +35,7 @@ public class DatabaseController extends SQLiteOpenHelper {
     public static final String HDBFlatType = "FlatType";
     public static final String HDBFlatPrice = "HDBFlatPrice";
     public static final String AmenitiesName = "AmenitiesName";
+    public static final String AmenitiesType = "AmenitiesType";
     public static final String AmenitiesLongitude = "ALongitude";
     public static final String AmenitiesLatitude = "ALatitude";
 
@@ -47,7 +48,7 @@ public class DatabaseController extends SQLiteOpenHelper {
     private static final String SQL_HDB = "CREATE TABLE " + TABLE_NAME + " (" + ID+ "INTEGER PRIMARY KEY," + HDBDevelopmentName + " TEXT, "
             + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude
             + " REAL, " + HDBFlatType + " INTEGER, " + HDBFlatPrice + "REAL, " + AmenitiesName
-            + "TEXT, " + AmenitiesLongitude + "REAL, " + AmenitiesLatitude + "REAL" + ")";
+            + "TEXT, " + AmenitiesType + "TEXT, "+ AmenitiesLongitude + "REAL, " + AmenitiesLatitude + "REAL" + ")";
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
@@ -83,10 +84,6 @@ public class DatabaseController extends SQLiteOpenHelper {
      such as with AsyncTask or IntentService. */
 
 
-    public void setHDB() {
-
-    }
-
 
 
     public boolean writeHDBata(HDBDevelopment HDBD) {
@@ -98,8 +95,8 @@ public class DatabaseController extends SQLiteOpenHelper {
         values.put(HDBDevelopmentDescription, HDBD.getDevelopmentDescription());
         String HDBlat = Double.toString(getHDBDevelopmentCoordinates(HDBDevelopmentName).latitude);
         String HDBlon = Double.toString(getHDBDevelopmentCoordinates(HDBDevelopmentName).longitude);
-        values.put(AmenitiesLatitude, HDBlat);
-        values.put(AmenitiesLongitude, HDBlon);
+        values.put(HDBDevelopmentLatitude, HDBlat);
+        values.put(HDBDevelopmentLongitude, HDBlon);
         //Potential BUGGY AREA TODO: UPGRADE TO USE FLATDETAIL HASHMAP
         ArrayList<HDBFlatType> HDBFT = HDBD.getHdbFlatTypeList();
         for (HDBFlatType i : HDBFT) {
@@ -111,8 +108,8 @@ public class DatabaseController extends SQLiteOpenHelper {
 
         ArrayList<MapData> HDBAmenities = HDBD.getAmenities();
         for (MapData j : HDBAmenities) {
-            String name = j.getAmenitiesName();
-            values.put(AmenitiesName, name);
+            values.put(AmenitiesName, j.getAmenitiesName());
+            values.put(AmenitiesType, j.getAmenityType());
             LatLng ACoord = j.getCoordinates();
             String Alat = Double.toString(ACoord.latitude);
             String Alon = Double.toString(ACoord.longitude);
@@ -131,9 +128,9 @@ public class DatabaseController extends SQLiteOpenHelper {
         return true;
     }
 
-     // TODO: GetData;
 
-    public ArrayList<HDBDevelopment> getHDBData(){
+
+    public ArrayList<HDBDevelopment> readHDBData(){
         SQLiteDatabase db = getReadableDatabase();
 
         // Define a projection that specifies which columns from the database
@@ -144,25 +141,125 @@ public class DatabaseController extends SQLiteOpenHelper {
                 HDBDevelopmentName,
                 HDBDevelopmentDescription,
                 HDBDevelopmentLongitude,
-                HDBDevelopmentLatitude,
-                HDBFlatType,
-                HDBFlatPrice,
-                AmenitiesName,
-                AmenitiesLongitude,
-                AmenitiesLatitude
+                HDBDevelopmentLatitude
+
         };
 
-
-
         // How you want the results sorted in the resulting Cursor
-        //SELECT HDBFlatType, HDBFlatPrice FROM TABLE_NAME AS D, HDBFlatType as FT WHERE D.DBDEVELOPMENTName == FT.HDBDEvelopmentName
+        //Potential problem, potential solution query by ID.
 
         String rawQuery = "SELECT * FROM "+ TABLE_NAME + "as D, " + HDBFlatType + "as FT WHERE D.HDBDevelopmentName = FT.HDBDevelopmentName";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
         HashMap<String, Object> flatTypeDetails = null;
-        ArrayList<HDBFlatType> HDBFTList = new ArrayList<HDBFlatType>();
+
+        ArrayList<HDBDevelopment> HDBDList = null;
+        ArrayList<MapData> mdList = null;
+        ArrayList<HDBFlatType> HDBFTList = null;
+        LatLng coord = null;
+        String DevelopmentName = "";
+        String DevelopmentDescription = "";
+        while(cursor.moveToNext() && cursor != null) {
+
+            int index;
+
+            index = cursor.getColumnIndexOrThrow("HDBDevelopmentName");
+            DevelopmentName = cursor.getString(index);
+
+            index = cursor.getColumnIndexOrThrow("HDBDevelopmentDescription");
+            DevelopmentDescription = cursor.getString(index);
+
+            index = cursor.getColumnIndexOrThrow("HDBDevelopmentLongitude");
+            String StringDevelopmentLongitude = cursor.getString(index);
+            Double DevelopmentLongitude = Double.parseDouble(StringDevelopmentLongitude);
+
+            index = cursor.getColumnIndexOrThrow("HDBDevelopmentLatitude");
+            String StringDevelopmentLatitude = cursor.getString(index);
+            Double DevelopmentLatitude = Double.parseDouble(StringDevelopmentLatitude);
+
+            coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
+            mdList = readMapData(DevelopmentName);
+            HDBFTList = readHDBFlatType(DevelopmentName);
+
+        }
+
+        cursor.close();
+
+        //TODO: Return created objects by calling the creation method
+        createHDBDevelopmentObject(HDBFTList, DevelopmentName, DevelopmentDescription, false, coord, mdList);
+
+        return HDBDList;
+
+    }
+
+
+    private ArrayList<MapData> readMapData(String name){
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = {
+                BaseColumns._ID,
+                ID,
+                AmenitiesName,
+                AmenitiesType,
+                AmenitiesLongitude,
+                AmenitiesLatitude
+        };
+
+
+        String rawQuery = "SELECT AmenitiesName, AmenitiesLongitude, AmenitiesLatitude FROM "+ TABLE_NAME + "as D, " + HDBFlatType + "as FT WHERE name = FT.HDBDevelopmentName";
+
+        Cursor cursor = db.rawQuery(rawQuery, null);
+
+        ArrayList<MapData> md = new ArrayList<MapData>();
+
+        while(cursor.moveToNext() && cursor != null) {
+
+            int index;
+
+
+            index = cursor.getColumnIndexOrThrow("AmenitiesName");
+            String AName = cursor.getString(index);
+
+            index = cursor.getColumnIndexOrThrow("AmenitiesLongitude");
+            String StringAmenitiesLongitude = cursor.getString(index);
+            Double ALongitude = Double.parseDouble(StringAmenitiesLongitude);
+
+            index = cursor.getColumnIndexOrThrow("AmenitiesLatitude");
+            String StringAmenitiesLatitude = cursor.getString(index);
+            Double ALatitude = Double.parseDouble(StringAmenitiesLatitude);
+
+            index = cursor.getColumnIndexOrThrow("AmenitiesType");
+            String AType = cursor.getString(index);
+
+            LatLng Acoord = new LatLng(ALatitude, ALongitude);
+
+
+            //add data to mapData arrayList
+            md.add(new MapData(AName,AType,Acoord));
+
+        }
+
+        assert md != null;
+        cursor.close();
+        return md;
+    }
+
+    private ArrayList<HDBFlatType> readHDBFlatType(String name){
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = {
+                BaseColumns._ID,
+                ID,
+                HDBFlatType,
+                HDBFlatPrice
+        };
+
+
+        String rawQuery = "SELECT HDBFlatType, HDBFlatPrice FROM "+ TABLE_NAME + "as D, " + HDBFlatType + "as FT WHERE name = FT.HDBDevelopmentName";
+
+        Cursor cursor = db.rawQuery(rawQuery, null);
+
+        HashMap<String, Object> flatTypeDetails = null;
+        ArrayList<HDBFlatType> HDBFTList = null;
 
         while(cursor.moveToNext() && cursor != null) {
 
@@ -182,11 +279,10 @@ public class DatabaseController extends SQLiteOpenHelper {
             flatTypeDetails.put("affordability", false);
             HDBFTList.add(new HDBFlatType(flatTypeDetails));
         }
+
+        assert HDBFTList != null;
         cursor.close();
-
-        //TODO: Return created objects by calling the creation method
-        return null;
-
+        return HDBFTList;
     }
 
     private HDBDevelopment createHDBDevelopmentObject(ArrayList<HashMap<String, Object>> HDBFTList, String HDBDevelopmentName, String HDBDevelopmentDescription,

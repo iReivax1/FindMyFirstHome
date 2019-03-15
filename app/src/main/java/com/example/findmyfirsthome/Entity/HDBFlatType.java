@@ -11,7 +11,6 @@ public class HDBFlatType {
     //i.e 3000000, 4room, false;
     private HashMap<String, Object> flatTypeDetails;
 
-    public HDBFlatType() {}
 
     public HDBFlatType(HashMap<String, Object> hdbFlatTypeDetails)
     {
