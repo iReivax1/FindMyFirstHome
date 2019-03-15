@@ -1,7 +1,6 @@
 package com.example.findmyfirsthome.Controller;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
 
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -16,7 +15,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 
-
+//Startup Controller just call write data.
 
 public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
 
@@ -30,9 +29,6 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
     private ArrayList<HashMap<String, Object>>ListFlatTypePrice = new ArrayList<HashMap<String, Object>>();
     private String descriptionText;
 
-    //useless constructor
-    public HDBDetailsManager(){
-    }
 
     @Override
     protected void onPreExecute() {
@@ -81,7 +77,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
     }
 
 
-    public ArrayList<HDBDevelopment> createHDBDevelopment(){
+    protected ArrayList<HDBDevelopment> createHDBDevelopment(){
         int index = 0;
         HDBDevelopment HDBD = null;
         ArrayList<HDBDevelopment> HDBDList = new ArrayList<HDBDevelopment>();
@@ -98,22 +94,28 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         return HDBDList;
     }
 
+    //TODO: A while loop to write data as the data is called asynchronously.
+
+    public void writeData(){
+        dbWritesData(createHDBDevelopment());
+    }
     //hold this first
-    public boolean writesData(ArrayList<HDBDevelopment> dev){
+    protected boolean dbWritesData(ArrayList<HDBDevelopment> developments){
         MapsController mc = new MapsController();
         Context context = mc.getContext();
         DatabaseController db = new DatabaseController(context);
         //get flattype
         //create faltType in the class
         //use writeData to enter flat type
-        for(HDBDevelopment hdb : dev){
+
+        for(HDBDevelopment hdb : developments){
             db.writeHDBata(hdb);
         }
         return true;
     }
 
 
-    public String description(String url, String developmentName1, String developmentName2) throws IOException {
+    protected String description(String url, String developmentName1, String developmentName2) throws IOException {
         Document document = Jsoup.connect(url).get();
         for(int i = 0; i <  document.select("p").size(); i ++) {
             Element paragraphs = document.select("p").get(i);
@@ -132,7 +134,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
     }
 
     //overloading cuz HDB a bitch
-    public String description(String url, String developmentName1) throws IOException {
+    protected String description(String url, String developmentName1) throws IOException {
         Document document = Jsoup.connect(url).get();
         for (int i = 0; i < document.select("p").size(); i++) {
             Element paragraphs = document.select("p").get(i);
@@ -147,7 +149,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         return "";
     }
 
-    public HashMap<String, Object> scrapFlatType(String url, int tableNumber, int firstRowNumber, int rowStart, int rowEnd){
+    protected HashMap<String, Object> scrapFlatType(String url, int tableNumber, int firstRowNumber, int rowStart, int rowEnd){
         HashMap<String, Object> flatType = new HashMap<String, Object>();
         try {
             Document document = Jsoup.connect(url).get();
@@ -185,7 +187,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         return flatType;
     }
 
-    public ArrayList<String> scrapDevelopmentName(String url, int tableNumber, int rowNumber, int colNumber) {
+    protected ArrayList<String> scrapDevelopmentName(String url, int tableNumber, int rowNumber, int colNumber) {
         try {
             ArrayList<String> textList = new ArrayList<String>();
             Document document = Jsoup.connect(url).get();
@@ -218,7 +220,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         return null;
     }
 
-    public void addToList(ArrayList<String> temp, ArrayList<String> target) {
+    protected void addToList(ArrayList<String> temp, ArrayList<String> target) {
         for(int i = 0; i < temp.size() ; i++ ) {
             target.add(temp.get(i));
         }

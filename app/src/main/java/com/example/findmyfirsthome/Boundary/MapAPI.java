@@ -85,16 +85,8 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
     }
 
     //Controller will call this
-    public LatLng getHDBDevelopmentCoordinates(HDBDevelopment HDBD){
-        LatLng Coordiantes;
-
-        Coordiantes = getCoordinates(HDBD.getDevelopmentName());
-
-        return Coordiantes;
-    }
-
     //self call GeoCooding
-    private LatLng getCoordinates(String name){
+    public LatLng getHDBCoordinates(String name){
         Context context = getApplicationContext();
         Geocoder gc = new Geocoder(context);
         List<Address> addresses = null;

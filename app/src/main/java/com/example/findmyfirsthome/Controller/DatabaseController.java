@@ -87,9 +87,7 @@ public class DatabaseController extends SQLiteOpenHelper {
 
     }
 
-    public boolean write HDBCoord(){
-        getHDBDevelopmentCoordinates
-    }
+
 
     public boolean writeHDBata(HDBDevelopment HDBD) {
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
@@ -98,9 +96,8 @@ public class DatabaseController extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(HDBDevelopmentName, HDBD.getDevelopmentName());
         values.put(HDBDevelopmentDescription, HDBD.getDevelopmentDescription());
-        LatLng HDBCoord = HDBD.getCoordinates();
-        String HDBlat = Double.toString(HDBCoord.latitude);
-        String HDBlon = Double.toString(HDBCoord.longitude);
+        String HDBlat = Double.toString(getHDBDevelopmentCoordinates(HDBDevelopmentName).latitude);
+        String HDBlon = Double.toString(getHDBDevelopmentCoordinates(HDBDevelopmentName).longitude);
         values.put(AmenitiesLatitude, HDBlat);
         values.put(AmenitiesLongitude, HDBlon);
         //Potential BUGGY AREA TODO: UPGRADE TO USE FLATDETAIL HASHMAP
@@ -199,9 +196,10 @@ public class DatabaseController extends SQLiteOpenHelper {
         return HDBD;
     }
 
-    public LatLng getHDBDevelopmentCoordinates(HDBDevelopment HDBD){
+    public LatLng getHDBDevelopmentCoordinates(String HDBDevelopmentName){
         MapAPI mAPI = new MapAPI();
-        mAPI.getHDBDevelopmentCoordinates();
+        LatLng coord = mAPI.getHDBCoordinates(HDBDevelopmentName);
+        return coord;
     }
 
 

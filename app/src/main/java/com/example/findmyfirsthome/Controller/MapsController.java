@@ -43,7 +43,7 @@ public class MapsController extends Application {
         LatLng coordinates;
         String HDBDevelopmentName;
         for(HDBDevelopment HDBD : HDBDevelopmentlist){
-            coordinates = db.getHDBDevelopmentCoordinates(HDBD);
+            coordinates = db.getHDBDevelopmentCoordinates(HDBD.getDevelopmentName());
             HDBDevelopmentName = HDBD.getDevelopmentName();
             HDBCoord.put(HDBDevelopmentName, coordinates);
         }
