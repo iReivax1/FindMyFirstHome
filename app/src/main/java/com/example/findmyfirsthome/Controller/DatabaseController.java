@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+import com.example.findmyfirsthome.Boundary.MapAPI;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
 import com.example.findmyfirsthome.Entity.HDBFlatType;
 import com.example.findmyfirsthome.Entity.MapData;
@@ -86,6 +87,9 @@ public class DatabaseController extends SQLiteOpenHelper {
 
     }
 
+    public boolean write HDBCoord(){
+        getHDBDevelopmentCoordinates
+    }
 
     public boolean writeHDBata(HDBDevelopment HDBD) {
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
@@ -196,7 +200,8 @@ public class DatabaseController extends SQLiteOpenHelper {
     }
 
     public LatLng getHDBDevelopmentCoordinates(HDBDevelopment HDBD){
-        return null;
+        MapAPI mAPI = new MapAPI();
+        mAPI.getHDBDevelopmentCoordinates();
     }
 
 
