@@ -50,6 +50,7 @@ public class MapsController extends Application {
     }
 
 
+    //MapController to parse url and give to mapAPI
 
 
 

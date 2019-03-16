@@ -252,6 +252,12 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
 }
 
 
+//TODO:
+///Need to scrap this and put in HashMap<String(for area i.e Ang Mo Kio), HashMap<String (For flat type), Double(Price)>>;
+//https://www.hdb.gov.sg/cs/infoweb/residential/renting-a-flat/renting-from-the-open-market/rental-statistics
+//This is to find the Annual value, rental of latest quarter * 12;
 
-
+//TODO:
+//For both 1st timer: https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/first-timer-applicants
+//For 1 1st 1 2nd : https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/first-timer-and-second-timer-couple-applicants
 

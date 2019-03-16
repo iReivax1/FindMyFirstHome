@@ -4,4 +4,5 @@
     <string name="title_activity_maps">Map</string>
     <string name="google_map_api_key">AIzaSyCe2WuHAEw34r4fZzloqGYccgy-1234</string>
     <string name="title_activity_maps_test">Map</string>
+    <string name="title_activity_gov_data_api">Map</string>
 </resources>
