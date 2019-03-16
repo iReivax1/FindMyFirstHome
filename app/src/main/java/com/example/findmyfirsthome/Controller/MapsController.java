@@ -28,9 +28,8 @@ public class MapsController extends Application {
 
     @Override
     public void onCreate() {
-
         super.onCreate();
-         HDBDevelopmentlist = getHDBListCoord();
+
     }
 
 

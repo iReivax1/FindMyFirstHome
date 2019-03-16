@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.findmyfirsthome.Boundary.MapAPI;
+import com.example.findmyfirsthome.Boundary.MapsTest;
 
 import java.util.Map;
 
@@ -17,7 +18,11 @@ public class SplashScreenUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
-        Intent intent = new Intent(this, MapAPI.class);
+        startMaps();
+    }
 
+    protected void startMaps(){
+        Intent intent = new Intent(this, MapsTest.class);
+        startService(intent);
     }
 }

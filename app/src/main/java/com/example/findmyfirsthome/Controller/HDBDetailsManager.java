@@ -27,7 +27,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
     private ProgressDialog mProgressDialog;
     private ArrayList<String> HDBDevelopmentNames = new ArrayList<String>();
     private ArrayList<String> temp;
-    private ArrayList<HDBFlatType>ListFlatTypePrice = new ArrayList<HDBFlatType>();
+    private ArrayList<HashMap<String, Object>>ListFlatTypePrice = new ArrayList<HashMap<String, Object>>();
     private String descriptionText;
 
 
@@ -47,15 +47,15 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         //BoonLay & Jurong west
         temp = (scrapDevelopmentName(urlMain, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
         addToList(temp,HDBDevelopmentNames);
-        ListFlatTypePrice.add(new HDBFlatType(scrapFlatType(urlMain,0 ,3,4, 8 )));
+        ListFlatTypePrice.add((scrapFlatType(urlMain,0 ,3,4, 8 )));
         //SK
         temp = (scrapDevelopmentName(urlMain, 0, 8, 1));
         addToList(temp,HDBDevelopmentNames);
-        ListFlatTypePrice.add(new HDBFlatType(scrapFlatType(urlMain,0,8,9, 13)));
+        ListFlatTypePrice.add((scrapFlatType(urlMain,0,8,9, 13)));
         //Kallang
         temp = (scrapDevelopmentName(urlMain, 0, 4, 1));
         addToList(temp,HDBDevelopmentNames);
-        ListFlatTypePrice.add(new HDBFlatType(scrapFlatType(urlMain,0,8,9, 13)));
+        ListFlatTypePrice.add((scrapFlatType(urlMain,0,8,9, 13)));
         print(HDBDevelopmentNames);
 
         try {
