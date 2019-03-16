@@ -31,9 +31,6 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".Boundary.MapsTest"
-            android:label="@string/title_activity_maps_test"></activity>
-        <activity
             android:name=".Boundary.MapAPI"
             android:label="@string/title_activity_maps" />
         <activity
