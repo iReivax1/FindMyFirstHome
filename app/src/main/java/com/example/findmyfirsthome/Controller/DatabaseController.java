@@ -63,12 +63,13 @@ public class DatabaseController extends SQLiteOpenHelper {
     //Draw the table
     private static final String SQL_HDBDevelopment = "CREATE TABLE " + TABLE_NAME + " (" + ID+ "INTEGER PRIMARY KEY," + HDBDevelopmentName + " TEXT, "
             + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude
-            + " REAL, "  + AmenitiesName
-            + "TEXT, " + AmenitiesType + "TEXT, "+ AmenitiesLongitude + "REAL, " + AmenitiesLatitude + "REAL" + ")";
+            + " REAL " + ")";
 
-    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" +  HDBDevelopmentName + "TEXT PRIMARY KEY, " + HDBFlatType + " INTEGER, " + HDBFlatPrice + "REAL, " +  ")";
-    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 ;
-    public static final String SQL_Grants = "";
+    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" +  HDBDevelopmentName + "TEXT PRIMARY KEY, " + HDBFlatType + " INTEGER, " + HDBFlatPrice + "REAL " +  ")";
+
+    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + "(" +  AmenitiesName + "TEXT PRIMARY KEY, " + AmenitiesType + "TEXT, "+ AmenitiesLongitude + "REAL, " + AmenitiesLatitude + "REAL" + ")";
+
+    public static final String SQL_Grants = "CREATE TABLE" + TABLE_NAME4 + "(" + IncomeRequired + "TEXT PRIMARY KEY, " + GrantType + "TEXT, " + GrantAmount + "REAL" + ")";
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
@@ -86,6 +87,8 @@ public class DatabaseController extends SQLiteOpenHelper {
         //On creation of DBC the table SQL_HDB will be created
         sqLiteDatabase.execSQL(SQL_HDBDevelopment);
         sqLiteDatabase.execSQL(SQL_FlatType);
+        sqLiteDatabase.execSQL(SQL_Amenities);
+        sqLiteDatabase.execSQL(SQL_Grants);
     }
 
     @Override
