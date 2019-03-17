@@ -16,18 +16,26 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 
-//Startup Controller just call write data.
+//Startup Controller just call write data, write grants
+
 
 public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
 
     //variables init;
     //url to be given by startUp controller
-    private String urlDetails = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTO_page_6280/$file/about0.html"; //need to get more of this, each development have different details url
-    private String urlMain = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTO_page_6280/$file/about0.html";
+    private String urlMain1 = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTOJW_page_6280/$file/about1.html    "; //jurong
+    private String urlMain2 =  "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTOSK_page_6280/$file/about1.html"; //sk
+    private String urlMain3 = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTOKWN_page_6280/$file/about1.html"; //kallng
+    private String urlALL = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTO_page_6280/$file/about0.html";
+    private String urlGrants1 = "https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/first-timer-applicants"; //both first
+    private String urlGrants2 = "https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/first-timer-and-second-timer-couple-applicants"; //one first , one second
+    //second timer : $15,000 => no need scrap just hardcode make my life easier thanks.
     private ProgressDialog mProgressDialog;
     private ArrayList<String> HDBDevelopmentNames = new ArrayList<String>();
     private ArrayList<String> temp;
     private ArrayList<HashMap<String, Object>>ListFlatTypePrice = new ArrayList<HashMap<String, Object>>();
+    private HashMap<String, HashMap<String, Double>> firstTimerGrantList  = new HashMap<String, HashMap<String, Double>>();
+    private HashMap<String, HashMap<String, Double>> fsTimerGrantList  = new HashMap<String, HashMap<String, Double>>();
     private String descriptionText;
 
 
@@ -45,24 +53,24 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
     protected Void doInBackground(String... url) {
 
         //BoonLay & Jurong west
-        temp = (scrapDevelopmentName(urlMain, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
+        temp = (scrapDevelopmentName(urlMain1, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
         addToList(temp,HDBDevelopmentNames);
-        ListFlatTypePrice.add((scrapFlatType(urlMain,0 ,3,4, 8 )));
+        ListFlatTypePrice.add((scrapFlatType(urlALL,0 ,3,4, 8 )));
+        descriptionText = description(urlMain1, HDBDevelopmentNames.get(0) , HDBDevelopmentNames.get(1)); //"jurong west jewel", Boon Lay Glade
         //SK
-        temp = (scrapDevelopmentName(urlMain, 0, 8, 1));
+        temp = (scrapDevelopmentName(urlMain2, 0, 8, 1));
         addToList(temp,HDBDevelopmentNames);
-        ListFlatTypePrice.add((scrapFlatType(urlMain,0,8,9, 13)));
+        ListFlatTypePrice.add((scrapFlatType(urlALL,0,8,9, 13)));
+        descriptionText = description(urlMain2, HDBDevelopmentNames.get(2)); //"SK one"
         //Kallang
-        temp = (scrapDevelopmentName(urlMain, 0, 4, 1));
+        temp = (scrapDevelopmentName(urlMain3, 0, 4, 1));
         addToList(temp,HDBDevelopmentNames);
-        ListFlatTypePrice.add((scrapFlatType(urlMain,0,8,9, 13)));
+        ListFlatTypePrice.add((scrapFlatType(urlALL,0,8,9, 13)));
+        descriptionText = description(urlMain3, HDBDevelopmentNames.get(3)); // Kallang /whampoa one
         print(HDBDevelopmentNames);
 
-        try {
-            descriptionText = description(urlDetails, "Jurong West Jewel", "Boon Lay Glade");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        firstTimerGrantList = scrapGrants(urlGrants1);
+        fsTimerGrantList = scrapGrants(urlGrants2);
 
         return null;
     }
@@ -115,36 +123,53 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         return true;
     }
 
+    public void writeGrants(HashMap<String, HashMap<String, Double>> list){
+        MapsController mc = new MapsController();
+        Context context = mc.getContext();
+        DatabaseController db = new DatabaseController(context);
+        //TODO. write in to database
+    }
 
-    protected String description(String url, String developmentName1, String developmentName2) throws IOException {
-        Document document = Jsoup.connect(url).get();
-        for(int i = 0; i <  document.select("p").size(); i ++) {
-            Element paragraphs = document.select("p").get(i);
-            if(paragraphs.text().length() > 150) {
-                String description = paragraphs.text();
-                if(description.contains(developmentName1)) {
-                    return(developmentName1 + ": " + description);
-                }else if(description.contains(developmentName2)) {
-                    System.out.println('\n');
-                    return('\n' + developmentName2 + ": " + description);
+
+    protected String description(String url, String developmentName1, String developmentName2)  {
+
+        try{
+            Document document = Jsoup.connect(url).get();
+            for(int i = 0; i <  document.select("p").size(); i ++) {
+                Element paragraphs = document.select("p").get(i);
+                if(paragraphs.text().length() > 150) {
+                    String description = paragraphs.text();
+                    if(description.contains(developmentName1)) {
+                        return(developmentName1 + ": " + description);
+                    }else if(description.contains(developmentName2)) {
+                        System.out.println('\n');
+                        return('\n' + developmentName2 + ": " + description);
+                    }
+
                 }
-
             }
+
+        } catch (IOException e){
+            e.printStackTrace();
         }
         return "";
     }
 
     //overloading cuz HDB a bitch
-    protected String description(String url, String developmentName1) throws IOException {
-        Document document = Jsoup.connect(url).get();
-        for (int i = 0; i < document.select("p").size(); i++) {
-            Element paragraphs = document.select("p").get(i);
-            if (paragraphs.text().length() > 150) {
-                String description = paragraphs.text();
-                if (description.contains(developmentName1)) {
-                    return(developmentName1 + ": " + description);
+    protected String description(String url, String developmentName1) {
+        try{
+            Document document = Jsoup.connect(url).get();
+            for (int i = 0; i < document.select("p").size(); i++) {
+                Element paragraphs = document.select("p").get(i);
+                if (paragraphs.text().length() > 150) {
+                    String description = paragraphs.text();
+                    if (description.contains(developmentName1)) {
+                        return(developmentName1 + ": " + description);
+                    }
                 }
             }
+        }catch (IOException e){
+            e.printStackTrace();
         }
 
         return "";
@@ -225,12 +250,110 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         return null;
     }
 
+    //Controller to do tell this guy which web to scrap
+    //first timer : https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/first-timer-applicants
+    //First and Second : https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/first-timer-and-second-timer-couple-applicants
+    //second timer : $15,000
+    public HashMap<String, HashMap<String, Double>> scrapGrants(String url) {
+        String grant = "0";
+        Elements cols = null;
+        Element col = null;
+        Element row = null;
+        HashMap<String, HashMap<String, Double>> grantList = new HashMap<String, HashMap<String, Double>>();  //HM<IncomeRequired, HM<GrantType, GrantAmt>>
+        HashMap<String, Double> tempHM = new HashMap<String, Double>();
+        ArrayList<String> incomeReq = new ArrayList<String>();
+        ArrayList<Double> AHG = new ArrayList<Double>();
+        ArrayList<Double> SHG = new ArrayList<Double>();
+        String[] temp = null;
+        try {
+            Document document = Jsoup.connect("url").get();
+
+            Element table = document.select("table").get(1); //select the second table.
+            Elements body = table.select("tbody");
+            //select all rows
+            Elements rows = body.select("tr");
+            //select all row in table body
+            for(int i = 0; i < rows.size(); i++) {
+                row = rows.get(i);
+                cols = row.select("td");
+                for(int j = 0; j < cols.size(); j++) {
+                    // j == 0 is for income required.
+                    switch (j) {
+                        case (0):
+                            col = cols.get(j);
+                            String income = col.text();
+                            incomeReq.add(income);
+                            //System.out.println(income);
+                            break;
+                        //j == 1 AHG grant
+                        case(1):
+                            col = cols.get(j);
+                            grant = col.text();
+                            if(grant.contains("$")) {
+                                grant = grant.substring(1);
+                                if(grant.contains(",")) {
+                                    temp = grant.split(",");
+                                    grant = temp[0] + temp[1];
+                                }
+                                AHG.add(Double.parseDouble(grant));
+                            }
+                            else AHG.add(0.0);
+                            break;
+                        //j ==3 is for SHG
+                        case(3):
+                            col = cols.get(j);
+                            grant = col.text();
+                            if(grant.contains("$")) {
+                                grant = grant.substring(1);
+                                if(grant.contains(",")) {
+                                    temp = grant.split(",");
+                                    grant = temp[0] + temp[1];
+                                }
+                                SHG.add(Double.parseDouble(grant));
+                            }
+                            else SHG.add(0.0);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+            }
+            System.out.println("in SHG");
+            printList(SHG);
+            System.out.println("in AHG");
+            printList(AHG);
+            System.out.println("in income");
+            print(incomeReq);
+
+            for(int i = 0; i < 15; i++) {
+                tempHM.put("SHG", SHG.get(i));
+                tempHM.put("AHG", AHG.get(i));
+                grantList.put(incomeReq.get(i), tempHM);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return grantList;
+    }
+
+
     protected void addToList(ArrayList<String> temp, ArrayList<String> target) {
         for(int i = 0; i < temp.size() ; i++ ) {
             target.add(temp.get(i));
         }
     }
 //    ----------------------------DEBUG PRINT METHODS----------------------------
+
+    private static void printList(ArrayList<Double> shg) {
+        System.out.println("-----------------Inside the SHG/AHG-----------------");
+        for (int i = 0; i < shg.size(); i++) {
+            System.out.println("Index: " + i + " :" + shg.get(i));
+        }
+    }
+
     public void print(ArrayList<String> stringList) {
         System.out.println("-----------------Inside the arrayList-----------------");
         for (int i = 0; i < stringList.size(); i++) {
@@ -256,8 +379,3 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
 ///Need to scrap this and put in HashMap<String(for area i.e Ang Mo Kio), HashMap<String (For flat type), Double(Price)>>;
 //https://www.hdb.gov.sg/cs/infoweb/residential/renting-a-flat/renting-from-the-open-market/rental-statistics
 //This is to find the Annual value, rental of latest quarter * 12;
-
-//TODO:
-//For both 1st timer: https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/first-timer-applicants
-//For 1 1st 1 2nd : https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/first-timer-and-second-timer-couple-applicants
-

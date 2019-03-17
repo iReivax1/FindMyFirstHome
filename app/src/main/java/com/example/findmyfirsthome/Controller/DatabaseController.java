@@ -20,35 +20,55 @@ import java.util.HashMap;
 //Basically this is our DAO;
 //Need to refactor this class to an interface class.
 //have all controllers implement this class
+
+
+//TODO: Redesign database, each enitity = 1 table
+//TODO: add writeGrants, and getGrants
 public class DatabaseController extends SQLiteOpenHelper {
 
 
     //Change version if schema changed;
     public static final int DATABASE_VERSION = 1;
 
-    //----------- TABLE COLUMNS -----------//
+    //----------- TABLE COLUMNS for HDBDevelopment -----------//
     public static final String ID = "ID";
     public static final String HDBDevelopmentName = "HDBDevelopmentName";
     public static final String HDBDevelopmentDescription = "HDBdevelopmentDescription";
     public static final String HDBDevelopmentLongitude = "Longitude";
     public static final String HDBDevelopmentLatitude = "Latitude";
+
+    //----------- TABLE COLUMNS for FlatType -----------//
     public static final String HDBFlatType = "FlatType";
     public static final String HDBFlatPrice = "HDBFlatPrice";
+
+    //----------- TABLE COLUMNS for Amenities -----------//
     public static final String AmenitiesName = "AmenitiesName";
     public static final String AmenitiesType = "AmenitiesType";
     public static final String AmenitiesLongitude = "ALongitude";
     public static final String AmenitiesLatitude = "ALatitude";
 
+    //----------- TABLE COLUMNS for Grants -----------//
+    public static final String IncomeRequired = "IncomeRequired";
+    public static final String GrantType = "GrantType";
+    public static final String GrantAmount = "GrantAmount";
 
-    //----------- TABLE COLUMNS -----------//
+
+    //----------- TABLE NAMES & DATABASE NAME -----------//
     public static final String DATABASE_NAME = "FindMyFirstHome.db";
-    private static final String TABLE_NAME = "HDB";
+    private static final String TABLE_NAME = "HDBDevelopment";
+    private static final String TABLE_NAME2 = "FlatType";
+    private static final String TABLE_NAME3 = "Amenities";
+    private static final String TABLE_NAME4 = "Grants";
 
     //Draw the table
-    private static final String SQL_HDB = "CREATE TABLE " + TABLE_NAME + " (" + ID+ "INTEGER PRIMARY KEY," + HDBDevelopmentName + " TEXT, "
+    private static final String SQL_HDBDevelopment = "CREATE TABLE " + TABLE_NAME + " (" + ID+ "INTEGER PRIMARY KEY," + HDBDevelopmentName + " TEXT, "
             + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude
-            + " REAL, " + HDBFlatType + " INTEGER, " + HDBFlatPrice + "REAL, " + AmenitiesName
+            + " REAL, "  + AmenitiesName
             + "TEXT, " + AmenitiesType + "TEXT, "+ AmenitiesLongitude + "REAL, " + AmenitiesLatitude + "REAL" + ")";
+
+    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" +  HDBDevelopmentName + "TEXT PRIMARY KEY, " + HDBFlatType + " INTEGER, " + HDBFlatPrice + "REAL, " +  ")";
+    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 ;
+    public static final String SQL_Grants = "";
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
@@ -64,7 +84,8 @@ public class DatabaseController extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         //On creation of DBC the table SQL_HDB will be created
-        sqLiteDatabase.execSQL(SQL_HDB);
+        sqLiteDatabase.execSQL(SQL_HDBDevelopment);
+        sqLiteDatabase.execSQL(SQL_FlatType);
     }
 
     @Override
