@@ -74,7 +74,7 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
         //set description of development/estate
         //get from controller which get from database controller which get from database
         final TextView estateDescription = findViewById(R.id.text_estateDescription);
-//        estateDescription.setText(ddc.getDevelopmentDescription());
+        estateDescription.setText(ddc.getDevelopmentDescription());
 
 
         //for Table of FlatType info

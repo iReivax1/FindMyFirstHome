@@ -1,6 +1,5 @@
 package com.example.findmyfirsthome.Entity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class HDBFlatType {
@@ -23,7 +22,6 @@ public class HDBFlatType {
         this.flatType = temp == null ? 0 : (int)temp;
         temp = hdbFlatTypeDetails.get("affordability");
         this.affordability = temp == null ? false : (Boolean)temp;
-        setFlatTypeDetails();
     }
 
     //price GET SET
@@ -59,10 +57,10 @@ public class HDBFlatType {
         this.affordability = affordability;
     }
 
-    public HashMap<String, Object> setFlatTypeDetails()
+    public HashMap<String, Object> getFlatTypeDetails()
     {
         //initialize
-        this.flatTypeDetails = new HashMap<String, Object>();
+        this.flatTypeDetails = new HashMap<>();
 
         //set data of this object into HashMap
         //key is the same as attribute name

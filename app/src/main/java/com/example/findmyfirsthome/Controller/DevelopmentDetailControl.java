@@ -12,6 +12,7 @@ public class DevelopmentDetailControl {
     private DatabaseController databaseController;
     private HDBDevelopment hdbd;
     private Context context;
+    private ArrayList<HashMap<String, Object>> flatTypeListDetails;
 
     public DevelopmentDetailControl(String estateName, Context context)
     {
@@ -19,7 +20,7 @@ public class DevelopmentDetailControl {
         databaseController = new DatabaseController(context);
 
         //get data from Database Controller as entity object
-       hdbd = databaseController.readHDBData(estateName);
+        hdbd = databaseController.readHDBData(estateName);
     }
 
     //get description from entity
@@ -38,6 +39,11 @@ public class DevelopmentDetailControl {
     public ArrayList<HashMap<String, Object>> getTableContent()
     {
         //get from development entity the ArrayList of FlatType details of that estate/development
+        flatTypeListDetails = hdbd.getHDBFlatTypeDetailsList();
+
+        if(flatTypeListDetails == null)
+            flatTypeListDetails = new ArrayList<>();
+
          return hdbd.getHDBFlatTypeDetailsList();
     }
 }
