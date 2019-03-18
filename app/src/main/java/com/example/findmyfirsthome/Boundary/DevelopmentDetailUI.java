@@ -58,8 +58,7 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         //initialize controller
         //get specific estate/development entity object
-        ddc = new DevelopmentDetailControl(estateName);
-        ddc.setContext(this);
+        ddc = new DevelopmentDetailControl(estateName, this);
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

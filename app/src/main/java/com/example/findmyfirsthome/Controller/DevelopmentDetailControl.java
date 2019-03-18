@@ -13,17 +13,13 @@ public class DevelopmentDetailControl {
     private HDBDevelopment hdbd;
     private Context context;
 
-    public DevelopmentDetailControl(String estateName)
+    public DevelopmentDetailControl(String estateName, Context context)
     {
-        databaseController = new DatabaseController(this.context);
+        this.context = context;
+        databaseController = new DatabaseController(context);
 
         //get data from Database Controller as entity object
        hdbd = databaseController.readHDBData(estateName);
-    }
-
-    public void setContext(Context context)
-    {
-        this.context = context;
     }
 
     //get description from entity
