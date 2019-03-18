@@ -63,14 +63,7 @@ public class DatabaseController extends SQLiteOpenHelper {
     private static final String SQL_HDBDevelopment = "CREATE TABLE " + TABLE_NAME + " (" + ID + " INTEGER PRIMARY KEY," + HDBDevelopmentName + " TEXT, "
             + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude
             + " REAL " + ")";
-
-<<<<<<< HEAD
-    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" +  HDBDevelopmentName + " TEXT PRIMARY KEY, " + HDBFlatType + " INTEGER, " + HDBFlatPrice + "REAL " +  ")";
-
-    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + "(" +  AmenitiesName + "TEXT PRIMARY KEY, " + AmenitiesType + " TEXT, "+ AmenitiesLongitude + "REAL, " + AmenitiesLatitude + "REAL" + ")";
-
-    public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + "(" + IncomeRequired + "TEXT PRIMARY KEY, " + GrantType + " TEXT, " + GrantAmount + "REAL" + ")";
-=======
+    
     public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" +  HDBDevelopmentName + " TEXT PRIMARY KEY, " + HDBFlatType + " INTEGER, "
             + HDBFlatPrice + "REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "))";
 
@@ -79,7 +72,6 @@ public class DatabaseController extends SQLiteOpenHelper {
 
     public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + "(" + IncomeRequired + " TEXT PRIMARY KEY, " + GrantType + " TEXT, " + GrantAmount +
             " REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "))";
->>>>>>> 1f3be1d09c150f24751b44e678c0953fc9dba3f1
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
     private static final String SQL_DELETE_ENTRIES2 = "DROP TABLE IF EXISTS " + TABLE_NAME2;
