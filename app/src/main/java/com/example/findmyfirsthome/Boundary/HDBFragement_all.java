@@ -25,7 +25,7 @@ public class HDBFragement_all extends Fragment{
         recyclerView = (RecyclerView) v.findViewById(R.id.display_development);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        HDBDevelopmentController hdbControl = new HDBDevelopmentController();
+        HDBDevelopmentController hdbControl = new HDBDevelopmentController(getContext());
         HDBAdapter hdbAdapter = new HDBAdapter(hdbControl.getAllHDBnames(),getContext());
         recyclerView.setAdapter(hdbAdapter);
         return recyclerView;

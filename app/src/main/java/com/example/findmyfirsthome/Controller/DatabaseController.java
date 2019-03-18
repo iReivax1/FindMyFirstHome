@@ -385,7 +385,7 @@ public class DatabaseController extends SQLiteOpenHelper {
 
             return coord;
         }
-        
+
 
 }
 
