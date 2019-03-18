@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -14,16 +16,23 @@ import android.widget.TextView;
 import com.example.findmyfirsthome.Controller.DevelopmentDetailControl;
 import com.example.findmyfirsthome.Entity.AffordabilityReport;
 import com.example.findmyfirsthome.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DevelopmentDetailUI extends AppCompatActivity{
+public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyCallback{
 
     private static Context context;
     private DevelopmentDetailControl ddc;
+    private GoogleMap mMap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +59,7 @@ public class DevelopmentDetailUI extends AppCompatActivity{
         //initialize controller
         //get specific estate/development entity object
         ddc = new DevelopmentDetailControl(estateName);
+        ddc.setContext(this.getBaseContext());
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,8 +74,8 @@ public class DevelopmentDetailUI extends AppCompatActivity{
 
         //set description of development/estate
         //get from controller which get from database controller which get from database
-        //final TextView estateDescription = findViewById(R.id.text_estateDescription);
-        //estateDescription.setText(ddc.getDevelopmentDescription());
+        final TextView estateDescription = findViewById(R.id.text_estateDescription);
+        estateDescription.setText(ddc.getDevelopmentDescription());
 
 
         //for Table of FlatType info
@@ -134,5 +144,27 @@ public class DevelopmentDetailUI extends AppCompatActivity{
 
 
         //for Map display
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+        ft.replace(R.id.mapPlaceHolder, mapFragment);
+        ft.commit();
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney, Australia, and move the camera.
+        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    private Context getContext()
+    {
+        return getBaseContext();
+    }
+
 }

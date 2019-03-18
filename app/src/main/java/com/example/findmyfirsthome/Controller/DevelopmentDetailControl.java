@@ -8,20 +8,22 @@ import com.example.findmyfirsthome.Entity.HDBDevelopment;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DevelopmentDetailControl extends Application {
+public class DevelopmentDetailControl {
     private DatabaseController databaseController;
     private HDBDevelopment hdbd;
+    private Context context;
 
     public DevelopmentDetailControl(String estateName)
     {
-        databaseController = new DatabaseController(this.getContext());
+        databaseController = new DatabaseController(this.context);
 
         //get data from Database Controller as entity object
-        //hdb = databaseController.getHDBData(estateName);
+        hdbd = databaseController.readHDBData(estateName);
     }
 
-    public Context getContext() {
-        return this.getBaseContext();
+    public void setContext(Context context)
+    {
+        this.context = context;
     }
 
     //get description from entity

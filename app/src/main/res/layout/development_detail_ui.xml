@@ -126,25 +126,15 @@
             android:text="Map"
             android:textStyle="bold"/>
 
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/map"
+        <FrameLayout
+            android:id="@+id/mapPlaceHolder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="150dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="50dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            ></com.google.android.gms.maps.MapView>
-        <fragment
-            android:name="com.example.findmyfirsthome.activity_maps"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="150dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="50dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"></fragment>
+            android:layout_marginRight="20dp"></FrameLayout>
 
     </LinearLayout>
 </ScrollView>
