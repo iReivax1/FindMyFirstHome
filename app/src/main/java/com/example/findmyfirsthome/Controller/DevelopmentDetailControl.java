@@ -18,7 +18,7 @@ public class DevelopmentDetailControl {
         databaseController = new DatabaseController(this.context);
 
         //get data from Database Controller as entity object
-        hdbd = databaseController.readHDBData(estateName);
+       hdbd = databaseController.readHDBData(estateName);
     }
 
     public void setContext(Context context)
@@ -42,6 +42,6 @@ public class DevelopmentDetailControl {
     public ArrayList<HashMap<String, Object>> getTableContent()
     {
         //get from development entity the ArrayList of FlatType details of that estate/development
-        return hdbd.getHDBFlatTypeDetailsList();
+         return hdbd.getHDBFlatTypeDetailsList();
     }
 }

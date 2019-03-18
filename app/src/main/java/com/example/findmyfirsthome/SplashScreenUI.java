@@ -10,6 +10,7 @@ import com.example.findmyfirsthome.Boundary.DevelopmentDetailUI;
 
 import com.example.findmyfirsthome.Boundary.DataGovAPI;
 import com.example.findmyfirsthome.Boundary.MapAPI;
+import com.example.findmyfirsthome.Controller.HDBDetailsManager;
 
 
 public class SplashScreenUI extends AppCompatActivity {
@@ -20,14 +21,15 @@ public class SplashScreenUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
+        startDetailsManager();
         try {
             synchronized (this) {
-                wait(1000);
+                wait(10000);
             }
             } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        startDataGovAPI();
+
     }
 
     private void startMaps(){
@@ -38,6 +40,14 @@ public class SplashScreenUI extends AppCompatActivity {
     private void startDataGovAPI(){
         Intent intent = new Intent(SplashScreenUI.this, DataGovAPI.class);
         startActivity(intent);
+    }
+    private void startHDBDevelopmentUI(){
+        Intent intent = new Intent(SplashScreenUI.this, DevelopmentDetailUI.class);
+        startActivity(intent);
+    }
+
+    private void startDetailsManager(){
+        HDBDetailsManager manager = new HDBDetailsManager();
     }
 
     public void nextWindow(View view)

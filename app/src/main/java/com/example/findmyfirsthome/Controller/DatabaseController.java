@@ -64,13 +64,16 @@ public class DatabaseController extends SQLiteOpenHelper {
             + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude
             + " REAL " + ")";
 
-    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" +  HDBDevelopmentName + "TEXT PRIMARY KEY, " + HDBFlatType + " INTEGER, " + HDBFlatPrice + "REAL " +  ")";
+    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" +  HDBDevelopmentName + " TEXT PRIMARY KEY, " + HDBFlatType + " INTEGER, " + HDBFlatPrice + "REAL " +  ")";
 
-    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + "(" +  AmenitiesName + "TEXT PRIMARY KEY, " + AmenitiesType + "TEXT, "+ AmenitiesLongitude + "REAL, " + AmenitiesLatitude + "REAL" + ")";
+    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + "(" +  AmenitiesName + "TEXT PRIMARY KEY, " + AmenitiesType + " TEXT, "+ AmenitiesLongitude + "REAL, " + AmenitiesLatitude + "REAL" + ")";
 
-    public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + "(" + IncomeRequired + "TEXT PRIMARY KEY, " + GrantType + "TEXT, " + GrantAmount + "REAL" + ")";
+    public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + "(" + IncomeRequired + "TEXT PRIMARY KEY, " + GrantType + " TEXT, " + GrantAmount + "REAL" + ")";
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
+    private static final String SQL_DELETE_ENTRIES2 = "DROP TABLE IF EXISTS " + TABLE_NAME2;
+    private static final String SQL_DELETE_ENTRIES3 = "DROP TABLE IF EXISTS " + TABLE_NAME3;
+    private static final String SQL_DELETE_ENTRIES4 = "DROP TABLE IF EXISTS " + TABLE_NAME4;
 
     private static int numID = 0;
     //use this to create the databaseContoller to write and get data; Like so;
@@ -95,6 +98,9 @@ public class DatabaseController extends SQLiteOpenHelper {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
         sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES2);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES3);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES4);
         onCreate(sqLiteDatabase);
     }
 
@@ -120,14 +126,48 @@ public class DatabaseController extends SQLiteOpenHelper {
         String HDBlon = Double.toString(getHDBDevelopmentCoordinates(HDBDevelopmentName).longitude);
         values.put(HDBDevelopmentLatitude, HDBlat);
         values.put(HDBDevelopmentLongitude, HDBlon);
-        //Potential BUGGY AREA TODO: UPGRADE TO USE FLATDETAIL HASHMAP
+
+        writeHDBFlatTypeData(HDBD);
+        writeAmenitiesData(HDBD);
+
+        //The first argument is the table name.
+        //The second argument tells the framework what to do if ContentValues is empty
+        //Third argument is  content;
+        // Insert the new row, returning the primary key value of the new row
+        //put id number;
+        values.put(ID, numID);
+        numID++;
+        long newRowId = db.insert(TABLE_NAME, null, values);
+        db.close();
+        return true;
+    }
+
+    public void writeHDBFlatTypeData(HDBDevelopment HDBD){
+
+        // Gets the data repository in write mode , getWritableDatabase is sqlite function
+        SQLiteDatabase db = getWritableDatabase();
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+
         ArrayList<HDBFlatType> HDBFT = HDBD.getHdbFlatTypeList();
         for (HDBFlatType i : HDBFT) {
             String HDBFlatTypeStr = Integer.toString(i.getFlatType());
             String HDBFP = Double.toString(i.getPrice());
+            values.put(HDBDevelopmentName, HDBD.getDevelopmentName());
             values.put(HDBFlatType, HDBFlatTypeStr);
             values.put(HDBFlatPrice, HDBFP);
         }
+
+        long newRowId = db.insert(TABLE_NAME2, null, values);
+        db.close();
+    }
+
+    public void writeAmenitiesData(HDBDevelopment HDBD){
+
+        // Gets the data repository in write mode , getWritableDatabase is sqlite function
+        SQLiteDatabase db = getWritableDatabase();
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
 
         ArrayList<MapData> HDBAmenities = HDBD.getAmenities();
         for (MapData j : HDBAmenities) {
@@ -140,15 +180,9 @@ public class DatabaseController extends SQLiteOpenHelper {
             values.put(AmenitiesLongitude, Alon);
         }
 
-        //The first argument is the table name.
-        //The second argument tells the framework what to do if ContentValues is empty
-        //Third argument is  content;
-        // Insert the new row, returning the primary key value of the new row
-        values.put(ID, numID);
-        numID++;
-        long newRowId = db.insert(TABLE_NAME, null, values);
+        long newRowId = db.insert(TABLE_NAME3, null, values);
         db.close();
-        return true;
+
     }
 
 
@@ -171,7 +205,7 @@ public class DatabaseController extends SQLiteOpenHelper {
         // How you want the results sorted in the resulting Cursor
         //Potential problem, potential solution query by ID.
 
-        String rawQuery = "SELECT * FROM "+ TABLE_NAME + "as D, " + HDBFlatType + "as FT WHERE D.HDBDevelopmentName = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT * FROM "+ TABLE_NAME + "as D, " + TABLE_NAME2 + "as FT WHERE D.HDBDevelopmentName = FT.HDBDevelopmentName";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
@@ -234,7 +268,7 @@ public class DatabaseController extends SQLiteOpenHelper {
         // How you want the results sorted in the resulting Cursor
         //Potential problem, potential solution query by ID.
 
-        String rawQuery = "SELECT * FROM "+ TABLE_NAME + "as D, " + HDBFlatType + "as FT WHERE D.HDBDevelopmentName = developmentName AND D.HDBDevelopmentName = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT * FROM "+ TABLE_NAME + "as D, " + TABLE_NAME2 + "as FT WHERE D.HDBDevelopmentName = developmentName AND D.HDBDevelopmentName = FT.HDBDevelopmentName";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
@@ -335,7 +369,7 @@ public class DatabaseController extends SQLiteOpenHelper {
 
         String[] projection = {
                 BaseColumns._ID,
-                ID,
+                HDBDevelopmentName,
                 HDBFlatType,
                 HDBFlatPrice
         };
@@ -343,7 +377,7 @@ public class DatabaseController extends SQLiteOpenHelper {
         HashMap<String, Object> flatTypeDetails = null;
         ArrayList<HashMap<String, Object>> HDBFlatTypedetailsList = new ArrayList<HashMap<String, Object>>();
 
-        String rawQuery = "SELECT HDBFlatType, HDBFlatPrice FROM "+ TABLE_NAME + "as D, " + HDBFlatType + "as FT WHERE name = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT HDBFlatType, HDBFlatPrice FROM "+ TABLE_NAME2 + "as D" + " WHERE name = FT.HDBDevelopmentName";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 

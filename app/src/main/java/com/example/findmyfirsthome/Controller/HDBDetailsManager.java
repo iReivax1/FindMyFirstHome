@@ -5,6 +5,7 @@ import com.example.findmyfirsthome.Entity.HDBFlatType;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -142,7 +143,6 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
                     if(description.contains(developmentName1)) {
                         return(developmentName1 + ": " + description);
                     }else if(description.contains(developmentName2)) {
-                        System.out.println('\n');
                         return('\n' + developmentName2 + ": " + description);
                     }
 
@@ -350,22 +350,22 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
     private static void printList(ArrayList<Double> shg) {
         System.out.println("-----------------Inside the SHG/AHG-----------------");
         for (int i = 0; i < shg.size(); i++) {
-            System.out.println("Index: " + i + " :" + shg.get(i));
+            Log.d("bye","Index: " + i + " :" + shg.get(i));
         }
     }
 
     public void print(ArrayList<String> stringList) {
         System.out.println("-----------------Inside the arrayList-----------------");
         for (int i = 0; i < stringList.size(); i++) {
-            System.out.println("Index: " + i + " :" + stringList.get(i));
+            Log.d("hello","Index: " + i + " :" + stringList.get(i));
         }
     }
 
     public void print(HashMap<String, String> hashList) {
         System.out.println("-----------------Inside the hashmap-----------------");
         for (String key: hashList.keySet()){
-            System.out.println(key);
-            System.out.println(hashList.get(key));
+            Log.d("hello",key);
+           Log.d("hello", hashList.get(key));
         }
     }
     public void print(String[] string, int i) {
