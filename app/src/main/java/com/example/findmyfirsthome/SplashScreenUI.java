@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+
+import com.example.findmyfirsthome.Boundary.DevelopmentDetailUI;
 
 import com.example.findmyfirsthome.Boundary.DataGovAPI;
 import com.example.findmyfirsthome.Boundary.MapAPI;
@@ -34,6 +37,13 @@ public class SplashScreenUI extends AppCompatActivity {
 
     private void startDataGovAPI(){
         Intent intent = new Intent(SplashScreenUI.this, DataGovAPI.class);
+        startActivity(intent);
+    }
+
+    public void nextWindow(View view)
+    {
+        Intent intent = new Intent(this, DevelopmentDetailUI.class);
+        intent.putExtra("estateName", "Test @ Sembawang");
         startActivity(intent);
     }
 }
