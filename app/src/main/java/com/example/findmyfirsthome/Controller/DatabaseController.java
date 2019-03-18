@@ -317,6 +317,12 @@ public class DatabaseController extends SQLiteOpenHelper {
 
         cursor.close();
 
+        //if cursor is empty
+        if(HDBFTList == null)
+            HDBFTList = new ArrayList<>();
+        if(mdList == null)
+            mdList = new ArrayList<>();
+
         //TODO: Return created objects by calling the creation method
         HDBD = createHDBDevelopmentObject(HDBFTList, DevelopmentName, DevelopmentDescription, false, coord, mdList);
 

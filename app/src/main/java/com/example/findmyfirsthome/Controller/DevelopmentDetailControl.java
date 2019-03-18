@@ -41,9 +41,6 @@ public class DevelopmentDetailControl {
         //get from development entity the ArrayList of FlatType details of that estate/development
         flatTypeListDetails = hdbd.getHDBFlatTypeDetailsList();
 
-        if(flatTypeListDetails == null)
-            flatTypeListDetails = new ArrayList<>();
-
          return hdbd.getHDBFlatTypeDetailsList();
     }
 }
