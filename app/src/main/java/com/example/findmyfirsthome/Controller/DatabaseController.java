@@ -69,7 +69,7 @@ public class DatabaseController extends SQLiteOpenHelper {
 
     public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + "(" +  AmenitiesName + "TEXT PRIMARY KEY, " + AmenitiesType + "TEXT, "+ AmenitiesLongitude + "REAL, " + AmenitiesLatitude + "REAL" + ")";
 
-    public static final String SQL_Grants = "CREATE TABLE" + TABLE_NAME4 + "(" + IncomeRequired + "TEXT PRIMARY KEY, " + GrantType + "TEXT, " + GrantAmount + "REAL" + ")";
+    public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + "(" + IncomeRequired + "TEXT PRIMARY KEY, " + GrantType + "TEXT, " + GrantAmount + "REAL" + ")";
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
