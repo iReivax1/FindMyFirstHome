@@ -1,10 +1,14 @@
 package com.example.findmyfirsthome.Boundary;
 
-import android.support.v4.app.FragmentActivity;
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
+import com.example.findmyfirsthome.Controller.MapsController;
+import com.example.findmyfirsthome.Entity.HDBDevelopment;
 import com.example.findmyfirsthome.R;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -12,18 +16,21 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.LocationSource;
 
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
-
-
-public class MapAPI extends FragmentActivity implements OnMapReadyCallback, LocationSource{
+public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
 
 
     private GoogleMap mMap;
-
+    private MapsController MC = new MapsController();
+    private String[] DevelopmentName;
+    LatLng point;
 
     public void onPause() {
         super.onPause();
@@ -36,6 +43,7 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback, Loca
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        HashMap<String, LatLng> HDBList = MC.getHDBListCoord();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -55,13 +63,13 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback, Loca
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng Singapore = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(Singapore).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(Singapore));
-        //     map.setLocationSource(mLocationSource);
-//      map.setOnMapLongClickListener(mLocationSource);
-//      map.setMyLocationEnabled(true);
+//        // Add a marker in Sydney and move the camera
+//        LatLng Singapore = new LatLng(-34, 151);
+//        mMap.addMarker(new MarkerOptions().position(Singapore).title("Marker in Sydney"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(Singapore));
+//        //     map.setLocationSource(mLocationSource);
+////      map.setOnMapLongClickListener(mLocationSource);
+////      map.setMyLocationEnabled(true);
     }
 
     public void setLocation(LatLng point){
@@ -74,16 +82,27 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback, Loca
                 .center(HDBLocation)
                 .radius(150000)
                 .visible(false));
-
     }
 
-    @Override
-    public void activate(OnLocationChangedListener onLocationChangedListener) {
-    }
+    //Controller will call this
+    //self call GeoCooding
+    public LatLng getHDBCoordinates(String name){
+        Context context = getApplicationContext();
+        Geocoder gc = new Geocoder(context);
+        List<Address> addresses = null;
+        point = null;
+        try {
+            addresses = gc.getFromLocationName(name, 5);
+            assert addresses != null; //make sure that addresss is not null
+            Address location = addresses.get(0);
+            point = new LatLng(location.getLatitude(), location.getLongitude() );
+            for ( Address a : addresses )
+                mMap.addMarker( new MarkerOptions().position( new LatLng( a.getLatitude(), a.getLongitude() ) ).title( "HDB" ) );
 
-    @Override
-    public void deactivate() {
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        return point;
     }
 }
-
