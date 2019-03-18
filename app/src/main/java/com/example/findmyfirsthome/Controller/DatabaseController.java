@@ -385,64 +385,7 @@ public class DatabaseController extends SQLiteOpenHelper {
 
             return coord;
         }
-
-    private ArrayList<HashMap<String, Object>> readHDBFlatType(String name){
-        assert getReadableDatabase() != null;
-        SQLiteDatabase db = getReadableDatabase();
-
-        String[] projection = {
-                BaseColumns._ID,
-                ID,
-                HDBFlatType,
-                HDBFlatPrice
-        };
-
-        HashMap<String, Object> flatTypeDetails = null;
-        ArrayList<HashMap<String, Object>> HDBFlatTypedetailsList = new ArrayList<HashMap<String, Object>>();
-
-        String rawQuery = "SELECT HDBFlatType, HDBFlatPrice FROM "+ TABLE_NAME + "as D, " + HDBFlatType + "as FT WHERE name = FT.HDBDevelopmentName";
-
-        Cursor cursor = db.rawQuery(rawQuery, null);
-
-        while(cursor.moveToNext() && cursor != null) {
-
-            int index;
-
-            index = cursor.getColumnIndexOrThrow("HDBFlatPrice");
-            String HDBFlatPrice = cursor.getString(index);
-
-            index = cursor.getColumnIndexOrThrow("HDBFlatType");
-            String HDBFlatType = cursor.getString(index);
-
-
-            //add data to flatType
-            flatTypeDetails = new HashMap<String, Object>();
-            flatTypeDetails.put("price", Double.parseDouble(HDBFlatPrice));
-            flatTypeDetails.put("flatType", Double.parseDouble(HDBFlatType));
-            flatTypeDetails.put("affordability", false);
-            HDBFlatTypedetailsList.add(flatTypeDetails);
-        }
-
-        assert HDBFlatTypedetailsList != null;
-        cursor.close();
-
-        return HDBFlatTypedetailsList;
-    }
-
-    private HDBDevelopment createHDBDevelopmentObject(ArrayList<HashMap<String, Object>> HDBFTList, String HDBDevelopmentName, String HDBDevelopmentDescription,
-                                                      boolean affordable, LatLng coordinates, ArrayList<MapData> amenities){
-        HDBDevelopment HDBD =  new HDBDevelopment(HDBFTList, HDBDevelopmentName,  HDBDevelopmentDescription,
-                false, coordinates, amenities);
-        return HDBD;
-    }
-
-    public LatLng getHDBDevelopmentCoordinates(String HDBDevelopmentName){
-        MapAPI mAPI = new MapAPI();
-        LatLng coord = mAPI.getHDBCoordinates(HDBDevelopmentName);
-        return coord;
-    }
-
-
+        
 
 }
 
