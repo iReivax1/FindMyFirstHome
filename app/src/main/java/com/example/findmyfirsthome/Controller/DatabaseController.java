@@ -130,7 +130,7 @@ public class DatabaseController extends SQLiteOpenHelper {
         values.put(HDBDevelopmentLatitude, HDBlat);
         values.put(HDBDevelopmentLongitude, HDBlon);
 
-        for(ArrayList<HashMap<String, Object>> i : ListFlatTypePrice){
+        for(HashMap<String, Object> i : ListFlatTypePrice){
             writeHDBFlatTypeData(HDBDevelopmentName, i);
         }
 
