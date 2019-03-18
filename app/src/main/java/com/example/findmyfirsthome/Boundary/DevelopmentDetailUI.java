@@ -59,7 +59,7 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
         //initialize controller
         //get specific estate/development entity object
         ddc = new DevelopmentDetailControl(estateName);
-        ddc.setContext(this.getBaseContext());
+        ddc.setContext(this);
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,11 +160,6 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-    }
-
-    private Context getContext()
-    {
-        return getBaseContext();
     }
 
 }
