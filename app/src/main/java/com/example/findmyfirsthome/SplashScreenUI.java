@@ -52,6 +52,7 @@ public class SplashScreenUI extends AppCompatActivity {
 
     public void nextWindow(View view)
     {
+
         Intent intent = new Intent(this, DevelopmentDetailUI.class);
         intent.putExtra("estateName", "Test @ Sembawang");
         startActivity(intent);
