@@ -271,7 +271,8 @@ public class DatabaseController extends SQLiteOpenHelper {
         // How you want the results sorted in the resulting Cursor
         //Potential problem, potential solution query by ID.
 
-        String rawQuery = "SELECT * FROM "+ TABLE_NAME + " as D, " + TABLE_NAME2 + "as FT WHERE D.HDBDevelopmentName = developmentName AND D.HDBDevelopmentName = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT * FROM " + TABLE_NAME + " as D, " + TABLE_NAME2 + " as FT WHERE D.HDBDevelopmentName = '" + developmentName
+                + "' AND D.HDBDevelopmentName = FT.HDBDevelopmentName";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
@@ -425,12 +426,3 @@ public class DatabaseController extends SQLiteOpenHelper {
 
 
 }
-
-
-    /*Note: to destroy the data base use write this in the onDestroy in the activity class
-    @Override
-    protected void onDestroy() {
-        dbHelper.close();
-        super.onDestroy();
-    }
-*/
