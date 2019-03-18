@@ -1,6 +1,8 @@
 package com.example.findmyfirsthome.Entity;
 
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ public class HDBDevelopment {
     public HDBDevelopment(ArrayList<HashMap<String, Object>> flatTypeList, String developmentName, String developmentDescription,
                           boolean affordable, LatLng coordinates, ArrayList<MapData> amenities)
     {
+        hdbFlatTypeList = new ArrayList<>();
+
         //set data
         setHDBFlatTypeList(flatTypeList);
         this.developmentName = developmentName;
@@ -34,16 +38,18 @@ public class HDBDevelopment {
     //hdbFlatTypeDetailsList GET, added through reference.
     public ArrayList<HashMap<String, Object>> getHDBFlatTypeDetailsList(ArrayList<HDBFlatType> hdbFlatTypeList)
     {
-        hdbFlatTypeDetailsList = new ArrayList<HashMap<String, Object>>();
+        hdbFlatTypeDetailsList = new ArrayList<>();
+
         for(HDBFlatType flat: hdbFlatTypeList ){
-            this.hdbFlatTypeDetailsList.add(flat.setFlatTypeDetails());
+            this.hdbFlatTypeDetailsList.add(flat.getFlatTypeDetails());
+            Log.i("Get Price from flat type Debug", (String)(flat.getFlatTypeDetails().get("price")));
         }
 
         return this.hdbFlatTypeDetailsList;
 
     }
 
-    //hdbFlatTypeList CREATE FlatType
+    //hdbFlatTypeList get FlatTypeList in strings and objects
     public ArrayList<HashMap<String, Object>> getHDBFlatTypeDetailsList()
     {
         //initialize
@@ -52,7 +58,7 @@ public class HDBDevelopment {
         //get HashMap of data of each HDBFlatType
         for(HDBFlatType hdbFlatType : hdbFlatTypeList)
         {
-            this.hdbFlatTypeDetailsList.add(hdbFlatType.setFlatTypeDetails());
+            this.hdbFlatTypeDetailsList.add(hdbFlatType.getFlatTypeDetails());
         }
 
         return this.hdbFlatTypeDetailsList;

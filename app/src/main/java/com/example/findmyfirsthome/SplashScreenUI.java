@@ -24,7 +24,7 @@ public class SplashScreenUI extends AppCompatActivity {
         startDetailsManager();
         try {
             synchronized (this) {
-                wait(10000);
+                wait(4000);
             }
             } catch (InterruptedException e) {
             e.printStackTrace();

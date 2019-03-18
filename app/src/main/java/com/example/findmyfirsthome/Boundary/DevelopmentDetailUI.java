@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
@@ -74,7 +74,7 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
         //set description of development/estate
         //get from controller which get from database controller which get from database
         final TextView estateDescription = findViewById(R.id.text_estateDescription);
-//        estateDescription.setText(ddc.getDevelopmentDescription());
+        estateDescription.setText(ddc.getDevelopmentDescription());
 
 
         //for Table of FlatType info
@@ -143,12 +143,12 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
 
 
         //for Map display
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        SupportMapFragment mapFragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        ft.replace(R.id.mapPlaceHolder, mapFragment);
-        ft.commit();
+        fragmentTransaction.add(R.id.map_developmentDetails, mapFragment);
+        fragmentTransaction.commit();;
     }
 
     @Override
