@@ -67,11 +67,11 @@ public class DatabaseController extends SQLiteOpenHelper {
     public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" +  HDBDevelopmentName + " TEXT PRIMARY KEY, " + HDBFlatType + " INTEGER, "
             + HDBFlatPrice + "REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "))";
 
-    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + "(" +  AmenitiesName + " TEXT PRIMARY KEY, " + AmenitiesType + "TEXT, "
+    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + "(" +  AmenitiesName + " TEXT PRIMARY KEY, " + HDBDevelopmentName + " TEXT," + AmenitiesType + " TEXT, "
             + AmenitiesLongitude + " REAL, " + AmenitiesLatitude + " REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "))";
 
     public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + "(" + IncomeRequired + " TEXT PRIMARY KEY, " + GrantType + " TEXT, " + GrantAmount +
-            " REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "))";
+            " REAL)";
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
     private static final String SQL_DELETE_ENTRIES2 = "DROP TABLE IF EXISTS " + TABLE_NAME2;
@@ -278,7 +278,8 @@ public class DatabaseController extends SQLiteOpenHelper {
         // How you want the results sorted in the resulting Cursor
         //Potential problem, potential solution query by ID.
 
-        String rawQuery = "SELECT * FROM "+ TABLE_NAME + "as D, " + TABLE_NAME2 + "as FT WHERE D.HDBDevelopmentName = developmentName AND D.HDBDevelopmentName = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT * FROM " + TABLE_NAME + " as D, " + TABLE_NAME2 + " as FT WHERE D.HDBDevelopmentName = '" + developmentName
+                + "' AND D.HDBDevelopmentName = FT.HDBDevelopmentName";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
@@ -335,7 +336,7 @@ public class DatabaseController extends SQLiteOpenHelper {
         };
 
 
-        String rawQuery = "SELECT AmenitiesName, AmenitiesLongitude, AmenitiesLatitude FROM "+ TABLE_NAME + "as D, " + HDBFlatType + "as FT WHERE name = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT AmenitiesName, AmenitiesLongitude, AmenitiesLatitude FROM "+ TABLE_NAME + " as D, " + HDBFlatType + " as FT WHERE name = FT.HDBDevelopmentName";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
@@ -387,7 +388,7 @@ public class DatabaseController extends SQLiteOpenHelper {
         HashMap<String, Object> flatTypeDetails = null;
         ArrayList<HashMap<String, Object>> HDBFlatTypedetailsList = new ArrayList<HashMap<String, Object>>();
 
-        String rawQuery = "SELECT HDBFlatType, HDBFlatPrice FROM "+ TABLE_NAME2 + "as D" + " WHERE name = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT HDBFlatType, HDBFlatPrice FROM "+ TABLE_NAME2 + " as D" + " WHERE name = FT.HDBDevelopmentName";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
@@ -432,12 +433,3 @@ public class DatabaseController extends SQLiteOpenHelper {
 
 
 }
-
-
-    /*Note: to destroy the data base use write this in the onDestroy in the activity class
-    @Override
-    protected void onDestroy() {
-        dbHelper.close();
-        super.onDestroy();
-    }
-*/
