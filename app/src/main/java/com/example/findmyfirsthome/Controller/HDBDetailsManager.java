@@ -33,7 +33,6 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
     //second timer : $15,000 => no need scrap just hardcode make my life easier thanks.
     private ProgressDialog mProgressDialog;
     private ArrayList<String> HDBDevelopmentNames = new ArrayList<String>();
-    private ArrayList<String> temp;
     private ArrayList<HashMap<String, Object>>ListFlatTypePrice = new ArrayList<HashMap<String, Object>>();
     private HashMap<String, HashMap<String, Double>> firstTimerGrantList  = new HashMap<String, HashMap<String, Double>>();
     private HashMap<String, HashMap<String, Double>> fsTimerGrantList  = new HashMap<String, HashMap<String, Double>>();
@@ -53,26 +52,37 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
     @Override
     protected Void doInBackground(String... url) {
 
-        //BoonLay & Jurong west
-        temp = (scrapDevelopmentName(urlMain1, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
-        addToList(temp,HDBDevelopmentNames);
+        ///////////////////////////////////Jurong///////////////////////////////////
+        //Scrap development name : BoonLay & Jurong west
+        HDBDevelopmentNames = (scrapDevelopmentName(urlMain1, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
+        //Scrap List of flat type for SK's HDB
         ListFlatTypePrice.add((scrapFlatType(urlALL,0 ,3,4, 8 )));
+        //Scrap description text for this development
         descriptionText = description(urlMain1, HDBDevelopmentNames.get(0) , HDBDevelopmentNames.get(1)); //"jurong west jewel", Boon Lay Glade
-        //SK
-        temp = (scrapDevelopmentName(urlMain2, 0, 8, 1));
-        addToList(temp,HDBDevelopmentNames);
+        dbWritesData(HDBDevelopmentNames, ListFlatTypePrice, descriptionText);
+        ///////////////////////////////////SK///////////////////////////////////
+        //Scrap development name : SK
+        HDBDevelopmentNames = (scrapDevelopmentName(urlMain2, 0, 8, 1));
+        //Scrap List of flat type for SK's HDB
         ListFlatTypePrice.add((scrapFlatType(urlALL,0,8,9, 13)));
+        //Scrap description text for this development
         descriptionText = description(urlMain2, HDBDevelopmentNames.get(2)); //"SK one"
-        //Kallang
-        temp = (scrapDevelopmentName(urlMain3, 0, 4, 1));
-        addToList(temp,HDBDevelopmentNames);
+        dbWritesData(HDBDevelopmentNames, ListFlatTypePrice, descriptionText);
+        ///////////////////////////////////Kallang///////////////////////////////////
+        //Scrap development name : Kallang
+        HDBDevelopmentNames = (scrapDevelopmentName(urlMain3, 0, 4, 1));
+        //Scrap List of flat type for Kallang's HDB
         ListFlatTypePrice.add((scrapFlatType(urlALL,0,8,9, 13)));
+        //Scrap description text for this development
         descriptionText = description(urlMain3, HDBDevelopmentNames.get(3)); // Kallang /whampoa one
-        print(HDBDevelopmentNames);
+        dbWritesData(HDBDevelopmentNames, ListFlatTypePrice, descriptionText);
 
+        //scrap grants
         firstTimerGrantList = scrapGrants(urlGrants1);
         fsTimerGrantList = scrapGrants(urlGrants2);
 
+        //HDBDevelopmentName => HDBDevelopmentName
+        //Flat type for that hdb name => ListFlatTypePrice
         return null;
     }
 
@@ -106,21 +116,17 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
 
     //TODO: A while loop to write data as the data is called asynchronously.
 
-    public void writeData(){
-        dbWritesData(createHDBDevelopment());
-    }
-    //hold this first
-    protected boolean dbWritesData(ArrayList<HDBDevelopment> developments){
+    public boolean dbWritesData(ArrayList<String> HDBDevelopmentNames, ArrayList<HashMap<String, Object>>ListFlatTypePrice, String descriptionText){
         MapsController mc = new MapsController();
         Context context = mc.getContext();
         DatabaseController db = new DatabaseController(context);
-        //get flattype
-        //create faltType in the class
-        //use writeData to enter flat type
 
-        for(HDBDevelopment hdb : developments){
-            db.writeHDBata(hdb);
+        for(String name : HDBDevelopmentNames){
+            db.writeHDBata(name, ListFlatTypePrice, descriptionText);
         }
+
+
+
         return true;
     }
 

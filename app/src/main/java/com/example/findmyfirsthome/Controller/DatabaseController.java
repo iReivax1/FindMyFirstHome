@@ -63,7 +63,7 @@ public class DatabaseController extends SQLiteOpenHelper {
     private static final String SQL_HDBDevelopment = "CREATE TABLE " + TABLE_NAME + " (" + ID + " INTEGER PRIMARY KEY," + HDBDevelopmentName + " TEXT, "
             + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude
             + " REAL " + ")";
-    
+
     public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" +  HDBDevelopmentName + " TEXT PRIMARY KEY, " + HDBFlatType + " INTEGER, "
             + HDBFlatPrice + "REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "))";
 
@@ -118,20 +118,23 @@ public class DatabaseController extends SQLiteOpenHelper {
 
 
 
-    public boolean writeHDBata(HDBDevelopment HDBD) {
+    public boolean writeHDBata(String HDBDevelopmentName, ArrayList<HashMap<String, Object>>ListFlatTypePrice, String descriptionText) {
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
-        values.put(HDBDevelopmentName, HDBD.getDevelopmentName());
-        values.put(HDBDevelopmentDescription, HDBD.getDevelopmentDescription());
+        values.put(HDBDevelopmentName, HDBDevelopmentName);
+        values.put(HDBDevelopmentDescription, descriptionText);
         String HDBlat = Double.toString(getHDBDevelopmentCoordinates(HDBDevelopmentName).latitude);
         String HDBlon = Double.toString(getHDBDevelopmentCoordinates(HDBDevelopmentName).longitude);
         values.put(HDBDevelopmentLatitude, HDBlat);
         values.put(HDBDevelopmentLongitude, HDBlon);
 
-        writeHDBFlatTypeData(HDBD);
-        writeAmenitiesData(HDBD);
+        for(ArrayList<HashMap<String, Object>> i : ListFlatTypePrice){
+            writeHDBFlatTypeData(HDBDevelopmentName, i);
+        }
+
+        //writeAmenitiesData(HDBDevelopmentName);
 
         //The first argument is the table name.
         //The second argument tells the framework what to do if ContentValues is empty
@@ -145,18 +148,18 @@ public class DatabaseController extends SQLiteOpenHelper {
         return true;
     }
 
-    public void writeHDBFlatTypeData(HDBDevelopment HDBD){
+    public void writeHDBFlatTypeData(String name, HashMap<String, Object> HMFlatType){
 
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
 
-        ArrayList<HDBFlatType> HDBFT = HDBD.getHdbFlatTypeList();
-        for (HDBFlatType i : HDBFT) {
-            String HDBFlatTypeStr = Integer.toString(i.getFlatType());
-            String HDBFP = Double.toString(i.getPrice());
-            values.put(HDBDevelopmentName, HDBD.getDevelopmentName());
+
+        for (String key : HMFlatType.keySet()) {
+            String HDBFlatTypeStr = key;
+            String HDBFP = HMFlatType.get(key).toString();
+            values.put(HDBDevelopmentName, name);
             values.put(HDBFlatType, HDBFlatTypeStr);
             values.put(HDBFlatPrice, HDBFP);
         }
@@ -165,7 +168,10 @@ public class DatabaseController extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void writeAmenitiesData(HDBDevelopment HDBD){
+
+    /*
+    //where to get amaneities
+    public void writeAmenitiesData(String name){
 
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
@@ -187,6 +193,7 @@ public class DatabaseController extends SQLiteOpenHelper {
         db.close();
 
     }
+    */
 
 
 
