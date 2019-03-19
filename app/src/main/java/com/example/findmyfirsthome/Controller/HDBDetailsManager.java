@@ -23,7 +23,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
 
     //variables init;
     //url to be given by startUp controller
-    private String urlMain1 = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTOJW_page_6280/$file/about1.html    "; //jurong
+    private String urlMain1 = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTOJW_page_6280/$file/about1.html"; //jurong
     private String urlMain2 =  "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTOSK_page_6280/$file/about1.html"; //sk
     private String urlMain3 = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTOKWN_page_6280/$file/about1.html"; //kallng
     private String urlALL = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTO_page_6280/$file/about0.html";
@@ -79,7 +79,9 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
 
         //scrap grants
         firstTimerGrantList = scrapGrants(urlGrants1);
+        writeGrants(firstTimerGrantList);
         fsTimerGrantList = scrapGrants(urlGrants2);
+        writeGrants(fsTimerGrantList);
 
         //HDBDevelopmentName => HDBDevelopmentName
         //Flat type for that hdb name => ListFlatTypePrice

@@ -63,10 +63,10 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
             + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude
             + " REAL " + ")";
 
-    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" +  HDBDevelopmentName + " TEXT PRIMARY KEY, " + HDBFlatType + " INTEGER, "
+    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" +  HDBDevelopmentName + " TEXT PRIMARY KEY, " + HDBFlatType + " REAL, "
             + HDBFlatPrice + "REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "))";
 
-    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + "(" +  AmenitiesName + " TEXT PRIMARY KEY, " + HDBDevelopmentName + " TEXT," + AmenitiesType + " TEXT, "
+    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + "(" +  AmenitiesName + " TEXT PRIMARY KEY, " +  AmenitiesType + " TEXT, "
             + AmenitiesLongitude + " REAL, " + AmenitiesLatitude + " REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "))";
 
     public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + "(" + IncomeRequired + " TEXT PRIMARY KEY, " + GrantType + " TEXT, " + GrantAmount +
@@ -118,22 +118,22 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
 
 
-    public boolean writeHDBData(String HDBDevelopmentName, ArrayList<HashMap<String, Object>>ListFlatTypePrice, String descriptionText) {
+    public boolean writeHDBData(String name, ArrayList<HashMap<String, Object>>ListFlatTypePrice, String descriptionText) {
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
 
         boolean checkWriteFlatData = false;
-        values.put(HDBDevelopmentName, HDBDevelopmentName);
+        values.put(HDBDevelopmentName, name);
         values.put(HDBDevelopmentDescription, descriptionText);
-        String HDBlat = Double.toString(getHDBDevelopmentCoordinates(HDBDevelopmentName).latitude);
-        String HDBlon = Double.toString(getHDBDevelopmentCoordinates(HDBDevelopmentName).longitude);
-        values.put(HDBDevelopmentLatitude, HDBlat);
-        values.put(HDBDevelopmentLongitude, HDBlon);
+        //String HDBlat = Double.toString(getHDBDevelopmentCoordinates(HDBDevelopmentName).latitude);
+        //String HDBlon = Double.toString(getHDBDevelopmentCoordinates(HDBDevelopmentName).longitude);
+        values.put(HDBDevelopmentLatitude, 0.0);
+        values.put(HDBDevelopmentLongitude, 0.0);
 
         for(HashMap<String, Object> i : ListFlatTypePrice){
-            checkWriteFlatData = writeHDBFlatTypeData(HDBDevelopmentName, i);
+            writeHDBFlatTypeData(HDBDevelopmentName, i);
         }
 
         //writeAmenitiesData(HDBDevelopmentName);
@@ -145,7 +145,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         //put id number;
         values.put(ID, numID);
         numID++;
-        assert checkWriteFlatData == true;
+        //assert checkWriteFlatData == true;
         long newRowId = db.insert(TABLE_NAME, null, values);
         db.close();
         return true;
@@ -161,14 +161,14 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
         for (String key : HMFlatType.keySet()) {
             String HDBFlatTypeStr = key;
-            String HDBFP = HMFlatType.get(key).toString();
+            Integer HDBFlatTypeInt = Integer.parseInt(HDBFlatTypeStr);
+            Double HDBFP = (Double)HMFlatType.get(key);
             values.put(HDBDevelopmentName, name);
-            values.put(HDBFlatType, HDBFlatTypeStr);
+            values.put(HDBFlatType, HDBFlatTypeInt);
             values.put(HDBFlatPrice, HDBFP);
         }
 
         long newRowId = db.insert(TABLE_NAME2, null, values);
-        db.close();
         return true;
     }
 
@@ -194,7 +194,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         }
 
         long newRowId = db.insert(TABLE_NAME3, null, values);
-        db.close();
+
 
     }
     */
@@ -216,7 +216,6 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         }
         long newRowId = db.insert(TABLE_NAME4, null, values);
         db.close();
-
         return true;
     }
 
@@ -224,18 +223,6 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
     public ArrayList<HDBDevelopment> readHDBData(){
         SQLiteDatabase db = getReadableDatabase();
-
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        String[] projection = {
-                BaseColumns._ID,
-                ID,
-                HDBDevelopmentName,
-                HDBDevelopmentDescription,
-                HDBDevelopmentLongitude,
-                HDBDevelopmentLatitude
-
-        };
 
         // How you want the results sorted in the resulting Cursor
         //Potential problem, potential solution query by ID.
@@ -263,12 +250,10 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
             DevelopmentDescription = cursor.getString(index);
 
             index = cursor.getColumnIndexOrThrow("HDBDevelopmentLongitude");
-            String StringDevelopmentLongitude = cursor.getString(index);
-            Double DevelopmentLongitude = Double.parseDouble(StringDevelopmentLongitude);
+            Double DevelopmentLongitude = cursor.getDouble(index);
 
             index = cursor.getColumnIndexOrThrow("HDBDevelopmentLatitude");
-            String StringDevelopmentLatitude = cursor.getString(index);
-            Double DevelopmentLatitude = Double.parseDouble(StringDevelopmentLatitude);
+            Double DevelopmentLatitude = cursor.getDouble(index);
 
             coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
             mdList = readMapData(DevelopmentName);
@@ -287,18 +272,6 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
     public HDBDevelopment readHDBData(String developmentName){
         SQLiteDatabase db = getReadableDatabase();
-
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        String[] projection = {
-                BaseColumns._ID,
-                ID,
-                HDBDevelopmentName,
-                HDBDevelopmentDescription,
-                HDBDevelopmentLongitude,
-                HDBDevelopmentLatitude
-
-        };
 
         // How you want the results sorted in the resulting Cursor
         //Potential problem, potential solution query by ID.
@@ -327,12 +300,10 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
             DevelopmentDescription = cursor.getString(index);
 
             index = cursor.getColumnIndexOrThrow("HDBDevelopmentLongitude");
-            String StringDevelopmentLongitude = cursor.getString(index);
-            Double DevelopmentLongitude = Double.parseDouble(StringDevelopmentLongitude);
+            Double DevelopmentLongitude = cursor.getDouble(index);
 
             index = cursor.getColumnIndexOrThrow("HDBDevelopmentLatitude");
-            String StringDevelopmentLatitude = cursor.getString(index);
-            Double DevelopmentLatitude = Double.parseDouble(StringDevelopmentLatitude);
+            Double DevelopmentLatitude = cursor.getDouble(index);
 
             coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
             mdList = readMapData(DevelopmentName);
@@ -357,17 +328,8 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
     public ArrayList<MapData> readMapData(String name){
         SQLiteDatabase db = getReadableDatabase();
-        String[] projection = {
-                BaseColumns._ID,
-                ID,
-                AmenitiesName,
-                AmenitiesType,
-                AmenitiesLongitude,
-                AmenitiesLatitude
-        };
 
-
-        String rawQuery = "SELECT AmenitiesName, AmenitiesLongitude, AmenitiesLatitude FROM "+ TABLE_NAME + " as D, " + HDBFlatType + " as FT WHERE name = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT AmenitiesName, AmenitiesType, AmenitiesLongitude, AmenitiesLatitude FROM "+ TABLE_NAME + " as D, " + HDBFlatType + " as FT WHERE name = FT.HDBDevelopmentName";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
@@ -382,12 +344,11 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
             String AName = cursor.getString(index);
 
             index = cursor.getColumnIndexOrThrow("AmenitiesLongitude");
-            String StringAmenitiesLongitude = cursor.getString(index);
-            Double ALongitude = Double.parseDouble(StringAmenitiesLongitude);
+            Double ALongitude = cursor.getDouble(index);
 
             index = cursor.getColumnIndexOrThrow("AmenitiesLatitude");
-            String StringAmenitiesLatitude = cursor.getString(index);
-            Double ALatitude = Double.parseDouble(StringAmenitiesLatitude);
+
+            Double ALatitude = cursor.getDouble(index);
 
             index = cursor.getColumnIndexOrThrow("AmenitiesType");
             String AType = cursor.getString(index);
@@ -421,16 +382,16 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
             int index;
 
             index = cursor.getColumnIndexOrThrow("HDBFlatPrice");
-            String HDBFlatPrice = cursor.getString(index);
+            Double HDBFlatPrice = cursor.getDouble(index);
 
             index = cursor.getColumnIndexOrThrow("HDBFlatType");
-            String HDBFlatType = cursor.getString(index);
+            Integer HDBFlatType = cursor.getInt(index);
 
 
             //add data to flatType
             flatTypeDetails = new HashMap<String, Object>();
-            flatTypeDetails.put("price", Double.parseDouble(HDBFlatPrice));
-            flatTypeDetails.put("flatType", Double.parseDouble(HDBFlatType));
+            flatTypeDetails.put("price", HDBFlatPrice);
+            flatTypeDetails.put("flatType", HDBFlatType);
             flatTypeDetails.put("affordability", false);
             HDBFlatTypedetailsList.add(flatTypeDetails);
         }
@@ -457,10 +418,10 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
             int index;
 
             index = cursor.getColumnIndexOrThrow("HDBDevelopmentLatitude");
-            Double lat = Double.parseDouble(cursor.getString(index));
+            Double lat = cursor.getDouble(index);
 
             index = cursor.getColumnIndexOrThrow("HDBDevelopmentLongitude");
-            Double lng = Double.parseDouble(cursor.getString(index));
+            Double lng = cursor.getDouble(index);
             coord = new LatLng(lat, lng);
         }
 
@@ -469,6 +430,33 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
         return coord;
 
+    }
+
+    public HashMap<String, Double> readHDBGrantData(String incomeReq){
+
+        assert getReadableDatabase() != null;
+        SQLiteDatabase db = getReadableDatabase();
+        HashMap<String, Double> grants = new HashMap<String, Double>();
+
+
+        String rawQuery = "SELECT GrantType, GrantAmount FROM "+ TABLE_NAME4 + " as D" + " WHERE incomeReq = D.incomeReq";
+
+        Cursor cursor = db.rawQuery(rawQuery, null);
+
+        while(cursor.moveToNext() && cursor != null) {
+
+            int index;
+
+            index = cursor.getColumnIndexOrThrow("GrantType");
+            String type =cursor.getString(index);
+
+            index = cursor.getColumnIndexOrThrow("GrantAmount");
+            Double amount = cursor.getDouble(index);
+
+            grants.put(type, amount);
+        }
+
+        return grants;
     }
 
 
