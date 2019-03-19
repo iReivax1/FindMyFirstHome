@@ -126,15 +126,24 @@
             android:text="Map"
             android:textStyle="bold"/>
 
-        <com.google.android.gms.maps.MapView
+        <fragment
             android:id="@+id/map_developmentDetails"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            class="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="150dp"
+            android:layout_height="250dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="50dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginRight="20dp"
+            map:mapType="normal"
+            map:cameraZoom="16"
+            map:uiCompass="false"
+            map:uiRotateGestures="true"
+            map:uiScrollGestures="false"
+            map:uiTiltGestures="true"
+            map:uiZoomControls="false"
+            map:uiZoomGestures="true"
+            />
 
     </LinearLayout>
 </ScrollView>
