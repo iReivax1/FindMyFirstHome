@@ -19,7 +19,7 @@ public class HDBFlatType {
         temp = hdbFlatTypeDetails.get("price");
         this.price = temp == null ? 0 : (Double)temp;
         temp = hdbFlatTypeDetails.get("FlatType");
-        this.flatType = temp == null ? 0 : (int)temp;
+        this.flatType = temp == null ? 0 : (String)temp;
         temp = hdbFlatTypeDetails.get("affordability");
         this.affordability = temp == null ? false : (Boolean)temp;
     }
