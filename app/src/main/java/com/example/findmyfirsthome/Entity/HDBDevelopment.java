@@ -9,10 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class HDBDevelopment {
-
-    private ArrayList<HDBFlatType> hdbFlatTypeList;
-    //HDBDevelopment is aggregated to FlatType , hence FlatType is added through reference not created here.
-    private ArrayList<HashMap<String, Object>> hdbFlatTypeDetailsList;
     private String developmentName;
     private String developmentDescription;
     private boolean affordable;
@@ -20,11 +16,17 @@ public class HDBDevelopment {
     private ArrayList<MapData> amenities;
     private ArrayList developmentDetails ;
 
+    private ArrayList<HDBFlatType> hdbFlatTypeList;
+    //HDBDevelopment is aggregated to FlatType , hence FlatType is added through reference not created here.
+    private ArrayList<HashMap<String, Object>> hdbFlatTypeDetailsList;
+    private ArrayList<ArrayList> amenitiesDetailsList;
+
 
     public HDBDevelopment(ArrayList<HashMap<String, Object>> flatTypeList, String developmentName, String developmentDescription,
                           boolean affordable, LatLng coordinates, ArrayList<MapData> amenities)
     {
         hdbFlatTypeList = new ArrayList<>();
+        amenitiesDetailsList = new ArrayList<>();
 
         //set data
         setHDBFlatTypeList(flatTypeList);
@@ -33,6 +35,18 @@ public class HDBDevelopment {
         this.affordable = affordable;
         this.coordinates = coordinates;
         this.amenities = amenities;
+    }
+
+    public ArrayList<ArrayList> getAmenititesDetailsList()
+    {
+        amenitiesDetailsList = new ArrayList<>();
+
+        for (MapData amenity : amenities)
+        {
+            amenitiesDetailsList.add(amenity.getMapdataDetails());
+        }
+
+        return amenitiesDetailsList;
     }
 
     //hdbFlatTypeDetailsList GET, added through reference.
