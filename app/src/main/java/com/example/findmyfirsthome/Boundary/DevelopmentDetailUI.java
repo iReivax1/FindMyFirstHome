@@ -21,6 +21,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -33,6 +34,7 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
     private DevelopmentDetailControl ddc;
     private GoogleMap mMap;
     private ArrayList<HashMap<String, Object>> HDBFlatTypeDetailsList;
+    private ArrayList<ArrayList> amenitiesDetailsList;
 
 
     @Override
@@ -154,11 +156,23 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney, Australia, and move the camera.
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(21.0f));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        amenitiesDetailsList = ddc.getAmenitiesDetailsList();
+
+        //only plot if there is data received
+        if(HDBFlatTypeDetailsList.size() != 0) {
+            // get location of development location and add a marker to it
+            LatLng developmentLoc = ddc.getDevelopmentLocation();
+            mMap.addMarker(new MarkerOptions().position(developmentLoc).title(ddc.getDevelopmentName()));
+
+            for(ArrayList amemity : amenitiesDetailsList) {
+                LatLng nearBy = new LatLng(1.345734, 103.681283);
+                mMap.addMarker(new MarkerOptions().position((LatLng) amemity.get(2))
+                        .title((String) amemity.get(0)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+            }
+
+            //move map focus to the location of the main marker
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(developmentLoc));
+        }
     }
 
 }

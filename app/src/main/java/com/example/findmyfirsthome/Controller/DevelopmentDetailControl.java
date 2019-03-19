@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,17 +24,24 @@ public class DevelopmentDetailControl {
         hdbd = databaseController.readHDBData(estateName);
     }
 
+    //get list of amenities details in arraylist
+    public ArrayList<ArrayList> getAmenitiesDetailsList() { return this.hdbd.getAmenititesDetailsList(); }
+
     //get description from entity
     public String getDevelopmentDescription()
     {
         return this.hdbd.getDevelopmentDescription();
     }
 
+    public LatLng getDevelopmentLocation() { return this.hdbd.getCoordinates(); }
+
     //get image from entity
     /*public String getDevelopmentImage()
     {
         return this.hdbd.getDevelopmentImage();
     }*/
+
+    public String getDevelopmentName() { return this.hdbd.getDevelopmentName(); }
 
     //return ArrayList of FlatType contents to the boundary
     public ArrayList<HashMap<String, Object>> getTableContent()

@@ -139,9 +139,8 @@
             map:cameraZoom="16"
             map:uiCompass="false"
             map:uiRotateGestures="true"
-            map:uiScrollGestures="false"
             map:uiTiltGestures="true"
-            map:uiZoomControls="false"
+            map:uiZoomControls="true"
             map:uiZoomGestures="true"
             />
 
