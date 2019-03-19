@@ -1,6 +1,7 @@
 package com.example.findmyfirsthome.Entity;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class HDBFlatType {
     private double price;
@@ -18,8 +19,10 @@ public class HDBFlatType {
         //set all fields from HashMap
         temp = hdbFlatTypeDetails.get("price");
         this.price = temp == null ? 0 : (Double)temp;
-        temp = hdbFlatTypeDetails.get("FlatType");
-        this.flatType = temp == null ? 0 : (int)temp;
+        Set<String> key = hdbFlatTypeDetails.keySet();
+        for(String i : key){
+            this.flatType = i;
+        }
         temp = hdbFlatTypeDetails.get("affordability");
         this.affordability = temp == null ? false : (Boolean)temp;
     }
