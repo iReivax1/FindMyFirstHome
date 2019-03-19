@@ -32,6 +32,7 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
     private static Context context;
     private DevelopmentDetailControl ddc;
     private GoogleMap mMap;
+    private ArrayList<HashMap<String, Object>> HDBFlatTypeDetailsList;
 
 
     @Override
@@ -80,7 +81,7 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
         //for Table of FlatType info
         final TableLayout tableLayOut = findViewById(R.id.table_developmentTable);
 
-        ArrayList<HashMap<String, Object>> HDBFlatTypeDetailsList = ddc.getTableContent();
+        HDBFlatTypeDetailsList = ddc.getTableContent();
 
         Object temp;
 
@@ -143,12 +144,10 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
 
 
         //for Map display
-        FragmentManager fragmentManager = this.getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        SupportMapFragment mapFragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map_developmentDetails);
+
         mapFragment.getMapAsync(this);
-        fragmentTransaction.add(R.id.map_developmentDetails, mapFragment);
-        fragmentTransaction.commit();;
     }
 
     @Override
@@ -158,6 +157,7 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
         // Add a marker in Sydney, Australia, and move the camera.
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(21.0f));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
