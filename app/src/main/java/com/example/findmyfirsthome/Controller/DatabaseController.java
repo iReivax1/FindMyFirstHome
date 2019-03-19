@@ -5,7 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Debug;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import com.example.findmyfirsthome.Boundary.MapAPI;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
@@ -27,7 +29,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
 
     //Change version if schema changed;
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
 
     //----------- TABLE COLUMNS for ALL -----------//
     public static final String ID = "ID";

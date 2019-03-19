@@ -22,10 +22,12 @@ public class SplashScreenUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
-        startTest();
+        HDBDetailsManager manager = new HDBDetailsManager();
+        manager.execute();
         try {
             synchronized (this) {
                 wait(4000);
+                startTest();
             }
             } catch (InterruptedException e) {
             e.printStackTrace();

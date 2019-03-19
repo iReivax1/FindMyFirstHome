@@ -1,5 +1,7 @@
 package com.example.findmyfirsthome.Controller;
+import com.example.findmyfirsthome.Boundary.test;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
+import com.example.findmyfirsthome.SplashScreenUI;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -30,7 +32,6 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
     private String urlGrants1 = "https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/first-timer-applicants"; //both first
     private String urlGrants2 = "https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/first-timer-and-second-timer-couple-applicants"; //one first , one second
     //second timer : $15,000 => no need scrap just hardcode make my life easier thanks.
-    private ProgressDialog mProgressDialog;
     private ArrayList<String> HDBDevelopmentNames = new ArrayList<String>();
     //String key: Income req, String object's key grant type, double grant amount
     private ArrayList<HashMap<String, Object>>ListFlatTypePrice = new ArrayList<HashMap<String, Object>>();
@@ -42,10 +43,6 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mProgressDialog.setTitle("Scraping from HDB now");
-        mProgressDialog.setMessage("Loading...");
-        mProgressDialog.setIndeterminate(false);
-        mProgressDialog.show();
     }
 
     //scrap data happens here
@@ -54,7 +51,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
 
         ///////////////////////////////////Jurong///////////////////////////////////
         //Scrap development name : BoonLay & Jurong west
-        HDBDevelopmentNames = (scrapDevelopmentName(urlMain1, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
+        HDBDevelopmentNames = (scrapDevelopmentName(urlALL, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
         //Scrap List of flat type for SK's HDB
         ListFlatTypePrice.add((scrapFlatType(urlALL,0 ,3,4, 8 )));
         //Scrap description text for this development
@@ -62,7 +59,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         dbWritesData(HDBDevelopmentNames, ListFlatTypePrice, descriptionText);
         ///////////////////////////////////SK///////////////////////////////////
         //Scrap development name : SK
-        HDBDevelopmentNames = (scrapDevelopmentName(urlMain2, 0, 8, 1));
+        HDBDevelopmentNames = (scrapDevelopmentName(urlALL, 0, 8, 1));
         //Scrap List of flat type for SK's HDB
         ListFlatTypePrice.add((scrapFlatType(urlALL,0,8,9, 13)));
         //Scrap description text for this development
@@ -70,18 +67,28 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         dbWritesData(HDBDevelopmentNames, ListFlatTypePrice, descriptionText);
         ///////////////////////////////////Kallang///////////////////////////////////
         //Scrap development name : Kallang
-        HDBDevelopmentNames = (scrapDevelopmentName(urlMain3, 0, 4, 1));
+        HDBDevelopmentNames = (scrapDevelopmentName(urlALL, 0, 4, 1));
         //Scrap List of flat type for Kallang's HDB
         ListFlatTypePrice.add((scrapFlatType(urlALL,0,8,9, 13)));
         //Scrap description text for this development
         descriptionText = description(urlMain3, HDBDevelopmentNames.get(3)); // Kallang /whampoa one
-        dbWritesData(HDBDevelopmentNames, ListFlatTypePrice, descriptionText);
 
+        try {
+            synchronized (this) {
+                wait(10000);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        dbWritesData(HDBDevelopmentNames, ListFlatTypePrice, descriptionText);
         //scrap grants
         firstTimerGrantList = scrapGrants(urlGrants1);
-        writeGrants(firstTimerGrantList);
+
+
         fsTimerGrantList = scrapGrants(urlGrants2);
-        writeGrants(fsTimerGrantList);
+
 
         //HDBDevelopmentName => HDBDevelopmentName
         //Flat type for that hdb name => ListFlatTypePrice
@@ -90,7 +97,8 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
 
     @Override
     protected void onPostExecute(Void result) {
-        mProgressDialog.dismiss();
+        writeGrants(firstTimerGrantList);
+        writeGrants(fsTimerGrantList);
     }
 
 
@@ -117,9 +125,8 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
     }
 
     public boolean dbWritesData(ArrayList<String> HDBDevelopmentNames, ArrayList<HashMap<String, Object>>ListFlatTypePrice, String descriptionText){
-        MapsController mc = new MapsController();
-        Context context = mc.getContext();
-        DatabaseController db = new DatabaseController(context);
+        SplashScreenUI t = new SplashScreenUI();
+        DatabaseController db = new DatabaseController(t.getApplicationContext());
 
         for(String name : HDBDevelopmentNames){
             db.writeHDBData(name, ListFlatTypePrice, descriptionText);
@@ -136,7 +143,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         for (String key : list.keySet()) {
             String incomeReq = key;
             HashMap<String, Double> grant = list.get(key);
-           db.writeHDBGrantData(incomeReq, grant);
+            db.writeHDBGrantData(incomeReq, grant);
         }
 
 
@@ -374,7 +381,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         System.out.println("-----------------Inside the hashmap-----------------");
         for (String key: hashList.keySet()){
             Log.d("hello",key);
-           Log.d("hello", hashList.get(key));
+            Log.d("hello", hashList.get(key));
         }
     }
     public void print(String[] string, int i) {
