@@ -85,7 +85,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-
+    //Create all the tables
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         //On creation of DBC the table SQL_HDB will be created
@@ -95,6 +95,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         sqLiteDatabase.execSQL(SQL_Grants);
     }
 
+    //If Database version is difference, delete all current entries and re-create new DBs
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         // This database is only a cache for online data, so its upgrade policy is
@@ -107,7 +108,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
     }
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////Write Functions/////////////////////////////////////////////////////////////////////
     /*Our Methods Below*/
     /*Because they can be long-running, be sure that you call getWritableDatabase() or
      getReadableDatabase()
@@ -469,6 +470,8 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         return coord;
 
     }
+
+    public
 
     private HDBDevelopment createHDBDevelopmentObject(ArrayList<HashMap<String, Object>> HDBFTList, String HDBDevelopmentName, String HDBDevelopmentDescription,
                                                      boolean affordable, LatLng coordinates, ArrayList<MapData> amenities){
