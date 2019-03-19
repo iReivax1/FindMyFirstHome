@@ -9,7 +9,6 @@ import android.provider.BaseColumns;
 
 import com.example.findmyfirsthome.Boundary.MapAPI;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
-import com.example.findmyfirsthome.Entity.HDBFlatType;
 import com.example.findmyfirsthome.Entity.MapData;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -24,7 +23,7 @@ import java.util.HashMap;
 
 //TODO: Redesign database, each enitity = 1 table
 //TODO: add writeGrants, and getGrants
-public class DatabaseController extends SQLiteOpenHelper {
+public class DatabaseController extends SQLiteOpenHelper implements  DataAccessInterfaceClass {
 
 
     //Change version if schema changed;
@@ -86,7 +85,7 @@ public class DatabaseController extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-
+    //Create all the tables
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         //On creation of DBC the table SQL_HDB will be created
@@ -96,6 +95,7 @@ public class DatabaseController extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_Grants);
     }
 
+    //If Database version is difference, delete all current entries and re-create new DBs
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         // This database is only a cache for online data, so its upgrade policy is
@@ -108,7 +108,7 @@ public class DatabaseController extends SQLiteOpenHelper {
     }
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////Write Functions/////////////////////////////////////////////////////////////////////
     /*Our Methods Below*/
     /*Because they can be long-running, be sure that you call getWritableDatabase() or
      getReadableDatabase()
@@ -118,11 +118,13 @@ public class DatabaseController extends SQLiteOpenHelper {
 
 
 
-    public boolean writeHDBata(String HDBDevelopmentName, ArrayList<HashMap<String, Object>>ListFlatTypePrice, String descriptionText) {
+    public boolean writeHDBData(String HDBDevelopmentName, ArrayList<HashMap<String, Object>>ListFlatTypePrice, String descriptionText) {
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
+
+        boolean checkWriteFlatData = false;
         values.put(HDBDevelopmentName, HDBDevelopmentName);
         values.put(HDBDevelopmentDescription, descriptionText);
         String HDBlat = Double.toString(getHDBDevelopmentCoordinates(HDBDevelopmentName).latitude);
@@ -131,7 +133,7 @@ public class DatabaseController extends SQLiteOpenHelper {
         values.put(HDBDevelopmentLongitude, HDBlon);
 
         for(HashMap<String, Object> i : ListFlatTypePrice){
-            writeHDBFlatTypeData(HDBDevelopmentName, i);
+            checkWriteFlatData = writeHDBFlatTypeData(HDBDevelopmentName, i);
         }
 
         //writeAmenitiesData(HDBDevelopmentName);
@@ -143,12 +145,13 @@ public class DatabaseController extends SQLiteOpenHelper {
         //put id number;
         values.put(ID, numID);
         numID++;
+        assert checkWriteFlatData == true;
         long newRowId = db.insert(TABLE_NAME, null, values);
         db.close();
         return true;
     }
 
-    public void writeHDBFlatTypeData(String name, HashMap<String, Object> HMFlatType){
+    public boolean writeHDBFlatTypeData(String name, HashMap<String, Object> HMFlatType){
 
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
@@ -166,6 +169,7 @@ public class DatabaseController extends SQLiteOpenHelper {
 
         long newRowId = db.insert(TABLE_NAME2, null, values);
         db.close();
+        return true;
     }
 
 
@@ -196,6 +200,27 @@ public class DatabaseController extends SQLiteOpenHelper {
     */
 
 
+    public boolean writeHDBGrantData(String incomeReq, HashMap<String, Double> grantList){
+
+        // Gets the data repository in write mode , getWritableDatabase is sqlite function
+        SQLiteDatabase db = getWritableDatabase();
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+
+        values.put(IncomeRequired, incomeReq);
+        for (String key : grantList.keySet()) {
+            String grantType = key;
+            Double grantAmount = grantList.get(key);
+            values.put(GrantType, grantType);
+            values.put(GrantAmount, grantAmount);
+        }
+        long newRowId = db.insert(TABLE_NAME4, null, values);
+        db.close();
+
+        return true;
+    }
+
+//////////////////////////////////////Read functions///////////////////////////////////////////////////////////////////////
 
     public ArrayList<HDBDevelopment> readHDBData(){
         SQLiteDatabase db = getReadableDatabase();
@@ -384,13 +409,6 @@ public class DatabaseController extends SQLiteOpenHelper {
         assert getReadableDatabase() != null;
         SQLiteDatabase db = getReadableDatabase();
 
-        String[] projection = {
-                BaseColumns._ID,
-                HDBDevelopmentName,
-                HDBFlatType,
-                HDBFlatPrice
-        };
-
         HashMap<String, Object> flatTypeDetails = null;
         ArrayList<HashMap<String, Object>> HDBFlatTypedetailsList = new ArrayList<HashMap<String, Object>>();
 
@@ -423,6 +441,38 @@ public class DatabaseController extends SQLiteOpenHelper {
         return HDBFlatTypedetailsList;
     }
 
+
+    public LatLng readHDBDevelopmentCoordinates(String name){
+        assert getReadableDatabase() != null;
+        SQLiteDatabase db = getReadableDatabase();
+
+        LatLng coord = new LatLng(0,0);
+
+        String rawQuery = "SELECT HDBDevelopmentLatitude, HDBDevelopmentLongitude FROM "+ TABLE_NAME + " as D" + " WHERE name = D.HDBDevelopmentName";
+
+        Cursor cursor = db.rawQuery(rawQuery, null);
+
+        while(cursor.moveToNext() && cursor != null) {
+
+            int index;
+
+            index = cursor.getColumnIndexOrThrow("HDBDevelopmentLatitude");
+            Double lat = Double.parseDouble(cursor.getString(index));
+
+            index = cursor.getColumnIndexOrThrow("HDBDevelopmentLongitude");
+            Double lng = Double.parseDouble(cursor.getString(index));
+            coord = new LatLng(lat, lng);
+        }
+
+        assert coord != null;
+        cursor.close();
+
+        return coord;
+
+    }
+
+    public
+
     private HDBDevelopment createHDBDevelopmentObject(ArrayList<HashMap<String, Object>> HDBFTList, String HDBDevelopmentName, String HDBDevelopmentDescription,
                                                      boolean affordable, LatLng coordinates, ArrayList<MapData> amenities){
         HDBDevelopment HDBD =  new HDBDevelopment(HDBFTList, HDBDevelopmentName,  HDBDevelopmentDescription,
@@ -430,12 +480,13 @@ public class DatabaseController extends SQLiteOpenHelper {
         return HDBD;
         }
 
-    public LatLng getHDBDevelopmentCoordinates(String HDBDevelopmentName){
+    private LatLng getHDBDevelopmentCoordinates(String HDBDevelopmentName){
             MapAPI mapi = new MapAPI();
             LatLng coord = mapi.getHDBCoordinates(HDBDevelopmentName);
-
             return coord;
-        }
+    }
+
+
 
 
 }

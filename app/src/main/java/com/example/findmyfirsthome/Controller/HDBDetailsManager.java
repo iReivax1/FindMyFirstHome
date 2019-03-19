@@ -1,6 +1,5 @@
 package com.example.findmyfirsthome.Controller;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
-import com.example.findmyfirsthome.Entity.HDBFlatType;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -33,6 +32,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
     //second timer : $15,000 => no need scrap just hardcode make my life easier thanks.
     private ProgressDialog mProgressDialog;
     private ArrayList<String> HDBDevelopmentNames = new ArrayList<String>();
+    //String key: Income req, String object's key grant type, double grant amount
     private ArrayList<HashMap<String, Object>>ListFlatTypePrice = new ArrayList<HashMap<String, Object>>();
     private HashMap<String, HashMap<String, Double>> firstTimerGrantList  = new HashMap<String, HashMap<String, Double>>();
     private HashMap<String, HashMap<String, Double>> fsTimerGrantList  = new HashMap<String, HashMap<String, Double>>();
@@ -114,18 +114,14 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         return HDBDList;
     }
 
-    //TODO: A while loop to write data as the data is called asynchronously.
-
     public boolean dbWritesData(ArrayList<String> HDBDevelopmentNames, ArrayList<HashMap<String, Object>>ListFlatTypePrice, String descriptionText){
         MapsController mc = new MapsController();
         Context context = mc.getContext();
         DatabaseController db = new DatabaseController(context);
 
         for(String name : HDBDevelopmentNames){
-            db.writeHDBata(name, ListFlatTypePrice, descriptionText);
+            db.writeHDBData(name, ListFlatTypePrice, descriptionText);
         }
-
-
 
         return true;
     }
@@ -134,7 +130,14 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         MapsController mc = new MapsController();
         Context context = mc.getContext();
         DatabaseController db = new DatabaseController(context);
-        //TODO. write in to database
+
+        for (String key : list.keySet()) {
+            String incomeReq = key;
+            HashMap<String, Double> grant = list.get(key);
+           db.writeHDBGrantData(incomeReq, grant);
+        }
+
+
     }
 
 
@@ -212,13 +215,11 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
                 rooms = cols.get(0).text();
                 price = cols.get(1).text();
                 flatType.put(rooms,price);
-
             }
 
         }catch (IOException e) {
             e.printStackTrace();
         }
-
 
         return flatType;
     }
