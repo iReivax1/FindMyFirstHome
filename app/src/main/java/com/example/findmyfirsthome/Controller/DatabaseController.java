@@ -355,7 +355,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
     }
 
-    private ArrayList<MapData> readMapData(String name){
+    public ArrayList<MapData> readMapData(String name){
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {
                 BaseColumns._ID,
@@ -405,7 +405,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         return md;
     }
 
-    private ArrayList<HashMap<String, Object>> readHDBFlatType(String name){
+    public ArrayList<HashMap<String, Object>> readHDBFlatType(String name){
         assert getReadableDatabase() != null;
         SQLiteDatabase db = getReadableDatabase();
 
@@ -471,7 +471,6 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
     }
 
-    public
 
     private HDBDevelopment createHDBDevelopmentObject(ArrayList<HashMap<String, Object>> HDBFTList, String HDBDevelopmentName, String HDBDevelopmentDescription,
                                                      boolean affordable, LatLng coordinates, ArrayList<MapData> amenities){
