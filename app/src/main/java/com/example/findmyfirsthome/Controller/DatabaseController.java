@@ -23,12 +23,14 @@ import java.util.HashMap;
 
 //TODO: Redesign database, each enitity = 1 table
 //TODO: add writeGrants, and getGrants
-public class DatabaseController extends SQLiteOpenHelper implements  DataAccessInterfaceClass {
+public class DatabaseController extends SQLiteOpenHelper implements  DataAccessInterfaceClass, BaseColumns{
 
 
     //Change version if schema changed;
     public static final int DATABASE_VERSION = 1;
 
+    //----------- TABLE COLUMNS for ALL -----------//
+    public static final String ID = "ID";
     //----------- TABLE COLUMNS for HDBDevelopment -----------//
     public static final String HDBDevelopmentName = "HDBDevelopmentName";
     public static final String HDBDevelopmentDescription = "HDBdevelopmentDescription";
@@ -36,7 +38,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
     public static final String HDBDevelopmentLatitude = "Latitude";
 
     //----------- TABLE COLUMNS for FlatType -----------//
-    public static final String HDBFlatType = "FlatType";
+    public static final String HDBFlatType = "HDBFlatType";
     public static final String HDBFlatPrice = "HDBFlatPrice";
 
     //----------- TABLE COLUMNS for Amenities -----------//
@@ -60,16 +62,14 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
     //Draw the table
     private static final String SQL_HDBDevelopment = "CREATE TABLE " + TABLE_NAME + " ("  + HDBDevelopmentName + " TEXT PRIMARY KEY, "
             + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude
-            + " REAL " + ")";
+            + " REAL " + ");";
 
-    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" +  HDBDevelopmentName + " TEXT PRIMARY KEY, " + HDBFlatType + " REAL, "
-            + HDBFlatPrice + "REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "))";
+    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
 
-    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + "(" +  AmenitiesName + " TEXT PRIMARY KEY, " +  AmenitiesType + " TEXT, "
-            + AmenitiesLongitude + " REAL, " + AmenitiesLatitude + " REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "))";
+    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + "(" +  AmenitiesName + " TEXT PRIMARY KEY, " +  AmenitiesType + " TEXT, " + AmenitiesLongitude + " REAL, " + AmenitiesLatitude + " REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
 
     public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + "(" + IncomeRequired + " TEXT PRIMARY KEY, " + GrantType + " TEXT, " + GrantAmount +
-            " REAL)";
+            " REAL);";
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
     private static final String SQL_DELETE_ENTRIES2 = "DROP TABLE IF EXISTS " + TABLE_NAME2;
@@ -90,7 +90,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         //On creation of DBC the table SQL_HDB will be created
         sqLiteDatabase.execSQL(SQL_HDBDevelopment);
         sqLiteDatabase.execSQL(SQL_FlatType);
-        sqLiteDatabase.execSQL(SQL_Amenities);
+        //sqLiteDatabase.execSQL(SQL_Amenities);
         sqLiteDatabase.execSQL(SQL_Grants);
     }
 
@@ -104,6 +104,10 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES3);
         sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES4);
         onCreate(sqLiteDatabase);
+    }
+
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        onUpgrade(db, oldVersion, newVersion);
     }
 
 
@@ -132,7 +136,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         values.put(HDBDevelopmentLongitude, 0.0);
 
         for(HashMap<String, Object> i : ListFlatTypePrice){
-            writeHDBFlatTypeData(HDBDevelopmentName, i);
+            writeHDBFlatTypeData(name, i);
         }
 
         //writeAmenitiesData(HDBDevelopmentName);
@@ -149,6 +153,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
     }
 
     public boolean writeHDBFlatTypeData(String name, HashMap<String, Object> HMFlatType){
+        long newRowId;
 
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
@@ -156,15 +161,15 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         ContentValues values = new ContentValues();
 
 
+        values.put(HDBDevelopmentName, name);
         for (String key : HMFlatType.keySet()) {
             String HDBFlatTypeStr = key;
             Double HDBFP = (Double)HMFlatType.get(key);
-            values.put(HDBDevelopmentName, name);
             values.put(HDBFlatType, HDBFlatTypeStr);
             values.put(HDBFlatPrice, HDBFP);
+            newRowId = db.insert(TABLE_NAME2, null, values);
         }
 
-        long newRowId = db.insert(TABLE_NAME2, null, values);
         return true;
     }
 
