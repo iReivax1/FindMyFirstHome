@@ -30,7 +30,6 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
     public static final int DATABASE_VERSION = 1;
 
     //----------- TABLE COLUMNS for HDBDevelopment -----------//
-    public static final String ID = "ID";
     public static final String HDBDevelopmentName = "HDBDevelopmentName";
     public static final String HDBDevelopmentDescription = "HDBdevelopmentDescription";
     public static final String HDBDevelopmentLongitude = "Longitude";
@@ -59,7 +58,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
     private static final String TABLE_NAME4 = "Grants";
 
     //Draw the table
-    private static final String SQL_HDBDevelopment = "CREATE TABLE " + TABLE_NAME + " (" + ID + " INTEGER PRIMARY KEY," + HDBDevelopmentName + " TEXT, "
+    private static final String SQL_HDBDevelopment = "CREATE TABLE " + TABLE_NAME + " ("  + HDBDevelopmentName + " TEXT PRIMARY KEY, "
             + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude
             + " REAL " + ")";
 
@@ -143,8 +142,6 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         //Third argument is  content;
         // Insert the new row, returning the primary key value of the new row
         //put id number;
-        values.put(ID, numID);
-        numID++;
         //assert checkWriteFlatData == true;
         long newRowId = db.insert(TABLE_NAME, null, values);
         db.close();
@@ -161,10 +158,9 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
         for (String key : HMFlatType.keySet()) {
             String HDBFlatTypeStr = key;
-            Integer HDBFlatTypeInt = Integer.parseInt(HDBFlatTypeStr);
             Double HDBFP = (Double)HMFlatType.get(key);
             values.put(HDBDevelopmentName, name);
-            values.put(HDBFlatType, HDBFlatTypeInt);
+            values.put(HDBFlatType, HDBFlatTypeStr);
             values.put(HDBFlatPrice, HDBFP);
         }
 
