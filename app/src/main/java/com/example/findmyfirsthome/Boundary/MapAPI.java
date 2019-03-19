@@ -86,6 +86,7 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
 
     //Controller will call this
     //self call GeoCooding
+    //To write in database
     public LatLng getHDBCoordinates(String name){
         Context context = getApplicationContext();
         Geocoder gc = new Geocoder(context);

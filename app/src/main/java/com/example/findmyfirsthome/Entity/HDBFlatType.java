@@ -4,10 +4,10 @@ import java.util.HashMap;
 
 public class HDBFlatType {
     private double price;
-    private int flatType; //number of rooms
+    private String flatType; //number of rooms
     private boolean affordability;
 
-    //i.e 3000000, 4room, false;
+    //i.e 3000000, 4 room, false;
     private HashMap<String, Object> flatTypeDetails;
 
     //constructor
@@ -36,12 +36,12 @@ public class HDBFlatType {
     }
 
     //flatType GET SET
-    public int getFlatType()
+    public String getFlatType()
     {
         return this.flatType;
     }
 
-    public void setFlatType(int flatType)
+    public void setFlatType(String flatType)
     {
         this.flatType = flatType;
     }

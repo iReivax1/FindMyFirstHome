@@ -10,6 +10,7 @@ import com.example.findmyfirsthome.Boundary.DevelopmentDetailUI;
 
 import com.example.findmyfirsthome.Boundary.DataGovAPI;
 import com.example.findmyfirsthome.Boundary.MapAPI;
+import com.example.findmyfirsthome.Boundary.test;
 import com.example.findmyfirsthome.Controller.HDBDetailsManager;
 
 
@@ -21,7 +22,7 @@ public class SplashScreenUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
-        startDetailsManager();
+        startTest();
         try {
             synchronized (this) {
                 wait(4000);
@@ -30,6 +31,11 @@ public class SplashScreenUI extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    private void startTest(){
+        Intent intent = new Intent(SplashScreenUI.this, test.class);
+        startActivity(intent);
     }
 
     private void startMaps(){
@@ -52,9 +58,7 @@ public class SplashScreenUI extends AppCompatActivity {
 
     public void nextWindow(View view)
     {
-
         Intent intent = new Intent(this, DevelopmentDetailUI.class);
         intent.putExtra("estateName", "Sembawang Doraemon");
-        startActivity(intent);
     }
 }
