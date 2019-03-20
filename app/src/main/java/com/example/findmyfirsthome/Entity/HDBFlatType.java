@@ -19,10 +19,8 @@ public class HDBFlatType {
         //set all fields from HashMap
         temp = hdbFlatTypeDetails.get("price");
         this.price = temp == null ? 0 : (Double)temp;
-        Set<String> key = hdbFlatTypeDetails.keySet();
-        for(String i : key){
-            this.flatType = i;
-        }
+        temp = hdbFlatTypeDetails.get("flatType");
+        this.flatType = temp == null ? "" : (String) temp;
         temp = hdbFlatTypeDetails.get("affordability");
         this.affordability = temp == null ? false : (Boolean)temp;
     }
