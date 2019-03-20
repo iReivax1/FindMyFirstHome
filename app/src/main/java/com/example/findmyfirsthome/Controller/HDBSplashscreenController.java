@@ -16,6 +16,7 @@ public class HDBSplashscreenController extends AppCompatActivity {
 
     public void writeHDBD(String HDBDevelopmentNames, HashMap<String, Object> ListFlatType, String descriptionText, String ImgURL){
         if(manager.getStatus() == AsyncTask.Status.FINISHED){
+            System.out.println("Reached database");
             DatabaseController db = new DatabaseController(this.getApplicationContext());
             db.writeHDBData(HDBDevelopmentNames,ListFlatType,descriptionText,ImgURL);
             System.out.println("SplashScreenController write HDB, Success in writing "+HDBDevelopmentNames);

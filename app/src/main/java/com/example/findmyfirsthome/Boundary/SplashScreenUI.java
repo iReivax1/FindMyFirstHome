@@ -1,10 +1,9 @@
 package com.example.findmyfirsthome.Boundary;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 
 import com.example.findmyfirsthome.Controller.StartupControl;
 import com.example.findmyfirsthome.R;
@@ -31,7 +30,7 @@ public class SplashScreenUI extends AppCompatActivity {
                 // This method will be executed once the timer is over
                 // Start your app main activity
 
-                Intent i = new Intent( SplashScreenUI.this, ProfileUI.class);
+                Intent i = new Intent( SplashScreenUI.this, test.class);
                 startActivity(i);
 
                 // close this activity

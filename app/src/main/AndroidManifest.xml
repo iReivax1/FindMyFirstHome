@@ -67,6 +67,7 @@
             android:name=".Boundary.AffordabilityReportUI"
             android:label="AffordabilityReportUI">
         </activity>
+        <activity android:name=".Boundary.HDBDevelopmentUI" />
     </application>
 
 </manifest>
