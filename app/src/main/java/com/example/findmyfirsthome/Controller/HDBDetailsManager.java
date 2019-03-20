@@ -1,21 +1,17 @@
 package com.example.findmyfirsthome.Controller;
-import com.example.findmyfirsthome.Boundary.test;
-import com.example.findmyfirsthome.Entity.HDBDevelopment;
-import com.example.findmyfirsthome.SplashScreenUI;
-
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import com.example.findmyfirsthome.Entity.HDBDevelopment;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 //Startup Controller just call write data, write grants
@@ -117,7 +113,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
 
     public boolean adaptHDBD(ArrayList<String> HDBDevelopmentNames, ArrayList<HashMap<String, Object>> ListFlatTypePrice, String descriptionText, String ImgURL) {
 
-        HDBAdapter adapter = new HDBAdapter();
+        HDBSplashscreenController adapter = new HDBSplashscreenController();
 
         //Write
         for (String name : HDBDevelopmentNames) {
@@ -128,7 +124,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     }
 
     public void adaptGrants(HashMap<String, HashMap<String, Double>> list) {
-        HDBAdapter adapter = new HDBAdapter();
+        HDBSplashscreenController adapter = new HDBSplashscreenController();
 
         for (String key : list.keySet()) {
             String incomeReq = key;
