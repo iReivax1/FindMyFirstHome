@@ -67,7 +67,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         //Scrap development name : SK
         HDBDevelopmentNames2 = (scrapDevelopmentName(urlALL, 0, 8, 1));
         //Scrap List of flat type for SK's HDB
-        ListFlatTypePrice2.add((scrapFlatType(urlALL, 0, 8, 9, 13)));
+        ListFlatTypePrice2 = (scrapFlatType(urlALL, 0, 8, 9, 13));
         //Scrap description text for this development
         descriptionText2 = description(urlMain2, HDBDevelopmentNames2.get(2)); //"SK one"
         ImgURL2 = scrapImage(urlMain2);
@@ -76,7 +76,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         //Scrap development name : Kallang
         HDBDevelopmentNames3 = (scrapDevelopmentName(urlALL, 0, 4, 1));
         //Scrap List of flat type for Kallang's HDB
-        ListFlatTypePrice3.add((scrapFlatType(urlALL, 0, 8, 9, 13)));
+        ListFlatTypePrice3 = (scrapFlatType(urlALL, 0, 8, 9, 13));
         //Scrap description text for this development
         descriptionText3 = description(urlMain3, HDBDevelopmentNames3.get(3)); // Kallang /whampoa one
         ImgURL3 = scrapImage(urlMain3);
