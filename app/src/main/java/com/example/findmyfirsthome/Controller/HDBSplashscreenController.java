@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class HDBSplashscreenController extends AppCompatActivity {
@@ -19,6 +18,10 @@ public class HDBSplashscreenController extends AppCompatActivity {
         if(manager.getStatus() == AsyncTask.Status.FINISHED){
             DatabaseController db = new DatabaseController(this.getApplicationContext());
             db.writeHDBData(HDBDevelopmentNames,ListFlatType,descriptionText,ImgURL);
+            System.out.println("SplashScreenController write HDB, Success in writing "+HDBDevelopmentNames);
+        }
+        else{
+            System.out.println("SplashScreenController write HDB, Fail to write "+HDBDevelopmentNames);
         }
 
     }
@@ -26,5 +29,6 @@ public class HDBSplashscreenController extends AppCompatActivity {
     public void writeHDBGrantData(String incomeReq, HashMap<String, Double> grant){
         DatabaseController db = new DatabaseController(this.getApplicationContext());
         db.writeHDBGrantData(incomeReq, grant);
+        System.out.println("SplashScreenController write HDB Grant, Success in writing "+incomeReq);
     }
 }
