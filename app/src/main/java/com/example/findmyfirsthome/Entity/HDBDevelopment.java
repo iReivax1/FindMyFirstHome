@@ -15,15 +15,15 @@ public class HDBDevelopment {
     private LatLng coordinates;
     private ArrayList<MapData> amenities;
     private ArrayList developmentDetails ;
-
     private ArrayList<HDBFlatType> hdbFlatTypeList;
     //HDBDevelopment is aggregated to FlatType , hence FlatType is added through reference not created here.
     private ArrayList<HashMap<String, Object>> hdbFlatTypeDetailsList;
     private ArrayList<ArrayList> amenitiesDetailsList;
+    private String imgUrl;
 
 
     public HDBDevelopment(ArrayList<HashMap<String, Object>> flatTypeList, String developmentName, String developmentDescription,
-                          boolean affordable, LatLng coordinates, ArrayList<MapData> amenities)
+                          boolean affordable, LatLng coordinates, ArrayList<MapData> amenities, String imgUrl)
     {
         hdbFlatTypeList = new ArrayList<>();
         amenitiesDetailsList = new ArrayList<>();
@@ -35,6 +35,7 @@ public class HDBDevelopment {
         this.affordable = affordable;
         this.coordinates = coordinates;
         this.amenities = amenities;
+        this.imgUrl = imgUrl;
     }
 
     public ArrayList<ArrayList> getAmenititesDetailsList()
@@ -150,6 +151,15 @@ public class HDBDevelopment {
     public ArrayList<HDBFlatType> getHdbFlatTypeList() {
         return hdbFlatTypeList;
     }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
 
     public ArrayList getDevelopmentDetails()
     {

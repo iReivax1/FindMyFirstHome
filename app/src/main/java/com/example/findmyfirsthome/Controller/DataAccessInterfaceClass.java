@@ -13,7 +13,7 @@ import java.util.HashMap;
 public interface DataAccessInterfaceClass {
 
     /////////////////////////////////////////////////////write/////////////////////////////////////////////////////////////////
-    boolean writeHDBData(String HDBDevelopmentName, ArrayList<HashMap<String, Object>>ListFlatTypePrice, String descriptionText);
+    boolean writeHDBData(String HDBDevelopmentName, ArrayList<HashMap<String, Object>>ListFlatTypePrice, String descriptionText, String ImgURL);
 
     boolean writeHDBFlatTypeData(String name, HashMap<String, Object> HMFlatType);
 

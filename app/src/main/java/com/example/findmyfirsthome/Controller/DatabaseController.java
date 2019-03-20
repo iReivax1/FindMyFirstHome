@@ -38,6 +38,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
     public static final String HDBDevelopmentDescription = "HDBdevelopmentDescription";
     public static final String HDBDevelopmentLongitude = "Longitude";
     public static final String HDBDevelopmentLatitude = "Latitude";
+    public static final String HDBDevelopmentImgURL = "ImgURL";
 
     //----------- TABLE COLUMNS for FlatType -----------//
     public static final String HDBFlatType = "HDBFlatType";
@@ -64,7 +65,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
     //Draw the table
     private static final String SQL_HDBDevelopment = "CREATE TABLE " + TABLE_NAME + " ("  + HDBDevelopmentName + " TEXT PRIMARY KEY, "
             + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude
-            + " REAL " + ");";
+            + " REAL, " + HDBDevelopmentImgURL + " TEXT " + ");";
 
     public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
 
@@ -123,7 +124,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
 
 
-    public boolean writeHDBData(String name, ArrayList<HashMap<String, Object>>ListFlatTypePrice, String descriptionText) {
+    public boolean writeHDBData(String name, ArrayList<HashMap<String, Object>>ListFlatTypePrice, String descriptionText, String ImgUrl) {
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
@@ -136,7 +137,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         //String HDBlon = Double.toString(getHDBDevelopmentCoordinates(HDBDevelopmentName).longitude);
         values.put(HDBDevelopmentLatitude, 0.0);
         values.put(HDBDevelopmentLongitude, 0.0);
-
+        values.put(HDBDevelopmentImgURL, ImgUrl);
         for(HashMap<String, Object> i : ListFlatTypePrice){
             writeHDBFlatTypeData(name, i);
         }
@@ -242,6 +243,8 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         LatLng coord = null;
         String DevelopmentName = "";
         String DevelopmentDescription = "";
+        String DevelopmentImgURL = "";
+
         while(cursor.moveToNext() && cursor != null) {
 
             int index;
@@ -258,6 +261,9 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
             index = cursor.getColumnIndexOrThrow("HDBDevelopmentLatitude");
             Double DevelopmentLatitude = cursor.getDouble(index);
 
+            index = cursor.getColumnIndexOrThrow("HDBDevelopmentImgURL");
+            DevelopmentImgURL = cursor.getString(index);
+
             coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
             mdList = readMapData(DevelopmentName);
             HDBFTList = readHDBFlatType(DevelopmentName);
@@ -267,7 +273,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         cursor.close();
 
         //TODO: Return created objects by calling the creation method
-        createHDBDevelopmentObject(HDBFTList, DevelopmentName, DevelopmentDescription, false, coord, mdList);
+        createHDBDevelopmentObject(HDBFTList, DevelopmentName, DevelopmentDescription, false, coord, mdList, DevelopmentImgURL);
 
         return HDBDList;
 
@@ -292,6 +298,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         LatLng coord = null;
         String DevelopmentName = developmentName;
         String DevelopmentDescription = "";
+        String DevelopmentImgURL = "";
         while(cursor.moveToNext() && cursor != null) {
 
             int index;
@@ -309,6 +316,10 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
             Double DevelopmentLatitude = cursor.getDouble(index);
 
             coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
+
+            index = cursor.getColumnIndexOrThrow("HDBDevelopmentImgURL");
+            DevelopmentImgURL = cursor.getString(index);
+
             mdList = readMapData(DevelopmentName);
             HDBFTList = readHDBFlatType(DevelopmentName);
 
@@ -323,7 +334,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
             mdList = new ArrayList<>();
 
         //TODO: Return created objects by calling the creation method
-        HDBD = createHDBDevelopmentObject(HDBFTList, DevelopmentName, DevelopmentDescription, false, coord, mdList);
+        HDBD = createHDBDevelopmentObject(HDBFTList, DevelopmentName, DevelopmentDescription, false, coord, mdList, DevelopmentImgURL);
 
         return HDBD;
 
@@ -464,9 +475,9 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
 
     private HDBDevelopment createHDBDevelopmentObject(ArrayList<HashMap<String, Object>> HDBFTList, String HDBDevelopmentName, String HDBDevelopmentDescription,
-                                                     boolean affordable, LatLng coordinates, ArrayList<MapData> amenities){
+                                                     boolean affordable, LatLng coordinates, ArrayList<MapData> amenities, String ImgURL){
         HDBDevelopment HDBD =  new HDBDevelopment(HDBFTList, HDBDevelopmentName,  HDBDevelopmentDescription,
-                false, coordinates, amenities);
+                false, coordinates, amenities, ImgURL);
         return HDBD;
         }
 

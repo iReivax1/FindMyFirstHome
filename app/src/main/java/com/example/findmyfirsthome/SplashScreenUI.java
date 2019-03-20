@@ -11,6 +11,7 @@ import com.example.findmyfirsthome.Boundary.DevelopmentDetailUI;
 import com.example.findmyfirsthome.Boundary.DataGovAPI;
 import com.example.findmyfirsthome.Boundary.MapAPI;
 import com.example.findmyfirsthome.Boundary.test;
+import com.example.findmyfirsthome.Controller.HDBAdapter;
 import com.example.findmyfirsthome.Controller.HDBDetailsManager;
 
 
@@ -22,8 +23,6 @@ public class SplashScreenUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
-        HDBDetailsManager manager = new HDBDetailsManager();
-        manager.execute();
         try {
             synchronized (this) {
                 wait(4000);
