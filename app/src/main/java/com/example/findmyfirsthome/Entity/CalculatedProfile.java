@@ -56,7 +56,7 @@ public class CalculatedProfile {
         return this.maxPurchasePrice;
     }
 
-    public void setMaxPurchasePricet(double maxPurchasePrice)
+    public void setMaxPurchasePrice(double maxPurchasePrice)
     {
         this.maxPurchasePrice = maxPurchasePrice;
     }

@@ -2,11 +2,13 @@ package com.example.findmyfirsthome.Controller;
 
 import android.app.Activity;
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.findmyfirsthome.Boundary.ProfileUI;
 import com.example.findmyfirsthome.Entity.UserData;
 import com.example.findmyfirsthome.R;
 
@@ -16,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ProfileControl {
-    UserData ud = new UserData();
+    private UserData ud = new UserData();
 
     public void setMaritalStatus(int marriedID){
         if(marriedID== R.id.radioBtnMarried){
@@ -180,4 +182,12 @@ public class ProfileControl {
             Log.d("123",Double.toString(list.get(i)));
         }
     }
+
+    //TODO: Write to database
+    public void writeProfile(){
+        ProfileUI ui = new ProfileUI();
+        DatabaseController db = new DatabaseController(ui.getApplicationContext());
+        db.writeProfileData(ud);
+    }
+
 }

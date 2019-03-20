@@ -12,6 +12,7 @@ import android.util.Log;
 import com.example.findmyfirsthome.Boundary.MapAPI;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
 import com.example.findmyfirsthome.Entity.MapData;
+import com.example.findmyfirsthome.Entity.UserData;
 import com.google.android.gms.maps.model.LatLng;
 
 
@@ -29,7 +30,10 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
 
     //Change version if schema changed;
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 1;
+
+
+
 
     //----------- TABLE COLUMNS for ALL -----------//
     public static final String ID = "ID";
@@ -56,29 +60,68 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
     public static final String GrantType = "GrantType";
     public static final String GrantAmount = "GrantAmount";
 
+
+    //----------- TABLE COLUMNS for UserData -----------//
+    //ID
+    public static final String isMarried = "isMarried";
+    public static final String isFirstTimeBuyer = "isFirstTimeBuyer";
+    public static final String isSingaporean = "isSingapore"; //if true is singaporean
+    public static final String age = "age";
+    public static final String grossSalary = "grossSalary";
+
+    public static final String isFirstTimeBuyerPartner = " isFirstTimeBuyerPartner";
+    public static final String isSingaporeanPartner = "isSingaporeanPartner"; //if true is singaporean
+    public static final String agePartner = "agePartner";
+    public static final String grossSalaryPartner = "grossSalaryPartner";
+
+    public static final String carLoan = "carLoan";
+    public static final String creditLoan = "creditLoan";
+    public static final String studyLoan = "studyLoan";
+    public static final String otherCommitments = "otherCommitments";
+
+    public static final String buyer1CPF = "buyer1CPF";
+    public static final String buyer2CPF = "buyer2CPF";
+
+    public static final String numberOfAdditionalHouseholdMembers = "numberOfAdditionalHouseholdMembers";
+
+    //----------- TABLE COLUMNS for membersSalaryList -----------//
+    //ID is foreign key and primary key
+    public static final String membersSalaryList = "membersSalaryList";
+
     //----------- TABLE NAMES & DATABASE NAME -----------//
     public static final String DATABASE_NAME = "FindMyFirstHome.db";
     private static final String TABLE_NAME = "HDBDevelopment";
     private static final String TABLE_NAME2 = "FlatType";
     private static final String TABLE_NAME3 = "Amenities";
     private static final String TABLE_NAME4 = "Grants";
+    private static final String TABLE_NAME5 = "UserData";
+    private static final String TABLE_NAME6 = "membersSalaryList";
 
     //Draw the table
     private static final String SQL_HDBDevelopment = "CREATE TABLE " + TABLE_NAME + " ("  + HDBDevelopmentName + " TEXT PRIMARY KEY, "
             + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude
             + " REAL, " + HDBDevelopmentImgURL + " TEXT " + ");";
 
-    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + HDBFlatAffordability + " BOOLEAN, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
+    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + HDBFlatAffordability + " BOOLEAN, " + " FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
 
     public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + "(" +  AmenitiesName + " TEXT PRIMARY KEY, " +  AmenitiesType + " TEXT, " + AmenitiesLongitude + " REAL, " + AmenitiesLatitude + " REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
 
     public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + "(" + IncomeRequired + " TEXT PRIMARY KEY, " + GrantType + " TEXT, " + GrantAmount +
             " REAL);";
 
+    public static final String SQL_UserData = "CREATE TABLE " + TABLE_NAME5 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + isMarried + " BOOLEAN, "
+            + isFirstTimeBuyer + " BOOLEAN, " + isSingaporean + " BOOLEAN, " + age + " REAL, " + grossSalary + " REAL, " + isFirstTimeBuyerPartner + "BOOLEAN, " + isSingaporeanPartner + " BOOLEAN, " + agePartner + " REAL, " + grossSalaryPartner + " REAL, "
+            + carLoan + " REAL, " + creditLoan + " REAL, " + studyLoan + " REAL, " + otherCommitments + " REAL, " + buyer1CPF + " REAL, " + buyer2CPF + " REAL,"
+            + numberOfAdditionalHouseholdMembers + " REAL " + ")";
+
+    public static final String SQL_membersSalaryList_ = "CREATE TABLE " + TABLE_NAME6  + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + membersSalaryList + " REAL, " + " FOREIGN KEY (" + ID + ") REFERENCES " + TABLE_NAME5 + "(" + ID + "));";
+
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
     private static final String SQL_DELETE_ENTRIES2 = "DROP TABLE IF EXISTS " + TABLE_NAME2;
     private static final String SQL_DELETE_ENTRIES3 = "DROP TABLE IF EXISTS " + TABLE_NAME3;
     private static final String SQL_DELETE_ENTRIES4 = "DROP TABLE IF EXISTS " + TABLE_NAME4;
+    private static final String SQL_DELETE_ENTRIES5 = "DROP TABLE IF EXISTS " + TABLE_NAME5;
+    private static final String SQL_DELETE_ENTRIES6 = "DROP TABLE IF EXISTS " + TABLE_NAME6;
 
     private static int numID = 0;
     //use this to create the databaseContoller to write and get data; Like so;
@@ -96,6 +139,8 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         sqLiteDatabase.execSQL(SQL_FlatType);
         //sqLiteDatabase.execSQL(SQL_Amenities);
         sqLiteDatabase.execSQL(SQL_Grants);
+        sqLiteDatabase.execSQL(SQL_UserData);
+        sqLiteDatabase.execSQL(SQL_membersSalaryList_);
     }
 
     //If Database version is difference, delete all current entries and re-create new DBs
@@ -107,6 +152,8 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES2);
         sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES3);
         sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES4);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES5);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES6);
         onCreate(sqLiteDatabase);
     }
 
@@ -121,8 +168,6 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
      getReadableDatabase()
      in a background thread,
      such as with AsyncTask or IntentService. */
-
-
 
 
     public boolean writeHDBData(String name, HashMap<String, Object>ListFlatType, String descriptionText, String ImgUrl) {
@@ -227,6 +272,44 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         long newRowId = db.insert(TABLE_NAME4, null, values);
         db.close();
         return true;
+    }
+
+    public boolean writeProfileData(UserData ud){
+
+        // Gets the data repository in write mode , getWritableDatabase is sqlite function
+        SQLiteDatabase db = getWritableDatabase();
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        ContentValues valueSalary = new ContentValues();
+
+        values.put(isMarried, ud.isMarried());
+        values.put(isFirstTimeBuyer,ud.isFirstTimeBuyer());
+        values.put(isSingaporean, ud.isSingaporean());
+        values.put(age, ud.getAge());
+        values.put(grossSalary, ud.getGrossSalary());
+
+        values.put(isFirstTimeBuyerPartner, ud.isFirstTimeBuyerPartner());
+        values.put(isSingaporeanPartner, ud.isSingaporeanPartner());
+        values.put(agePartner, ud.getAgePartner());
+        values.put(grossSalaryPartner, ud.getGrossSalaryPartner());
+
+        values.put(carLoan, ud.getCarLoan());
+        values.put(creditLoan, ud.getCreditLoan());
+        values.put(studyLoan, ud.getStudyLoan());
+        values.put(otherCommitments, ud.getOtherCommitments());
+
+        values.put(buyer1CPF, ud.getBuyer1CPF());
+        values.put(buyer2CPF, ud.getBuyer2CPF());
+
+        for(Double salary : ud.getMembersSalaryList()){
+            valueSalary.put(numberOfAdditionalHouseholdMembers, salary);
+        }
+        long newRowId = db.insert(TABLE_NAME5, null, values);
+        long secondNewRowId = db.insert(TABLE_NAME6, null, valueSalary);
+        db.close();
+
+        return false;
+
     }
 
 //////////////////////////////////////Read functions///////////////////////////////////////////////////////////////////////
