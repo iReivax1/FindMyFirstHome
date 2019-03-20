@@ -7,12 +7,17 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.findmyfirsthome.Controller.DevelopmentDetailControl;
 import com.example.findmyfirsthome.Entity.AffordabilityReport;
 import com.example.findmyfirsthome.R;
@@ -55,7 +60,7 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
         Bundle extras = intent.getExtras();
 
         //to be used when combine work with the rest
-        final String estateName = extras.getString("estateName");
+        final String estateName = extras.getString("HDBName");
         //String estateName = "Test @ Sembawang"; //temporary used for now before combining with others
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,8 +76,8 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
         estateNameView.setText(estateName);
 
         //set image of development/estate
-        //final ImageView estateImage = findViewById(R.id.image_estatePic);
-        //estateImage.setImageResource();
+        final ImageView estateImage = findViewById(R.id.image_estatePic);
+        Glide.with(this).load("http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTOJW_images_6280/$file/jw_N2C20_view1.png").into(estateImage);
 
         //set description of development/estate
         //get from controller which get from database controller which get from database
@@ -90,34 +95,47 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
         for(HashMap<String, Object> HDBFlatTypeDetails : HDBFlatTypeDetailsList)
         {
             TextView tv = new TextView(this);
+            tv.setGravity(Gravity.CENTER);
             //set all fields from HashMap
             temp = HDBFlatTypeDetails.get("flatType");
             if(temp == null)
                 break;
-            tv.setText((int)temp);
+            //setText must be in String
+            tv.setText((String) temp);
+            //set text color to black only if user can afford that flat room
+            if((Boolean) HDBFlatTypeDetails.get("affordability"))
+                tv.setTextColor(Color.parseColor("#000000"));
 
             TextView tv1 = new TextView(this);
+            tv1.setGravity(Gravity.CENTER);
             //set all fields from HashMap
             temp = HDBFlatTypeDetails.get("price");
 
             if(temp == null)
                 break;
             //setText cannot set Double
-            tv1.setText(String.valueOf((Double)temp));
+            tv1.setText("$" + String.format ("%,.2f", (Double) temp));
+            //set text color to black only if user can afford that flat room
+            if((Boolean) HDBFlatTypeDetails.get("affordability"))
+                tv1.setTextColor(Color.parseColor("#000000"));
 
 
             //create generation button in table last column
             Button generateReportButton = new Button(this);
-            generateReportButton.setId((int)HDBFlatTypeDetails.get("flatType"));
+            generateReportButton.setGravity(Gravity.CENTER);
+            generateReportButton.setId(((String) HDBFlatTypeDetails.get("flatType")).charAt(0));    //use room type number as id
             generateReportButton.setText("Generate");
+            generateReportButton.setTextSize(5*(this.getResources().getDisplayMetrics().density));  //size of text
+            generateReportButton.setLayoutParams(new FrameLayout.LayoutParams(200, 75));    //size for button
+            generateReportButton.setPadding(0, 0, 0, 0);    //to not crop the words because default have some padding
             generateReportButton.setTextColor(Color.parseColor("#FFFFFF")); //set text to white color
-            generateReportButton.setBackgroundColor(Color.parseColor("#0000FF"));   //set button to dark blue color
+            generateReportButton.setBackground(getDrawable(R.drawable.generate_report_btn));    //set round corner button
             generateReportButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent generateAfReportIntent = new Intent(getApplicationContext(), AffordabilityReportUI.class);
                     generateAfReportIntent.putExtra("estateName", estateName);  //send the estate/development name
-                    generateAfReportIntent.putExtra("FlatType", v.getId()); //send the FlatType
+                    generateAfReportIntent.putExtra("FlatType", String.valueOf(v.getId())); //send the FlatType
                     startActivity(generateAfReportIntent);
                 }
             });
@@ -133,11 +151,17 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
                 tv1.setTextColor(Color.parseColor("#696969"));
             }
 
+            FrameLayout frameLayout_Buttons = new FrameLayout(this);
+            frameLayout_Buttons.setPadding(100,20, 50,0);
+            frameLayout_Buttons.setForegroundGravity(Gravity.CENTER);
+            frameLayout_Buttons.addView(generateReportButton);
+
             //set each cell of the table into a row
             TableRow tr = new TableRow(this);
+            tr.setGravity(Gravity.CENTER);
             tr.addView(tv);
             tr.addView(tv1);
-            tr.addView(generateReportButton);
+            tr.addView(frameLayout_Buttons);
 
             //set row into table
             TableLayout tableLayout = findViewById(R.id.table_developmentTable);
