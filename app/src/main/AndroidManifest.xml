@@ -18,6 +18,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Boundary.test"></activity>
         <activity android:name=".Boundary.DataGovAPI" />
@@ -51,7 +52,12 @@
         </activity>
         <activity
             android:name=".Boundary.DevelopmentDetailUI"
-            android:label="DevelopmentDetailUI" />
+            android:label="DevelopmentDetailUI">
+        </activity>
+        <activity
+            android:name=".Boundary.AffordabilityReportUI"
+            android:label="AffordabilityReportUI">
+        </activity>
     </application>
 
 </manifest>

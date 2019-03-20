@@ -1,5 +1,7 @@
 package com.example.findmyfirsthome.Controller;
+import com.example.findmyfirsthome.Boundary.test;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
+import com.example.findmyfirsthome.SplashScreenUI;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -19,33 +21,29 @@ import org.jsoup.select.Elements;
 //Startup Controller just call write data, write grants
 
 
-public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
+public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
 
     //variables init;
     //url to be given by startUp controller
     private String urlMain1 = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTOJW_page_6280/$file/about1.html"; //jurong
-    private String urlMain2 =  "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTOSK_page_6280/$file/about1.html"; //sk
+    private String urlMain2 = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTOSK_page_6280/$file/about1.html"; //sk
     private String urlMain3 = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTOKWN_page_6280/$file/about1.html"; //kallng
     private String urlALL = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTO_page_6280/$file/about0.html";
     private String urlGrants1 = "https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/first-timer-applicants"; //both first
     private String urlGrants2 = "https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/first-timer-and-second-timer-couple-applicants"; //one first , one second
     //second timer : $15,000 => no need scrap just hardcode make my life easier thanks.
-    private ProgressDialog mProgressDialog;
     private ArrayList<String> HDBDevelopmentNames = new ArrayList<String>();
     //String key: Income req, String object's key grant type, double grant amount
-    private ArrayList<HashMap<String, Object>>ListFlatTypePrice = new ArrayList<HashMap<String, Object>>();
-    private HashMap<String, HashMap<String, Double>> firstTimerGrantList  = new HashMap<String, HashMap<String, Double>>();
-    private HashMap<String, HashMap<String, Double>> fsTimerGrantList  = new HashMap<String, HashMap<String, Double>>();
+    private ArrayList<HashMap<String, Object>> ListFlatTypePrice = new ArrayList<HashMap<String, Object>>();
+    private HashMap<String, HashMap<String, Double>> firstTimerGrantList = new HashMap<String, HashMap<String, Double>>();
+    private HashMap<String, HashMap<String, Double>> fsTimerGrantList = new HashMap<String, HashMap<String, Double>>();
     private String descriptionText;
+    private String ImgURL;
 
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mProgressDialog.setTitle("Scraping from HDB now");
-        mProgressDialog.setMessage("Loading...");
-        mProgressDialog.setIndeterminate(false);
-        mProgressDialog.show();
     }
 
     //scrap data happens here
@@ -54,34 +52,36 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
 
         ///////////////////////////////////Jurong///////////////////////////////////
         //Scrap development name : BoonLay & Jurong west
-        HDBDevelopmentNames = (scrapDevelopmentName(urlMain1, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
+        HDBDevelopmentNames = (scrapDevelopmentName(urlALL, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
         //Scrap List of flat type for SK's HDB
-        ListFlatTypePrice.add((scrapFlatType(urlALL,0 ,3,4, 8 )));
+        ListFlatTypePrice.add((scrapFlatType(urlALL, 0, 3, 4, 8)));
         //Scrap description text for this development
-        descriptionText = description(urlMain1, HDBDevelopmentNames.get(0) , HDBDevelopmentNames.get(1)); //"jurong west jewel", Boon Lay Glade
-        dbWritesData(HDBDevelopmentNames, ListFlatTypePrice, descriptionText);
+        descriptionText = description(urlMain1, HDBDevelopmentNames.get(0), HDBDevelopmentNames.get(1)); //"jurong west jewel", Boon Lay Glade
+        ImgURL = scrapImage(urlMain1);
+        adaptHDBD(HDBDevelopmentNames, ListFlatTypePrice, descriptionText, ImgURL);
         ///////////////////////////////////SK///////////////////////////////////
         //Scrap development name : SK
-        HDBDevelopmentNames = (scrapDevelopmentName(urlMain2, 0, 8, 1));
+        HDBDevelopmentNames = (scrapDevelopmentName(urlALL, 0, 8, 1));
         //Scrap List of flat type for SK's HDB
-        ListFlatTypePrice.add((scrapFlatType(urlALL,0,8,9, 13)));
+        ListFlatTypePrice.add((scrapFlatType(urlALL, 0, 8, 9, 13)));
         //Scrap description text for this development
         descriptionText = description(urlMain2, HDBDevelopmentNames.get(2)); //"SK one"
-        dbWritesData(HDBDevelopmentNames, ListFlatTypePrice, descriptionText);
+        ImgURL = scrapImage(urlMain2);
+        adaptHDBD(HDBDevelopmentNames, ListFlatTypePrice, descriptionText, ImgURL);
         ///////////////////////////////////Kallang///////////////////////////////////
         //Scrap development name : Kallang
-        HDBDevelopmentNames = (scrapDevelopmentName(urlMain3, 0, 4, 1));
+        HDBDevelopmentNames = (scrapDevelopmentName(urlALL, 0, 4, 1));
         //Scrap List of flat type for Kallang's HDB
-        ListFlatTypePrice.add((scrapFlatType(urlALL,0,8,9, 13)));
+        ListFlatTypePrice.add((scrapFlatType(urlALL, 0, 8, 9, 13)));
         //Scrap description text for this development
         descriptionText = description(urlMain3, HDBDevelopmentNames.get(3)); // Kallang /whampoa one
-        dbWritesData(HDBDevelopmentNames, ListFlatTypePrice, descriptionText);
-
+        ImgURL = scrapImage(urlMain3);
+        adaptHDBD(HDBDevelopmentNames, ListFlatTypePrice, descriptionText, ImgURL);
         //scrap grants
         firstTimerGrantList = scrapGrants(urlGrants1);
-        writeGrants(firstTimerGrantList);
         fsTimerGrantList = scrapGrants(urlGrants2);
-        writeGrants(fsTimerGrantList);
+        adaptGrants(firstTimerGrantList);
+        adaptGrants(fsTimerGrantList);
 
         //HDBDevelopmentName => HDBDevelopmentName
         //Flat type for that hdb name => ListFlatTypePrice
@@ -90,25 +90,24 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
 
     @Override
     protected void onPostExecute(Void result) {
-        mProgressDialog.dismiss();
+
     }
 
 
-    public ArrayList<HDBDevelopment> getHDBData(){
+    public ArrayList<HDBDevelopment> getHDBData() {
         return createHDBDevelopment();
     }
 
 
-    protected ArrayList<HDBDevelopment> createHDBDevelopment(){
+    protected ArrayList<HDBDevelopment> createHDBDevelopment() {
         int index = 0;
         HDBDevelopment HDBD = null;
         ArrayList<HDBDevelopment> HDBDList = new ArrayList<HDBDevelopment>();
-        if(HDBDevelopmentNames.isEmpty()){
+        if (HDBDevelopmentNames.isEmpty()) {
             return null;
-        }else{
-            while(HDBDevelopmentNames.get(index) != null){
-                HDBD = new HDBDevelopment(ListFlatTypePrice, HDBDevelopmentNames.get(index), descriptionText,
-                        false, null, null);
+        } else {
+            while (HDBDevelopmentNames.get(index) != null) {
+                HDBD = new HDBDevelopment(ListFlatTypePrice, HDBDevelopmentNames.get(index), descriptionText, false, null, null, ImgURL);
                 HDBDList.add(HDBD);
                 index++;
             }
@@ -116,51 +115,47 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         return HDBDList;
     }
 
-    public boolean dbWritesData(ArrayList<String> HDBDevelopmentNames, ArrayList<HashMap<String, Object>>ListFlatTypePrice, String descriptionText){
-        MapsController mc = new MapsController();
-        Context context = mc.getContext();
-        DatabaseController db = new DatabaseController(context);
+    public boolean adaptHDBD(ArrayList<String> HDBDevelopmentNames, ArrayList<HashMap<String, Object>> ListFlatTypePrice, String descriptionText, String ImgURL) {
 
-        for(String name : HDBDevelopmentNames){
-            db.writeHDBData(name, ListFlatTypePrice, descriptionText);
+        HDBAdapter adapter = new HDBAdapter();
+
+        //Write
+        for (String name : HDBDevelopmentNames) {
+            adapter.writeHDBD(name, ListFlatTypePrice, descriptionText, ImgURL);
         }
 
         return true;
     }
 
-    public void writeGrants(HashMap<String, HashMap<String, Double>> list){
-        MapsController mc = new MapsController();
-        Context context = mc.getContext();
-        DatabaseController db = new DatabaseController(context);
+    public void adaptGrants(HashMap<String, HashMap<String, Double>> list) {
+        HDBAdapter adapter = new HDBAdapter();
 
         for (String key : list.keySet()) {
             String incomeReq = key;
             HashMap<String, Double> grant = list.get(key);
-           db.writeHDBGrantData(incomeReq, grant);
+            adapter.writeHDBGrantData(incomeReq, grant);
         }
-
-
     }
 
 
-    protected String description(String url, String developmentName1, String developmentName2)  {
+    protected String description(String url, String developmentName1, String developmentName2) {
 
-        try{
+        try {
             Document document = Jsoup.connect(url).get();
-            for(int i = 0; i <  document.select("p").size(); i ++) {
+            for (int i = 0; i < document.select("p").size(); i++) {
                 Element paragraphs = document.select("p").get(i);
-                if(paragraphs.text().length() > 150) {
+                if (paragraphs.text().length() > 150) {
                     String description = paragraphs.text();
-                    if(description.contains(developmentName1)) {
-                        return(developmentName1 + ": " + description);
-                    }else if(description.contains(developmentName2)) {
-                        return('\n' + developmentName2 + ": " + description);
+                    if (description.contains(developmentName1)) {
+                        return (developmentName1 + ": " + description);
+                    } else if (description.contains(developmentName2)) {
+                        return ('\n' + developmentName2 + ": " + description);
                     }
 
                 }
             }
 
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return "";
@@ -168,25 +163,25 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
 
     //overloading cuz HDB a bitch
     protected String description(String url, String developmentName1) {
-        try{
+        try {
             Document document = Jsoup.connect(url).get();
             for (int i = 0; i < document.select("p").size(); i++) {
                 Element paragraphs = document.select("p").get(i);
                 if (paragraphs.text().length() > 150) {
                     String description = paragraphs.text();
                     if (description.contains(developmentName1)) {
-                        return(developmentName1 + ": " + description);
+                        return (developmentName1 + ": " + description);
                     }
                 }
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         return "";
     }
 
-    protected HashMap<String, Object> scrapFlatType(String url, int tableNumber, int firstRowNumber, int rowStart, int rowEnd){
+    protected HashMap<String, Object> scrapFlatType(String url, int tableNumber, int firstRowNumber, int rowStart, int rowEnd) {
 
 
         HashMap<String, Object> flatType = new HashMap<String, Object>();
@@ -209,20 +204,19 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
             //get(3) for Boonlay => 4 ~ 8
             //get(8) for SK => 9~13
             //get(14) for Kallang => 15~16
-            for(int i = rowStart; i < rowEnd; i++) {
+            for (int i = rowStart; i < rowEnd; i++) {
                 row = rows.get(i);
 
                 cols = row.select("td");
 
                 rooms = cols.get(0).text();
                 price = cols.get(1).text();
-                flatType.put(rooms,price);
+                flatType.put(rooms, price);
             }
 
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
         return flatType;
     }
 
@@ -240,9 +234,9 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
 
             String text = cols.get(colNumber).html();
 
-            if(text.contains("<br>")) {
-                String[] textArray= text.split("<br>");
-                for(int i =0 ; i < textArray.length ; i++) {
+            if (text.contains("<br>")) {
+                String[] textArray = text.split("<br>");
+                for (int i = 0; i < textArray.length; i++) {
                     textList.add(textArray[i]);
                 }
             }
@@ -255,7 +249,6 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -282,10 +275,10 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
             //select all rows
             Elements rows = body.select("tr");
             //select all row in table body
-            for(int i = 0; i < rows.size(); i++) {
+            for (int i = 0; i < rows.size(); i++) {
                 row = rows.get(i);
                 cols = row.select("td");
-                for(int j = 0; j < cols.size(); j++) {
+                for (int j = 0; j < cols.size(); j++) {
                     // j == 0 is for income required.
                     switch (j) {
                         case (0):
@@ -295,32 +288,30 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
                             //System.out.println(income);
                             break;
                         //j == 1 AHG grant
-                        case(1):
+                        case (1):
                             col = cols.get(j);
                             grant = col.text();
-                            if(grant.contains("$")) {
+                            if (grant.contains("$")) {
                                 grant = grant.substring(1);
-                                if(grant.contains(",")) {
+                                if (grant.contains(",")) {
                                     temp = grant.split(",");
                                     grant = temp[0] + temp[1];
                                 }
                                 AHG.add(Double.parseDouble(grant));
-                            }
-                            else AHG.add(0.0);
+                            } else AHG.add(0.0);
                             break;
                         //j ==3 is for SHG
-                        case(3):
+                        case (3):
                             col = cols.get(j);
                             grant = col.text();
-                            if(grant.contains("$")) {
+                            if (grant.contains("$")) {
                                 grant = grant.substring(1);
-                                if(grant.contains(",")) {
+                                if (grant.contains(",")) {
                                     temp = grant.split(",");
                                     grant = temp[0] + temp[1];
                                 }
                                 SHG.add(Double.parseDouble(grant));
-                            }
-                            else SHG.add(0.0);
+                            } else SHG.add(0.0);
                             break;
                         default:
                             break;
@@ -328,14 +319,8 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
                 }
 
             }
-            System.out.println("in SHG");
-            printList(SHG);
-            System.out.println("in AHG");
-            printList(AHG);
-            System.out.println("in income");
-            print(incomeReq);
 
-            for(int i = 0; i < 15; i++) {
+            for (int i = 0; i < 15; i++) {
                 tempHM.put("SHG", SHG.get(i));
                 tempHM.put("AHG", AHG.get(i));
                 grantList.put(incomeReq.get(i), tempHM);
@@ -348,12 +333,22 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         return grantList;
     }
 
-
-    protected void addToList(ArrayList<String> temp, ArrayList<String> target) {
-        for(int i = 0; i < temp.size() ; i++ ) {
-            target.add(temp.get(i));
+    public String scrapImage(String url) {
+        String imgUrl = "" ;
+        try {
+            Document document = Jsoup.connect(url).get();
+            Element image = document.select("img").get(1);
+            imgUrl = image.absUrl("src");
+            System.out.println(imgUrl);
         }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return imgUrl;
     }
+
+
+
 //    ----------------------------DEBUG PRINT METHODS----------------------------
 
     private static void printList(ArrayList<Double> shg) {
@@ -374,7 +369,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void>  {
         System.out.println("-----------------Inside the hashmap-----------------");
         for (String key: hashList.keySet()){
             Log.d("hello",key);
-           Log.d("hello", hashList.get(key));
+            Log.d("hello", hashList.get(key));
         }
     }
     public void print(String[] string, int i) {
