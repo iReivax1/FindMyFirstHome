@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class HDBAdapter extends AppCompatActivity {
     HDBDetailsManager manager = new HDBDetailsManager();
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         manager.execute();
     }

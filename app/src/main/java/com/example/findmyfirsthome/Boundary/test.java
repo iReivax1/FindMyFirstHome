@@ -18,13 +18,12 @@ public class test extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         HDBAdapter adapter = new HDBAdapter();
+        adapter.onCreate(savedInstanceState);
     }
 
     public Context getContext(){
         return this.getApplicationContext();
     }
-
-
-
+    
 
 }
