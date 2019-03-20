@@ -22,7 +22,7 @@ public class SplashScreenUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
-        //startTest();
+        startTest();
         try {
             synchronized (this) {
                 wait(4000);
