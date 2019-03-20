@@ -6,160 +6,163 @@ public class UserData {
     private boolean isMarried;
     private boolean isFirstTimeBuyer;
     private boolean isSingaporean; //if true is singaporean
-    private int age;
+    private int age =-1;
     private double grossSalary = 0;
+
+    private boolean isFirstTimeBuyerPartner;
+    private boolean isSingaporeanPartner; //if true is singaporean
+    private int agePartner = -1;
+    private double grossSalaryPartner = 0;
 
     private double carLoan = 0;
     private double creditLoan = 0;
     private double studyLoan = 0;
-    private double otherCommittment = 0;
+    private double otherCommitments = 0;
 
-    private double buyer1CPF;
-    private double buyer2CPF;
+    private double buyer1CPF = 0;
+    private double buyer2CPF = 0;
 
-    public int numberOfAdditionalHouseholdMemeber;
+    public int numberOfAdditionalHouseholdMembers;
     ArrayList<Double> membersSalaryList = new ArrayList<Double>();
 
-    //isMarried get set
-    public boolean getIsMarried()
-    {
-        return this.isMarried;
+    public boolean isMarried() {
+        return isMarried;
     }
 
-    public void setIsMarried(boolean isMarried)
-    {
-        this.isMarried = isMarried;
+    public void setMarried(boolean married) {
+        isMarried = married;
     }
 
-    //isFirstTimeBuyer get set
-    public boolean getIsFirstTimeBuyer()
-    {
-        return this.isFirstTimeBuyer;
+    public boolean isFirstTimeBuyer() {
+        return isFirstTimeBuyer;
     }
 
-    public void setIsFirstTimeBuyer(boolean isFirstTimeBuyer)
-    {
-        this.isFirstTimeBuyer = isFirstTimeBuyer;
+    public void setFirstTimeBuyer(boolean firstTimeBuyer) {
+        isFirstTimeBuyer = firstTimeBuyer;
     }
 
-    //isSingaporean GET SET
-    public boolean getIsSingaporean()
-    {
-        return this.isSingaporean;
+    public boolean isSingaporean() {
+        return isSingaporean;
     }
 
-    public void setIsSingaporean(boolean isSingaporean)
-    {
-        this.isSingaporean = isSingaporean;
+    public void setSingaporean(boolean singaporean) {
+        isSingaporean = singaporean;
     }
 
-    //age GET SET
-    public int getAge()
-    {
-        return this.age;
+    public int getAge() {
+        return age;
     }
 
-    public void setAge(int age)
-    {
+    public void setAge(int age) {
         this.age = age;
     }
 
-    //grossSalary GET SET
-    public double getGrossSalary()
-    {
-        return this.grossSalary;
+    public double getGrossSalary() {
+        return grossSalary;
     }
 
-    public void setGrossSalary(double grossSalary)
-    {
+    public void setGrossSalary(double grossSalary) {
         this.grossSalary = grossSalary;
     }
 
-    //carLoan GET SET
-    public double getCarLoan()
-    {
-        return this.carLoan;
+    public boolean isFirstTimeBuyerPartner() {
+        return isFirstTimeBuyerPartner;
     }
 
-    public void setCarLoan(double carLoan)
-    {
+    public void setFirstTimeBuyerPartner(boolean firstTimeBuyerPartner) {
+        isFirstTimeBuyerPartner = firstTimeBuyerPartner;
+    }
+
+    public boolean isSingaporeanPartner() {
+        return isSingaporeanPartner;
+    }
+
+    public void setSingaporeanPartner(boolean singaporeanPartner) {
+        isSingaporeanPartner = singaporeanPartner;
+    }
+
+    public int getAgePartner() {
+        return agePartner;
+    }
+
+    public void setAgePartner(int agePartner) {
+        this.agePartner = agePartner;
+    }
+
+    public double getGrossSalaryPartner() {
+        return grossSalaryPartner;
+    }
+
+    public void setGrossSalaryPartner(double grossSalaryPartner) {
+        this.grossSalaryPartner = grossSalaryPartner;
+    }
+
+    public double getCarLoan() {
+        return carLoan;
+    }
+
+    public void setCarLoan(double carLoan) {
         this.carLoan = carLoan;
     }
 
-    //creditLoan GET SET
-    public double getCreditLoan()
-    {
-        return this.creditLoan;
+    public double getCreditLoan() {
+        return creditLoan;
     }
 
-    public void setCreditLoan(double creditLoan)
-    {
+    public void setCreditLoan(double creditLoan) {
         this.creditLoan = creditLoan;
     }
 
-    //studyLoan GET SET
-    public double getStudyLoan()
-    {
-        return this.studyLoan;
+    public double getStudyLoan() {
+        return studyLoan;
     }
 
-    public void setStudyLoan(double studyLoan)
-    {
+    public void setStudyLoan(double studyLoan) {
         this.studyLoan = studyLoan;
     }
 
-    //otherCommittment GET SET
-    public double getOtherCommittment()
-    {
-        return this.otherCommittment;
+    public double getOtherCommitments() {
+        return otherCommitments;
     }
 
-    public void setOtherCommittment(double otherCommittment)
-    {
-        this.otherCommittment = otherCommittment;
+    public void setOtherCommitments(double otherCommitments) {
+        this.otherCommitments = otherCommitments;
     }
 
-    //buyer1CPF GET SET
-    public double getBuyer1CPF()
-    {
-        return this.buyer1CPF;
+    public double getBuyer1CPF() {
+        return buyer1CPF;
     }
 
-    public void setBuyer1CPF(double buyer1CPF)
-    {
+    public void setBuyer1CPF(double buyer1CPF) {
         this.buyer1CPF = buyer1CPF;
     }
 
-    //buyer2CPF GET SET
-    public double getBuyer2CPF()
-    {
-        return this.buyer2CPF;
+    public double getBuyer2CPF() {
+        return buyer2CPF;
     }
 
-    public void setBuyer2CPF(double buyer2CPF)
-    {
+    public void setBuyer2CPF(double buyer2CPF) {
         this.buyer2CPF = buyer2CPF;
     }
 
-    //numberOfAdditionalHouseholdMemeber GET SET
-    public int getNumberOfAdditionalHouseholdMemeber()
-    {
-        return this.numberOfAdditionalHouseholdMemeber;
+    public int getNumberOfAdditionalHouseholdMembers() {
+        return numberOfAdditionalHouseholdMembers;
     }
 
-    public void setNumberOfAdditionalHouseholdMemeber(int numberOfAdditionalHouseholdMemeber)
-    {
-        this.numberOfAdditionalHouseholdMemeber = numberOfAdditionalHouseholdMemeber;
+    public void setNumberOfAdditionalHouseholdMembers(int numberOfAdditionalHouseholdMembers) {
+        this.numberOfAdditionalHouseholdMembers = numberOfAdditionalHouseholdMembers;
     }
 
-    //membersSalaryList GET SET
-    public ArrayList<Double> getMembersSalaryList()
-    {
-        return this.membersSalaryList;
+    public ArrayList<Double> getMembersSalaryList() {
+        return membersSalaryList;
     }
 
-    public void setMembersSalaryList(ArrayList<Double> membersSalaryList)
-    {
+    public void setMembersSalaryList(ArrayList<Double> membersSalaryList) {
         this.membersSalaryList = membersSalaryList;
     }
+    public void appendSalarytoSalaryList(Double salaryHMember){
+        membersSalaryList.add(salaryHMember);
+    }
 }
+
+
