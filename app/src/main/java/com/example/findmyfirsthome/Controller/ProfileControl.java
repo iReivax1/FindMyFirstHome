@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ProfileControl {
-    UserData ud = new UserData();
+    private UserData ud = new UserData();
 
     public void setMaritalStatus(int marriedID){
         if(marriedID== R.id.radioBtnMarried){
