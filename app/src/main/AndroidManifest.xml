@@ -19,9 +19,8 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".Boundary.test"/>
         <activity android:name=".Boundary.DataGovAPI" />
+        <activity android:name=".Boundary.test"/>
         <activity android:name=".Boundary.ProfileUI3"
             android:parentActivityName=".Boundary.ProfileUI2"/>
         <activity
@@ -72,7 +71,9 @@
 
         <activity android:name=".Boundary.HDBDevelopmentUI" />
 
-        <activity android:name=".Controller.MapsController" />
+        <activity
+            android:name=".Controller.MapsController"
+            android:usesCleartextTraffic="true"/>
     </application>
 
 </manifest>

@@ -52,40 +52,40 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     @Override
     protected Void doInBackground(String... url) {
 
-        ///////////////////////////////////Jurong///////////////////////////////////
-        //Scrap development name : BoonLay & Jurong west
-        HDBDevelopmentNames1 = (scrapDevelopmentName(urlALL, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
-        //Scrap List of flat type for Boonlay's HDB
-        ListFlatTypePrice1 = (scrapFlatType(urlALL, 0, 3, 4, 8));
-        //Scrap description text for this development
-        descriptionText1 = description(urlMain1, HDBDevelopmentNames1.get(0), HDBDevelopmentNames1.get(1)); //"jurong west jewel", Boon Lay Glade
-        ImgURL1 = scrapImage(urlMain1);
-        ///////////////////////////////////SK///////////////////////////////////
-        //Scrap development name : SK
-        HDBDevelopmentNames2 = (scrapDevelopmentName(urlALL, 0, 8, 1));
-        //Scrap List of flat type for SK's HDB
-        ListFlatTypePrice2 = (scrapFlatType(urlALL, 0, 8, 9, 13));
-        System.out.println("Scrapped 2.2");
-        //Scrap description text for this development
-        descriptionText2 = description(urlMain2, HDBDevelopmentNames2.get(2)); //"SK one" ERROR IS HERE
-        System.out.println("Scrapped 2.3");
-        ImgURL2 = scrapImage(urlMain2);
-        System.out.println("Scrapped Second Development");
-        ///////////////////////////////////Kallang///////////////////////////////////
-        //Scrap development name : Kallang
-        HDBDevelopmentNames3 = (scrapDevelopmentName(urlALL, 0, 4, 1));
-        //Scrap List of flat type for Kallang's HDB
-        ListFlatTypePrice3 = (scrapFlatType(urlALL, 0, 8, 9, 13));
-        //Scrap description text for this development
-        descriptionText3 = description(urlMain3, HDBDevelopmentNames3.get(3)); // Kallang /whampoa one
-        ImgURL3 = scrapImage(urlMain3);
-        System.out.println("Scrapped Third Development");
-        //scrap grants
-        firstTimerGrantList = scrapGrants(urlGrants1);
-        fsTimerGrantList = scrapGrants(urlGrants2);
-
-        //HDBDevelopmentName => HDBDevelopmentName
-        //Flat type for that hdb name => ListFlatTypePrice
+//        ///////////////////////////////////Jurong///////////////////////////////////
+//        //Scrap development name : BoonLay & Jurong west
+//        HDBDevelopmentNames1 = (scrapDevelopmentName(urlALL, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
+//        //Scrap List of flat type for Boonlay's HDB
+//        ListFlatTypePrice1 = (scrapFlatType(urlALL, 0, 3, 4, 8));
+//        //Scrap description text for this development
+//        descriptionText1 = description(urlMain1, HDBDevelopmentNames1.get(0), HDBDevelopmentNames1.get(1)); //"jurong west jewel", Boon Lay Glade
+//        ImgURL1 = scrapImage(urlMain1);
+//        ///////////////////////////////////SK///////////////////////////////////
+//        //Scrap development name : SK
+//        HDBDevelopmentNames2 = (scrapDevelopmentName(urlALL, 0, 8, 1));
+//        //Scrap List of flat type for SK's HDB
+//        ListFlatTypePrice2 = (scrapFlatType(urlALL, 0, 8, 9, 13));
+//        System.out.println("Scrapped 2.2");
+//        //Scrap description text for this development
+//        descriptionText2 = description(urlMain2, HDBDevelopmentNames2.get(2)); //"SK one" ERROR IS HERE
+//        System.out.println("Scrapped 2.3");
+//        ImgURL2 = scrapImage(urlMain2);
+//        System.out.println("Scrapped Second Development");
+//        ///////////////////////////////////Kallang///////////////////////////////////
+//        //Scrap development name : Kallang
+//        HDBDevelopmentNames3 = (scrapDevelopmentName(urlALL, 0, 14, 1));
+//        //Scrap List of flat type for Kallang's HDB
+//        ListFlatTypePrice3 = (scrapFlatType(urlALL, 0, 8, 9, 13));
+//        //Scrap description text for this development
+//        descriptionText3 = description(urlMain3, HDBDevelopmentNames3.get(3)); // Kallang /whampoa one
+//        ImgURL3 = scrapImage(urlMain3);
+//        System.out.println("Scrapped Third Development");
+//        //scrap grants
+//        firstTimerGrantList = scrapGrants(urlGrants1);
+//        fsTimerGrantList = scrapGrants(urlGrants2);
+//
+//        //HDBDevelopmentName => HDBDevelopmentName
+//        //Flat type for that hdb name => ListFlatTypePrice
         return null;
     }
 

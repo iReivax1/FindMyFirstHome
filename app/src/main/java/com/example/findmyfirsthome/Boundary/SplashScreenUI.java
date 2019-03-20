@@ -17,25 +17,26 @@ public class SplashScreenUI extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
-        StartupControl sc1 = new StartupControl();
-        sc1.run();
-        new Handler().postDelayed(new Runnable() {
-
-            /*
-             * Showing splash screen with a timer
-            */
-
-            @Override
-            public void run() {
-                // This method will be executed once the timer is over
-                // Start your app main activity
-
-                Intent i = new Intent( SplashScreenUI.this, test.class);
-                startActivity(i);
-
-                // close this activity
-                finish();
-            }
-        }, SPLASH_TIME_OUT);
+        Intent i = new Intent( SplashScreenUI.this, DataGovAPI.class);
+        startActivity(i);
+//        StartupControl sc1 = new StartupControl();
+//        sc1.run();
+//        new Handler().postDelayed(new Runnable() {
+//
+//            /*
+//             * Showing splash screen with a timer
+//            */
+//
+//            @Override
+//            public void run() {
+//                // This method will be executed once the timer is over
+//                // Start your app main activity
+//
+//
+//
+//                // close this activity
+//                finish();
+//            }
+//        }, SPLASH_TIME_OUT);;
     }
 }
