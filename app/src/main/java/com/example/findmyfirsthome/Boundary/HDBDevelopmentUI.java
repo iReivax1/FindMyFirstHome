@@ -2,11 +2,10 @@ package com.example.findmyfirsthome.Boundary;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
@@ -37,8 +36,8 @@ public class HDBDevelopmentUI extends AppCompatActivity implements View.OnClickL
         tabLayout.setupWithViewPager(viewPager);
 
         //Remove Shadow from the action bar
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setElevation(0);
+        //ActionBar actionBar = getSupportActionBar();
+        //actionBar.setElevation(0);
 
         //set on click listener for button to go to intent
         recalculate.setOnClickListener(this);

@@ -1,26 +1,22 @@
 package com.example.findmyfirsthome.Controller;
 
+import android.app.Application;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import java.util.HashMap;
 
-public class HDBSplashscreenController extends AppCompatActivity {
+public class HDBSplashscreenController extends Application {
     HDBDetailsManager manager = new HDBDetailsManager();
+
     @Override
-    public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-
-    }
-
-    public void executeScrapper(){
+    public void onCreate(){
+        super.onCreate();
         manager.execute();
     }
 
     public void writeHDBD(String HDBDevelopmentNames, HashMap<String, Object> ListFlatType, String descriptionText, String ImgURL){
-
         if(manager.getStatus() == AsyncTask.Status.FINISHED){
+            System.out.println("Reached database");
             DatabaseController db = new DatabaseController(this.getApplicationContext());
             db.writeHDBData(HDBDevelopmentNames,ListFlatType,descriptionText,ImgURL);
             System.out.println("SplashScreenController write HDB, Success in writing "+HDBDevelopmentNames);
