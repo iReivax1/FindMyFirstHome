@@ -28,13 +28,21 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     private String urlGrants1 = "https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/first-timer-applicants"; //both first
     private String urlGrants2 = "https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/first-timer-and-second-timer-couple-applicants"; //one first , one second
     //second timer : $15,000 => no need scrap just hardcode make my life easier thanks.
-    private ArrayList<String> HDBDevelopmentNames = new ArrayList<String>();
+    private ArrayList<String> HDBDevelopmentNames1 = new ArrayList<String>();
+    private ArrayList<String> HDBDevelopmentNames2 = new ArrayList<String>();
+    private ArrayList<String> HDBDevelopmentNames3 = new ArrayList<String>();
     //String key: Income req, String object's key grant type, double grant amount
-    private ArrayList<HashMap<String, Object>> ListFlatType = new ArrayList<HashMap<String, Object>>();
+    private ArrayList<HashMap<String, Object>> ListFlatTypePrice1 = new ArrayList<HashMap<String, Object>>();
+    private ArrayList<HashMap<String, Object>> ListFlatTypePrice2 = new ArrayList<HashMap<String, Object>>();
+    private ArrayList<HashMap<String, Object>> ListFlatTypePrice3 = new ArrayList<HashMap<String, Object>>();
     private HashMap<String, HashMap<String, Double>> firstTimerGrantList = new HashMap<String, HashMap<String, Double>>();
     private HashMap<String, HashMap<String, Double>> fsTimerGrantList = new HashMap<String, HashMap<String, Double>>();
-    private String descriptionText;
-    private String ImgURL;
+    private String descriptionText1;
+    private String descriptionText2;
+    private String descriptionText3;
+    private String ImgURL1;
+    private String ImgURL2;
+    private String ImgURL3;
 
 
     @Override
@@ -48,36 +56,34 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
 
         ///////////////////////////////////Jurong///////////////////////////////////
         //Scrap development name : BoonLay & Jurong west
-        HDBDevelopmentNames = (scrapDevelopmentName(urlALL, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
+        HDBDevelopmentNames1 = (scrapDevelopmentName(urlALL, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
         //Scrap List of flat type for Boonlay's HDB
-        ListFlatType = (scrapFlatType(urlALL, 0, 3, 4, 8));
+        ListFlatTypePrice1 = (scrapFlatType(urlALL, 0, 3, 4, 8));
         //Scrap description text for this development
-        descriptionText = description(urlMain1, HDBDevelopmentNames.get(0), HDBDevelopmentNames.get(1)); //"jurong west jewel", Boon Lay Glade
-        ImgURL = scrapImage(urlMain1);
-        adaptHDBD(HDBDevelopmentNames, ListFlatType, descriptionText, ImgURL);
+        descriptionText1 = description(urlMain1, HDBDevelopmentNames1.get(0), HDBDevelopmentNames1.get(1)); //"jurong west jewel", Boon Lay Glade
+        ImgURL1 = scrapImage(urlMain1);
+
         ///////////////////////////////////SK///////////////////////////////////
         //Scrap development name : SK
-        HDBDevelopmentNames = (scrapDevelopmentName(urlALL, 0, 8, 1));
+        HDBDevelopmentNames2 = (scrapDevelopmentName(urlALL, 0, 8, 1));
         //Scrap List of flat type for SK's HDB
-        ListFlatType  = scrapFlatType(urlALL, 0, 8, 9, 13);
+        ListFlatTypePrice2.add((scrapFlatType(urlALL, 0, 8, 9, 13)));
         //Scrap description text for this development
-        descriptionText = description(urlMain2, HDBDevelopmentNames.get(2)); //"SK one"
-        ImgURL = scrapImage(urlMain2);
-        adaptHDBD(HDBDevelopmentNames, ListFlatType, descriptionText, ImgURL);
+        descriptionText2 = description(urlMain2, HDBDevelopmentNames2.get(2)); //"SK one"
+        ImgURL2 = scrapImage(urlMain2);
+
         ///////////////////////////////////Kallang///////////////////////////////////
         //Scrap development name : Kallang
-        HDBDevelopmentNames = (scrapDevelopmentName(urlALL, 0, 4, 1));
+        HDBDevelopmentNames3 = (scrapDevelopmentName(urlALL, 0, 4, 1));
         //Scrap List of flat type for Kallang's HDB
-        ListFlatType = (scrapFlatType(urlALL, 0, 8, 9, 13));
+        ListFlatTypePrice3.add((scrapFlatType(urlALL, 0, 8, 9, 13)));
         //Scrap description text for this development
-        descriptionText = description(urlMain3, HDBDevelopmentNames.get(3)); // Kallang /whampoa one
-        ImgURL = scrapImage(urlMain3);
-        adaptHDBD(HDBDevelopmentNames, ListFlatType, descriptionText, ImgURL);
+        descriptionText3 = description(urlMain3, HDBDevelopmentNames3.get(3)); // Kallang /whampoa one
+        ImgURL3 = scrapImage(urlMain3);
+
         //scrap grants
         firstTimerGrantList = scrapGrants(urlGrants1);
         fsTimerGrantList = scrapGrants(urlGrants2);
-        adaptGrants(firstTimerGrantList);
-        adaptGrants(fsTimerGrantList);
 
         //HDBDevelopmentName => HDBDevelopmentName
         //Flat type for that hdb name => ListFlatTypePrice
@@ -86,30 +92,13 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
 
     @Override
     protected void onPostExecute(Void result) {
-
+        adaptHDBD(HDBDevelopmentNames1, ListFlatTypePrice1, descriptionText1, ImgURL1);
+        adaptHDBD(HDBDevelopmentNames2, ListFlatTypePrice2, descriptionText2, ImgURL2);
+        adaptHDBD(HDBDevelopmentNames3, ListFlatTypePrice3, descriptionText3, ImgURL3);
+        adaptGrants(firstTimerGrantList);
+        adaptGrants(fsTimerGrantList);
     }
-
-
-    public ArrayList<HDBDevelopment> getHDBData() {
-        return createHDBDevelopment();
-    }
-
-
-    protected ArrayList<HDBDevelopment> createHDBDevelopment() {
-        int index = 0;
-        HDBDevelopment HDBD = null;
-        ArrayList<HDBDevelopment> HDBDList = new ArrayList<HDBDevelopment>();
-        if (HDBDevelopmentNames.isEmpty()) {
-            return null;
-        } else {
-            while (HDBDevelopmentNames.get(index) != null) {
-                HDBD = new HDBDevelopment(ListFlatType, HDBDevelopmentNames.get(index), descriptionText, false, null, null, ImgURL);
-                HDBDList.add(HDBD);
-                index++;
-            }
-        }
-        return HDBDList;
-    }
+    
 
     public boolean adaptHDBD(ArrayList<String> HDBDevelopmentNames, ArrayList<HashMap<String, Object>> ListFlatType, String descriptionText, String ImgURL) {
 
