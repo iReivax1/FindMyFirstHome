@@ -9,12 +9,17 @@ import java.util.HashMap;
 public class HDBSplashscreenController extends AppCompatActivity {
     HDBDetailsManager manager = new HDBDetailsManager();
     @Override
-    public void onCreate(Bundle savedInstanceS
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
+    }
+
+    public void executeScrapper(){
         manager.execute();
     }
 
     public void writeHDBD(String HDBDevelopmentNames, HashMap<String, Object> ListFlatType, String descriptionText, String ImgURL){
+
         if(manager.getStatus() == AsyncTask.Status.FINISHED){
             DatabaseController db = new DatabaseController(this.getApplicationContext());
             db.writeHDBData(HDBDevelopmentNames,ListFlatType,descriptionText,ImgURL);

@@ -25,6 +25,8 @@ public class UserData {
     public int numberOfAdditionalHouseholdMembers;
     ArrayList<Double> membersSalaryList = new ArrayList<Double>();
 
+    //get Set functions
+
     public boolean isMarried() {
         return isMarried;
     }
