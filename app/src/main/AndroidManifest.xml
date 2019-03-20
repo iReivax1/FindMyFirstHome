@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".Controller.MapsController"
+        android:name=".Controller.HDBSplashscreenController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -20,7 +20,7 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".Boundary.test"></activity>
+        <activity android:name=".Boundary.test"/>
         <activity android:name=".Boundary.DataGovAPI" />
         <activity android:name=".Boundary.ProfileUI3"
             android:parentActivityName=".Boundary.ProfileUI2"/>
@@ -40,13 +40,13 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
         <activity
             android:name=".Boundary.MapAPI"
-
             android:label="@string/title_activity_maps" /> <!-- Splashscreen UI -->
 
         <activity
@@ -59,15 +59,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".Boundary.DevelopmentDetailUI"
             android:label="DevelopmentDetailUI">
         </activity>
+
         <activity
             android:name=".Boundary.AffordabilityReportUI"
             android:label="AffordabilityReportUI">
         </activity>
+
         <activity android:name=".Boundary.HDBDevelopmentUI" />
+
+        <activity android:name=".Controller.MapsController" />
     </application>
 
 </manifest>

@@ -1,17 +1,18 @@
 package com.example.findmyfirsthome.Controller;
 
 
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
 import com.google.android.gms.maps.model.LatLng;
 
-
-import android.app.Application;
-import android.content.Context;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class MapsController extends Application {
+public class MapsController extends AppCompatActivity {
     //object and var init;
     //create DAO;
     DatabaseController db = new DatabaseController(getContext());
@@ -27,8 +28,8 @@ public class MapsController extends Application {
 
 
     @Override
-    public void onCreate() {
-        super.onCreate();
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
     }
 

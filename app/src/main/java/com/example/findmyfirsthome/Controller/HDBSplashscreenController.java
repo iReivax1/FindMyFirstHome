@@ -1,16 +1,16 @@
 package com.example.findmyfirsthome.Controller;
 
+import android.app.Application;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import java.util.HashMap;
 
-public class HDBSplashscreenController extends AppCompatActivity {
+public class HDBSplashscreenController extends Application {
     HDBDetailsManager manager = new HDBDetailsManager();
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate(){
+        super.onCreate();
         manager.execute();
     }
 
