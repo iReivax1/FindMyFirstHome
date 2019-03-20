@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DevelopmentDetailControl {
-    private DatabaseController databaseController;
+    private DataAccessInterfaceClass databaseController;
     private HDBDevelopment hdbd;
     private Context context;
     private ArrayList<HashMap<String, Object>> flatTypeListDetails;
@@ -52,15 +52,14 @@ public class DevelopmentDetailControl {
     //DEBUGGING WITH FAKE INSERTED VALUES
     //public String getDevelopmentDescription() { return "asddf"; }
 
-   public LatLng getDevelopmentLocation() { return this.hdbd.getCoordinates(); }
+    public LatLng getDevelopmentLocation() { return this.hdbd.getCoordinates(); }
     //DEBUGGING WITH FAKE INSERTED VALUES
     //public LatLng getDevelopmentLocation() { return new LatLng(1.331183, 103.798311); }
 
     //get image from entity
-    /*public String getDevelopmentImage()
-    {
-        return this.hdbd.getDevelopmentImage();
-    }*/
+    public String getDevelopmentImage() { return this.hdbd.getImgUrl(); }
+    //DEBUGGING WITH FAKE INSERTED VALUES
+    //public String getDevelopmentImage() { return "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTOJW_images_6280/$file/jw_N2C20_view1.png"; }
 
     public String getDevelopmentName() { return this.hdbd.getDevelopmentName(); }
     //DEBUGGING WITH FAKE INSERTED VALUES

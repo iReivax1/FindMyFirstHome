@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.findmyfirsthome.Controller.DevelopmentDetailControl;
 import com.example.findmyfirsthome.Entity.AffordabilityReport;
+import com.example.findmyfirsthome.Entity.MapData;
 import com.example.findmyfirsthome.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -77,7 +78,7 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
 
         //set image of development/estate
         final ImageView estateImage = findViewById(R.id.image_estatePic);
-        Glide.with(this).load("http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTOJW_images_6280/$file/jw_N2C20_view1.png").into(estateImage);
+        Glide.with(this).load(ddc.getDevelopmentImage()).into(estateImage);
 
         //set description of development/estate
         //get from controller which get from database controller which get from database
@@ -190,8 +191,8 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
 
             for(ArrayList amemity : amenitiesDetailsList) {
                 LatLng nearBy = new LatLng(1.345734, 103.681283);
-                mMap.addMarker(new MarkerOptions().position((LatLng) amemity.get(2))
-                        .title((String) amemity.get(0)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                mMap.addMarker(new MarkerOptions().position((LatLng) amemity.get(MapData.COORDINATES))
+                        .title((String) amemity.get(MapData.AMENITIESNAME)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
             }
 
             //move map focus to the location of the main marker
