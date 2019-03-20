@@ -1,14 +1,13 @@
 package com.example.findmyfirsthome.Entity;
 
 import java.util.HashMap;
-import java.util.Set;
 
 public class HDBFlatType {
     private double price;
     private String flatType; //number of rooms
     private boolean affordability;
 
-    //i.e 3000000, 4 room, false;
+    //
     private HashMap<String, Object> flatTypeDetails;
 
     //constructor
@@ -19,10 +18,8 @@ public class HDBFlatType {
         //set all fields from HashMap
         temp = hdbFlatTypeDetails.get("price");
         this.price = temp == null ? 0 : (Double)temp;
-        Set<String> key = hdbFlatTypeDetails.keySet();
-        for(String i : key){
-            this.flatType = i;
-        }
+        temp = hdbFlatTypeDetails.get("flatType");
+        this.flatType = temp == null ? "" : (String) temp;
         temp = hdbFlatTypeDetails.get("affordability");
         this.affordability = temp == null ? false : (Boolean)temp;
     }

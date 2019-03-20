@@ -20,6 +20,6 @@ public class test extends AppCompatActivity {
     public Context getContext(){
         return this.getApplicationContext();
     }
-    
+
 
 }

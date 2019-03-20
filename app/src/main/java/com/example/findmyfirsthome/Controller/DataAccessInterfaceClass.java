@@ -13,9 +13,9 @@ import java.util.HashMap;
 public interface DataAccessInterfaceClass {
 
     /////////////////////////////////////////////////////write/////////////////////////////////////////////////////////////////
-    boolean writeHDBData(String HDBDevelopmentName, ArrayList<HashMap<String, Object>>ListFlatTypePrice, String descriptionText, String ImgURL);
+    boolean writeHDBFlatTypeData(String name, String key, Object obj);
 
-    boolean writeHDBFlatTypeData(String name, HashMap<String, Object> HMFlatType);
+    boolean writeHDBData(String name, HashMap<String, Object>ListFlatType, String descriptionText, String ImgUrl);
 
     boolean writeHDBGrantData(String incomeReq, HashMap<String, Double> grantList);
 

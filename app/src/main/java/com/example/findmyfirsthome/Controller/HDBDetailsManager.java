@@ -49,8 +49,8 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         ///////////////////////////////////Jurong///////////////////////////////////
         //Scrap development name : BoonLay & Jurong west
         HDBDevelopmentNames = (scrapDevelopmentName(urlALL, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
-        //Scrap List of flat type for SK's HDB
-        ListFlatTypePrice.add((scrapFlatType(urlALL, 0, 3, 4, 8)));
+        //Scrap List of flat type for Boonlay's HDB
+        ListFlatTypePrice = (scrapFlatType(urlALL, 0, 3, 4, 8));
         //Scrap description text for this development
         descriptionText = description(urlMain1, HDBDevelopmentNames.get(0), HDBDevelopmentNames.get(1)); //"jurong west jewel", Boon Lay Glade
         ImgURL = scrapImage(urlMain1);
@@ -111,13 +111,17 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         return HDBDList;
     }
 
-    public boolean adaptHDBD(ArrayList<String> HDBDevelopmentNames, ArrayList<HashMap<String, Object>> ListFlatTypePrice, String descriptionText, String ImgURL) {
+    public boolean adaptHDBD(ArrayList<String> HDBDevelopmentNames, ArrayList<HashMap<String, Object>> ListFlatType, String descriptionText, String ImgURL) {
 
         HDBSplashscreenController adapter = new HDBSplashscreenController();
 
-        //Write
+
+        //For each of the HDBDevelopmenet
         for (String name : HDBDevelopmentNames) {
-            adapter.writeHDBD(name, ListFlatTypePrice, descriptionText, ImgURL);
+            //Write each of the hashmap into each development name
+            for(HashMap<String, Object> ft : ListFlatType){
+                adapter.writeHDBD(name, ft, descriptionText, ImgURL);
+            }
         }
 
         return true;
@@ -176,11 +180,10 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
 
         return "";
     }
-
-    protected HashMap<String, Object> scrapFlatType(String url, int tableNumber, int firstRowNumber, int rowStart, int rowEnd) {
-
-
-        HashMap<String, Object> flatType = new HashMap<String, Object>();
+    //each development wil have 1 arraylist each arraylist will have mulitple hashmaps
+    protected ArrayList<HashMap<String, Object>> scrapFlatType(String url, int tableNumber, int firstRowNumber, int rowStart, int rowEnd) {
+        ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+        HashMap<String, Object> flatType = null;
         try {
             //Connect to the page
             Document document = Jsoup.connect(url).get();
@@ -196,24 +199,37 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
 
             String rooms = cols.get(2).text();
             String price = cols.get(3).text();
-            flatType.put(rooms, price);
+
+            ///////////1 hashMap/////////////////////
+            flatType = new HashMap<String, Object>();
+            flatType.put("price", price);
+            flatType.put("flatType", rooms);
+            flatType.put("affordability", false);
+            ///////////////////////////////////////
+            list.add(flatType);
+
             //get(3) for Boonlay => 4 ~ 8
             //get(8) for SK => 9~13
             //get(14) for Kallang => 15~16
             for (int i = rowStart; i < rowEnd; i++) {
                 row = rows.get(i);
-
                 cols = row.select("td");
-
                 rooms = cols.get(0).text();
                 price = cols.get(1).text();
-                flatType.put(rooms, price);
+
+                ///////////1 hashMap/////////////////////
+                flatType = new HashMap<String, Object>();
+                flatType.put("price", price);
+                flatType.put("flatType", rooms);
+                flatType.put("affordability", false);
+                ///////////////////////////////////////
+                list.add(flatType);
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return flatType;
+        return list;
     }
 
     protected ArrayList<String> scrapDevelopmentName(String url, int tableNumber, int rowNumber, int colNumber) {
