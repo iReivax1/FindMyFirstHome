@@ -1,15 +1,12 @@
 package com.example.findmyfirsthome.Boundary;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import com.example.findmyfirsthome.Controller.DatabaseController;
+
+import com.example.findmyfirsthome.Controller.HDBSplashscreenController;
 import com.example.findmyfirsthome.R;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class test extends AppCompatActivity {
 
@@ -17,8 +14,8 @@ public class test extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        com.example.findmyfirsthome.Controller.HDBAdapter adapter = new com.example.findmyfirsthome.Controller.HDBAdapter();
-        adapter.onCreate(savedInstanceState);
+        HDBSplashscreenController SScontrol = new HDBSplashscreenController();
+        SScontrol.onCreate(savedInstanceState);
     }
 
     public Context getContext(){

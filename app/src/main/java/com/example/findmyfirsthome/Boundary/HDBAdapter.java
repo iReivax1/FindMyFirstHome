@@ -13,65 +13,73 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.findmyfirsthome.R;
 
 import java.util.List;
 
-public class HDBAdapter extends RecyclerView.Adapter<HDBAdapter.ViewHolder>{
-    //initialise these objects
-    private List<String> listHDBName;
-    private Context context;
+public class HDBAdapter extends RecyclerView.Adapter<HDBAdapter.MyViewHolder> {
 
-    public HDBAdapter(List<String> listHDBName, Context context) {
-        this.listHDBName = listHDBName;
-        this.context = context;
+    private Context mContext;
+    private List<String> hdbList;
+    private List<String> hdbUrl;
+
+    public HDBAdapter(Context mContext, List<String> hdbList, List<String> hdbUrl) {
+        this.mContext = mContext;
+        this.hdbList = hdbList;
+        this.hdbUrl = hdbUrl;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.hdb_list, viewGroup, false); //false to not attach layout to root
-        return new ViewHolder(v);
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View v = LayoutInflater.from(mContext).inflate(R.layout.item_rec, viewGroup, false);
+        final MyViewHolder vHolder = new MyViewHolder(v);
+
+        vHolder.chooseHDB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String hdbname = hdbList.get(vHolder.getAdapterPosition());
+                Toast.makeText(mContext, "You clicked on " + hdbname,
+                        Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(mContext, DevelopmentDetailUI.class);
+                intent.putExtra("HDBName", hdbname);
+                mContext.startActivity(intent);
+            }
+        });
+
+        return vHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        final String HDBName = listHDBName.get(position);
-
-        //setting xml id to HDNName
-        viewHolder.textViewHDBName.setText(HDBName);
-
-        // onClickListener for each card
-        viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "You clicked "  + HDBName, Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(v.getContext(), HDBDevelopmentUI.class); //Suppose to call next page, HAOJIE!!
-                v.getContext().startActivity(intent); //supposed to put intent in ActivityClass instead of Adapter
-            }
-        });
+    public void onBindViewHolder(@NonNull MyViewHolder viewHolder, int position) {
+        //Still got image not done
+        final String name = hdbList.get(position);
+        final String Url = hdbUrl.get(position);
+        viewHolder.textViewHDBName.setText(name);
+        Glide.with(mContext).load(Url).into(viewHolder.imageViewHDB);
     }
 
     @Override
     public int getItemCount() {
-        //return #of items in listHDBName
-        return listHDBName.size();
+        return hdbList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
 
-        //text views from ListItem.xml
-        public ImageView imageView;
-        public TextView textViewHDBName;
-        public LinearLayout linearLayout;
+    public class MyViewHolder extends RecyclerView.ViewHolder{
 
-        public ViewHolder(@NonNull View itemView) {
+        private ImageView imageViewHDB;
+        private TextView textViewHDBName;
+        private LinearLayout chooseHDB;
+
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            imageView = (ImageView) itemView.findViewById(R.id.imageView);
-            textViewHDBName = (TextView) itemView.findViewById(R.id.textViewHDBName);
-            linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayout);
+            imageViewHDB = (ImageView) itemView.findViewById(R.id.hdbImage);
+            textViewHDBName = (TextView) itemView.findViewById(R.id.hdbName);
+            chooseHDB = (LinearLayout) itemView.findViewById(R.id.hdb_id);
         }
+
+
     }
 }
