@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class HDBSplashscreenController extends AppCompatActivity {
     HDBDetailsManager manager = new HDBDetailsManager();
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceS
         super.onCreate(savedInstanceState);
         manager.execute();
     }
