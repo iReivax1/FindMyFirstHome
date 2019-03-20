@@ -1,14 +1,13 @@
 package com.example.findmyfirsthome.Entity;
 
 import java.util.HashMap;
-import java.util.Set;
 
 public class HDBFlatType {
     private double price;
     private String flatType; //number of rooms
     private boolean affordability;
 
-    //i.e 3000000, 4 room, false;
+    //
     private HashMap<String, Object> flatTypeDetails;
 
     //constructor

@@ -14,7 +14,6 @@ public class test extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         HDBSplashscreenController SScontrol = new HDBSplashscreenController();
-        SScontrol.onCreate(savedInstanceState);
     }
 
     public Context getContext(){

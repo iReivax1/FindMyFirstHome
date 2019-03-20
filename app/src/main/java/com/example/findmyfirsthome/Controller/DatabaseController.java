@@ -43,6 +43,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
     //----------- TABLE COLUMNS for FlatType -----------//
     public static final String HDBFlatType = "HDBFlatType";
     public static final String HDBFlatPrice = "HDBFlatPrice";
+    public static final String HDBFlatAffordability = "HDBAffordability";
 
     //----------- TABLE COLUMNS for Amenities -----------//
     public static final String AmenitiesName = "AmenitiesName";
@@ -67,7 +68,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
             + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude
             + " REAL, " + HDBDevelopmentImgURL + " TEXT " + ");";
 
-    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
+    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + HDBFlatAffordability + " BOOLEAN, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
 
     public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + "(" +  AmenitiesName + " TEXT PRIMARY KEY, " +  AmenitiesType + " TEXT, " + AmenitiesLongitude + " REAL, " + AmenitiesLatitude + " REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
 
@@ -124,7 +125,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
 
 
-    public boolean writeHDBData(String name, ArrayList<HashMap<String, Object>>ListFlatTypePrice, String descriptionText, String ImgUrl) {
+    public boolean writeHDBData(String name, HashMap<String, Object>ListFlatType, String descriptionText, String ImgUrl) {
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
@@ -138,9 +139,12 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         values.put(HDBDevelopmentLatitude, 0.0);
         values.put(HDBDevelopmentLongitude, 0.0);
         values.put(HDBDevelopmentImgURL, ImgUrl);
-        for(HashMap<String, Object> i : ListFlatTypePrice){
-            writeHDBFlatTypeData(name, i);
+        for (String key : ListFlatType.keySet()) {
+            String HDBFlatTypeKey = key;
+            Object HDBFTObj = ListFlatType.get(key);
+            writeHDBFlatTypeData(HDBDevelopmentName, HDBFlatTypeKey, HDBFTObj);
         }
+
 
         //writeAmenitiesData(HDBDevelopmentName);
 
@@ -155,7 +159,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         return true;
     }
 
-    public boolean writeHDBFlatTypeData(String name, HashMap<String, Object> HMFlatType){
+    public boolean writeHDBFlatTypeData(String name, String key, Object obj){
         long newRowId;
 
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
@@ -165,13 +169,15 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
 
         values.put(HDBDevelopmentName, name);
-        for (String key : HMFlatType.keySet()) {
-            String HDBFlatTypeStr = key;
-            Double HDBFP = (Double)HMFlatType.get(key);
-            values.put(HDBFlatType, HDBFlatTypeStr);
-            values.put(HDBFlatPrice, HDBFP);
-            newRowId = db.insert(TABLE_NAME2, null, values);
-        }
+       if(key.contains("price")){
+           values.put(HDBFlatPrice, (Double) obj);
+       }
+       else if(key.contains("flatType")){
+           values.put(HDBFlatType, obj.toString());
+       }
+       else if(key.contains("affordability")){
+           values.put(HDBFlatAffordability, false);
+       }
 
         return true;
     }

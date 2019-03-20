@@ -15,10 +15,10 @@ public class HDBSplashscreenController extends AppCompatActivity {
         manager.execute();
     }
 
-    public void writeHDBD(String HDBDevelopmentNames, ArrayList<HashMap<String, Object>> ListFlatTypePrice, String descriptionText, String ImgURL){
+    public void writeHDBD(String HDBDevelopmentNames, HashMap<String, Object> ListFlatType, String descriptionText, String ImgURL){
         if(manager.getStatus() == AsyncTask.Status.FINISHED){
             DatabaseController db = new DatabaseController(this.getApplicationContext());
-            db.writeHDBData(HDBDevelopmentNames, ListFlatTypePrice,descriptionText,ImgURL);
+            db.writeHDBData(HDBDevelopmentNames,ListFlatType,descriptionText,ImgURL);
         }
 
     }
