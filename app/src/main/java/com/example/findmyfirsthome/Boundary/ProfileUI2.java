@@ -1,13 +1,11 @@
 package com.example.findmyfirsthome.Boundary;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import java.lang.Integer;
 
 import com.example.findmyfirsthome.Controller.ProfileControl;
 import com.example.findmyfirsthome.R;
@@ -75,8 +73,8 @@ public class ProfileUI2 extends AppCompatActivity implements View.OnFocusChangeL
 
 
 
-                //Intent skip = new Intent( ProfileUI2.this, DevelopmentsUI.class);
-                // startActivity(skip);
+                Intent skip = new Intent( ProfileUI2.this, HDBDevelopmentUI.class);
+                startActivity(skip);
             }
         });
         next2.setOnClickListener(new View.OnClickListener(){
