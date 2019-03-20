@@ -30,7 +30,6 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 
 
 public class DataGovAPI extends AppCompatActivity {
@@ -40,7 +39,7 @@ public class DataGovAPI extends AppCompatActivity {
     TextView tvRepoList;  // This will reference our repo list text box.
     RequestQueue requestQueue;  // This is our requests queue to process our HTTP requests.
 
-    String baseUrl = "https://api.github.com/users/";  // This is the API base URL (GitHub API)
+    String baseUrl = "https://data.gov.sg/api/action/datastore_search?resource_id=4fc3fd79-64f2-4027-8d5b-ce0d7c279646&limit=";  // This is the API base URL (GitHub API)
     String url;  // This will hold the full URL which will include the username entered in the etGitHubUser.
 
     @Override
@@ -61,11 +60,11 @@ public class DataGovAPI extends AppCompatActivity {
         this.tvRepoList.setText("");
     }
 
-    private void addToRepoList(String repoName, String lastUpdated) {
+    private void addToRepoList(String address, String lastUpdated) {
         // This will add a new repo to our list.
         // It combines the repoName and lastUpdated strings together.
         // And then adds them followed by a new line (\n\n make two new lines).
-        String strRow = repoName + " / " + lastUpdated;
+        String strRow = address + " / " + lastUpdated;
         String currentText = tvRepoList.getText().toString();
         this.tvRepoList.setText(currentText + "\n\n" + strRow);
     }
@@ -76,27 +75,27 @@ public class DataGovAPI extends AppCompatActivity {
         this.tvRepoList.setText(str);
     }
 
-    private void getRepoList(String username) {
-        // First, we insert the username into the repo url.
+    private void getList(String limit) {
         // The repo url is defined in GitHubs API docs (https://developer.github.com/v3/repos/).
-        this.url = this.baseUrl + username + "/repos";
+        //this is the datagov limit
+        this.url = this.baseUrl + limit;
 
         // Next, we create a new JsonArrayRequest. This will use Volley to make a HTTP request
         // that expects a JSON Array Response.
-        // To fully understand this, I'd recommend readng the office docs: https://developer.android.com/training/volley/index.html
         JsonArrayRequest arrReq = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                // Check the length of our response (to see if the user has any repos)
+                // Check the length of our response to see if anything exist
                 if (response.length() > 0) {
-                    // The user does have repos, so let's loop through them all.
                     for (int i = 0; i < response.length(); i++) {
                         try {
                             // For each repo, add a new line to our repo list.
                             JSONObject jsonObj = response.getJSONObject(i);
+                            System.out.println(jsonObj);
                             String repoName = jsonObj.get("name").toString();
                             String lastUpdated = jsonObj.get("updated_at").toString();
                             addToRepoList(repoName, lastUpdated);
+
                         } catch (JSONException e) {
                             // If there is an error then output this to the logs.
                             Log.e("Volley", "Invalid JSON Object.");
@@ -127,9 +126,9 @@ public class DataGovAPI extends AppCompatActivity {
     public void getReposClicked(View v) {
         // Clear the repo list (so we have a fresh screen to add to)
         clearRepoList();
-        // Call our getRepoList() function that is defined above and pass in the
+        // Call our getList() function that is defined above and pass in the
         // text which has been entered into the etGitHubUser text input field.
-        getRepoList(etGitHubUser.getText().toString());
+        getList(etGitHubUser.getText().toString());
     }
 
     public boolean writeAmenitiesCoord() {
