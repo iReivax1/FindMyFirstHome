@@ -88,7 +88,7 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
         return point;
     }
 
-    public LatLng getAmeneities(String name){
+    public LatLng getAmeneitiesCoordinates(String name){
         Context context = getApplicationContext();
         Geocoder gc = new Geocoder(context);
         List<Address> addresses = null;
