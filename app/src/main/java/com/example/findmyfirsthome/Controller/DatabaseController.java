@@ -97,16 +97,16 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
             + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude
             + " REAL, " + HDBDevelopmentImgURL + " TEXT " + ");";
 
-    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + HDBFlatAffordability + " BOOLEAN, " + " FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
+    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + HDBFlatAffordability + " BOOLEAN, " + " FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
 
-    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + "(" +  AmenitiesName + " TEXT PRIMARY KEY, " +  AmenitiesType + " TEXT, " + AmenitiesLongitude + " REAL, " + AmenitiesLatitude + " REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
+    //public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + " (" +  AmenitiesName + " TEXT PRIMARY KEY, " +  AmenitiesType + " TEXT, " + AmenitiesLongitude + " REAL, " + AmenitiesLatitude + " REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
 
-    public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + "(" + IncomeRequired + " TEXT PRIMARY KEY, " + GrantType + " TEXT, " + GrantAmount +
+    public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + " (" + IncomeRequired + " TEXT PRIMARY KEY, " + GrantType + " TEXT, " + GrantAmount +
             " REAL);";
 
-    public static final String SQL_UserData = "CREATE TABLE " + TABLE_NAME5 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + isMarried + " BOOLEAN, "
+    public static final String SQL_UserData = "CREATE TABLE " + TABLE_NAME5 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + isMarried + " BOOLEAN, "
             + isFirstTimeBuyer + " BOOLEAN, " + isSingaporean + " BOOLEAN, " + age + " REAL, " + grossSalary + " REAL, " + isFirstTimeBuyerPartner + "BOOLEAN, " + isSingaporeanPartner + " BOOLEAN, " + agePartner + " REAL, " + grossSalaryPartner + " REAL, "
-            + carLoan + " REAL, " + creditLoan + " REAL, " + studyLoan + " REAL, " + otherCommitments + " REAL, " + buyer1CPF + " REAL, " + buyer2CPF + " REAL,"
+            + carLoan + " REAL, " + creditLoan + " REAL, " + studyLoan + " REAL, " + otherCommitments + " REAL, " + buyer1CPF + " REAL, " + buyer2CPF + " REAL, "
             + numberOfAdditionalHouseholdMembers + " REAL " + ")";
 
     public static final String SQL_membersSalaryList_ = "CREATE TABLE " + TABLE_NAME6  + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + membersSalaryList + " REAL, " + " FOREIGN KEY (" + ID + ") REFERENCES " + TABLE_NAME5 + "(" + ID + "));";
@@ -182,13 +182,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         long newRowId = db.insert(TABLE_NAME, null, values);
         System.out.println(newRowId);
         db.close();
-        /*int i=0;
-            for (String key : ListFlatType.keySet()) {
-                i++;
-                String HDBFlatTypeKey = key;
-                Object HDBFTObj = ListFlatType.get(key);
-                writeHDBFlatTypeData(HDBDevelopmentName, HDBFlatTypeKey, HDBFTObj);
-            }*/
+
         return true;
         //writeAmenitiesData(HDBDevelopmentName);
         //The first argument is the table name.
