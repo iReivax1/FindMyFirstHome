@@ -165,13 +165,12 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
      such as with AsyncTask or IntentService. */
 
 
-    public boolean writeHDBData(String name, HashMap<String, Object>ListFlatType, String descriptionText, String ImgUrl) {
+    public boolean writeHDBData(String name, String descriptionText, String ImgUrl) {
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
 
-        boolean checkWriteFlatData = false;
         values.put(HDBDevelopmentName, name);
         values.put(HDBDevelopmentDescription, descriptionText);
         //String HDBlat = Double.toString(getHDBDevelopmentCoordinates(HDBDevelopmentName).latitude);
@@ -179,48 +178,52 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         values.put(HDBDevelopmentLatitude, 0.0);
         values.put(HDBDevelopmentLongitude, 0.0);
         values.put(HDBDevelopmentImgURL, ImgUrl);
-        for (String key : ListFlatType.keySet()) {
-            String HDBFlatTypeKey = key;
-            Object HDBFTObj = ListFlatType.get(key);
-            writeHDBFlatTypeData(HDBDevelopmentName, HDBFlatTypeKey, HDBFTObj);
-        }
-
-
+        System.out.println(values);
+        long newRowId = db.insert(TABLE_NAME, null, values);
+        System.out.println(newRowId);
+        db.close();
+        /*int i=0;
+            for (String key : ListFlatType.keySet()) {
+                i++;
+                String HDBFlatTypeKey = key;
+                Object HDBFTObj = ListFlatType.get(key);
+                writeHDBFlatTypeData(HDBDevelopmentName, HDBFlatTypeKey, HDBFTObj);
+            }*/
+        return true;
         //writeAmenitiesData(HDBDevelopmentName);
-
         //The first argument is the table name.
         //The second argument tells the framework what to do if ContentValues is empty
         //Third argument is  content;
         // Insert the new row, returning the primary key value of the new row
         //put id number;
         //assert checkWriteFlatData == true;
-        long newRowId = db.insert(TABLE_NAME, null, values);
-        db.close();
-        return true;
     }
 
-    public boolean writeHDBFlatTypeData(String name, String key, Object obj){
+    public void writeHDBFlatTypeData(String name, HashMap<String, Object> ListFlatType){
         long newRowId;
 
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
-
-
         values.put(HDBDevelopmentName, name);
-       if(key.contains("price")){
-           obj = ((String)obj).replace(",","").substring(6);
-           values.put(HDBFlatPrice, Double.valueOf((String)obj));
-       }
-       else if(key.contains("flatType")){
-           values.put(HDBFlatType, obj.toString());
-       }
-       else if(key.contains("affordability")){
-           values.put(HDBFlatAffordability, false);
-       }
-
-        return true;
+        for (String key : ListFlatType.keySet()) {
+            String obj;
+            if(key.contains("price")){
+                obj = (ListFlatType.get(key).toString()).replace(",","").substring(6);
+                values.put(HDBFlatPrice, Double.valueOf(obj));
+            }
+            else if(key.contains("flatType")){
+                values.put(HDBFlatType, ListFlatType.get(key).toString());
+            }
+            else if(key.contains("affordability")){
+                values.put(HDBFlatAffordability, false);
+            }
+        }
+        System.out.println(values);
+        newRowId = db.insert(TABLE_NAME2, null, values);
+        System.out.println(newRowId);
+        db.close();
     }
 
 
