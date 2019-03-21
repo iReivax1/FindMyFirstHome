@@ -17,8 +17,6 @@ public class SplashScreenUI extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
-        Intent i = new Intent( SplashScreenUI.this, ProfileUI.class);
-        startActivity(i);
         StartupControl sc1 = new StartupControl();
         sc1.run();
         new Handler().postDelayed(new Runnable() {
@@ -31,7 +29,8 @@ public class SplashScreenUI extends AppCompatActivity {
             public void run() {
                 // This method will be executed once the timer is over
                 // Start your app main activity
-
+                Intent i = new Intent( SplashScreenUI.this, ProfileUI.class);
+                startActivity(i);
 
 
                 // close this activity
