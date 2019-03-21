@@ -63,25 +63,6 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-//        // Add a marker in Sydney and move the camera
-//        LatLng Singapore = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(Singapore).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(Singapore));
-//        //     map.setLocationSource(mLocationSource);
-////      map.setOnMapLongClickListener(mLocationSource);
-////      map.setMyLocationEnabled(true);
-    }
-
-    public void setLocation(LatLng point){
-        mMap.addMarker(new MarkerOptions().position(point).title("mark"));
-    }
-
-    public void drawCircle(LatLng HDBLocation){
-
-        Circle circle = mMap.addCircle(new CircleOptions()
-                .center(HDBLocation)
-                .radius(150000)
-                .visible(false));
     }
 
     //Controller will call this
@@ -99,6 +80,26 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
             point = new LatLng(location.getLatitude(), location.getLongitude() );
             for ( Address a : addresses )
                 mMap.addMarker( new MarkerOptions().position( new LatLng( a.getLatitude(), a.getLongitude() ) ).title( "HDB" ) );
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return point;
+    }
+
+    public LatLng getAmeneities(String name){
+        Context context = getApplicationContext();
+        Geocoder gc = new Geocoder(context);
+        List<Address> addresses = null;
+        point = null;
+        try {
+            addresses = gc.getFromLocationName(name, 2);
+            assert addresses != null; //make sure that addresss is not null
+            Address location = addresses.get(0);
+            point = new LatLng(location.getLatitude(), location.getLongitude() );
+            for ( Address a : addresses )
+                mMap.addMarker( new MarkerOptions().position( new LatLng( a.getLatitude(), a.getLongitude() ) ).title( "Amenities" ) );
 
         } catch (IOException e) {
             e.printStackTrace();

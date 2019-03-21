@@ -19,6 +19,8 @@ public interface DataAccessInterfaceClass {
 
     boolean writeHDBGrantData(String incomeReq, HashMap<String, Double> grantList);
 
+    boolean writeAmenitiesData(ArrayList<HashMap<String, String>> infoList);
+
     //boolean writeAmenitiesData(String name);
     /////////////////////////////////////////////////////read/////////////////////////////////////////////////////////////////
     ArrayList<HDBDevelopment> readHDBData();
@@ -30,5 +32,6 @@ public interface DataAccessInterfaceClass {
     ArrayList<HashMap<String, Object>> readHDBFlatType(String name);
 
     LatLng readHDBDevelopmentCoordinates(String name);
+
 
 }

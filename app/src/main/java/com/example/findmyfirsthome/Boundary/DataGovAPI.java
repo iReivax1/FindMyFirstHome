@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.findmyfirsthome.Controller.DataAccessInterfaceClass;
+import com.example.findmyfirsthome.Controller.DatabaseController;
 import com.example.findmyfirsthome.R;
 
 
@@ -37,11 +39,14 @@ import java.util.HashMap;
 public class DataGovAPI extends AppCompatActivity {
 
     EditText limit; // This will be a reference to our GitHub username input.
+    EditText dataType;
     Button getData;  // This is a reference to the "Get Repos" button.
     TextView dataList;  // This will reference our repo list text box.
     RequestQueue requestQueue;  // This is our requests queue to process our HTTP requests.
-
-    String baseUrl = "https://data.gov.sg/api/action/datastore_search?resource_id=4fc3fd79-64f2-4027-8d5b-ce0d7c279646&limit=";  // This is the API base URL (GitHub API)
+    String typeData;
+    String childCareURL = "https://data.gov.sg/api/action/datastore_search?resource_id=4fc3fd79-64f2-4027-8d5b-ce0d7c279646&limit=";  // This is the API base URL (GitHub API)
+    String marketURL = "https://data.gov.sg/api/action/datastore_search?resource_id=8f6bba57-19fc-4f36-8dcf-c0bda382364d&limit=";
+    String schoolURL = "https://data.gov.sg/api/action/datastore_search?resource_id=ede26d32-01af-4228-b1ed-f05c45a1d8ee&limit=";
     String url;  // This will hold the full URL which will include the username entered in the etGitHubUser.
     ArrayList<HashMap<String, String>> infoList = new ArrayList<>();
 
@@ -50,7 +55,7 @@ public class DataGovAPI extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_gov_api);
 
-
+        this.dataType = findViewById(R.id.data_type);
         this.limit = findViewById(R.id.limit);  // Link our github user text box.
         this.getData = findViewById(R.id.get_data);  // Link our click button.
         this.dataList = findViewById(R.id.data_list);  // Link our repository list text output box.
@@ -67,7 +72,7 @@ public class DataGovAPI extends AppCompatActivity {
         // This will add new data to our list.
         // (\n\n make two new lines).
         String currentText = dataList.getText().toString();
-        this.dataList.setText(currentText + "\n\n" + type + name + address);
+        this.dataList.setText(currentText + "\n\n" +type + " " + name + " " + address);
     }
 
     private void setRepoListText(String str) {
@@ -77,18 +82,37 @@ public class DataGovAPI extends AppCompatActivity {
     }
 
     //limit is the limit number for the number of search queries > 1 please.
-    private void getList(String limit) {
+    private void getList(String type, String limit) {
         // The repo url is defined in GitHubs API docs (https://developer.github.com/v3/repos/).
         //this is the datagov limit
-        this.url = this.baseUrl + limit;
+        this.typeData = type;
 
+        //Check type to set url
+        if(typeData.equals("childCare")){
+            this.url = this.childCareURL + limit;
+        }
+        else if(typeData.equals("market")){
+            this.url = this.marketURL + limit;
+        }
+        else if(typeData.equals("school")){
+            this.url = this.schoolURL + limit;
+        }
         // Next, we create a new JsonArrayRequest. This will use Volley to make a HTTP request
         // that expects a JSON Array Response.
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, (JSONObject) null, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
-                JSONParserChildCare(response);
+                if(typeData.equals("childCare")) {
+                    JSONParserChildCare(response);
+                }
+                else if(typeData.equals("market")){
+                    JSONParserMarket(response);
+                }
+                else if(typeData.equals("school")){
+                    JSONParserSchool(response);
+                }
+
             }
         }, new Response.ErrorListener() {
 
@@ -109,7 +133,7 @@ public class DataGovAPI extends AppCompatActivity {
         clearRepoList();
         // Call our getList() function that is defined above and pass in the
         // text which has been entered into the etGitHubUser text input field.
-        getList(limit.getText().toString());
+        getList(dataType.getText().toString(),limit.getText().toString());
     }
 
     public boolean writeAmenitiesCoord(String amenitiesType, String Address) {
@@ -145,14 +169,13 @@ public class DataGovAPI extends AppCompatActivity {
                     HashMap<String, String> info = new HashMap<>();
 
                     // adding each child node to HashMap key => value
-                    info.put("id", centre_name);
-                    info.put("name", centre_address);
+                    info.put("AmenitiesType", "ChildCare");
+                    info.put("AmenitiesName", centre_name);
+                    info.put("AmenitiesAddress", centre_address);
                     addToList("Childcare : ", centre_name, centre_address);
-                    Log.d("test", centre_name);
-                    Log.d("test", centre_address);
-
                     // adding contact to contact list
                     infoList.add(info);
+                    writeAmenitiesToDB();
                 }
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
@@ -161,6 +184,85 @@ public class DataGovAPI extends AppCompatActivity {
         else {
             Log.e("ERROR", "Couldn't get json from server.");
         }
+
+    }
+
+    public void JSONParserMarket(JSONObject obj) {
+        if (obj != null) {
+            try {
+                JSONObject jsonObj = obj;
+                //Log.d("test", obj.toString());
+                // Getting JSON Array node
+                JSONObject result = jsonObj.getJSONObject("result");
+                JSONArray records = result.getJSONArray("records");
+                // looping through All Contacts
+                for (int i = 0; i < records.length(); i++) {
+                    JSONObject c = records.getJSONObject(i);
+
+                    String name_of_centre = c.getString("name_of_centre");
+                    String location_of_centre = c.getString("location_of_centre");
+                    // tmp hash map for single contact
+                    HashMap<String, String> info = new HashMap<>();
+
+                    // adding each child node to HashMap key => value
+                    info.put("AmenitiesType", "Market");
+                    info.put("AmenitiesName", name_of_centre);
+                    info.put("AmenitiesAddress", location_of_centre);
+                    addToList("Markets : ", name_of_centre, location_of_centre);
+                    // adding contact to contact list
+                    infoList.add(info);
+                    writeAmenitiesToDB();
+                }
+            } catch (final JSONException e) {
+                Log.e("ERROR", "Json parsing error: " + e.getMessage());
+            }
+        }
+        else {
+            Log.e("ERROR", "Couldn't get json from server.");
+        }
+
+    }
+
+    public void JSONParserSchool(JSONObject obj) {
+        if (obj != null) {
+            try {
+                JSONObject jsonObj = obj;
+                //Log.d("test", obj.toString());
+                // Getting JSON Array node
+                JSONObject result = jsonObj.getJSONObject("result");
+                JSONArray records = result.getJSONArray("records");
+                Log.d("Error", Integer.toString(records.length()));
+                // looping through All Contacts
+                for (int i = 0; i < records.length(); i++) {
+                    JSONObject c = records.getJSONObject(i);
+
+                    String schoolName = c.getString("school_name");
+                    String postalCode = c.getString("postal_code");
+                    // tmp hash map for single contact
+                    HashMap<String, String> info = new HashMap<>();
+
+                    // adding each child node to HashMap key => value
+                    info.put("AmenitiesType", "School");
+                    info.put("AmenitiesName", schoolName);
+                    info.put("AmenitiesAddress", postalCode);
+                    addToList("School : ", schoolName, postalCode);
+                    // adding contact to contact list
+                    infoList.add(info);
+                    writeAmenitiesToDB();
+                }
+            } catch (final JSONException e) {
+                Log.e("ERROR", "Json parsing error: " + e.getMessage());
+            }
+        }
+        else {
+            Log.e("ERROR", "Couldn't get json from server.");
+        }
+
+    }
+
+    public void writeAmenitiesToDB(){
+        DataAccessInterfaceClass db = new DatabaseController(this.getApplicationContext());
+        db.writeAmenitiesData(infoList);
 
     }
 

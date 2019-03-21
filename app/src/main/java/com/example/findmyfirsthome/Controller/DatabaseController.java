@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import com.example.findmyfirsthome.Boundary.MapAPI;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
@@ -24,7 +25,7 @@ import java.lang.*;
 
 //TODO: Redesign database, each enitity = 1 table
 //TODO: add writeGrants, and getGrants
-public class DatabaseController extends SQLiteOpenHelper implements  DataAccessInterfaceClass, BaseColumns{
+public class DatabaseController extends SQLiteOpenHelper implements DataAccessInterfaceClass, BaseColumns{
 
 
     //Change version if schema changed;
@@ -47,8 +48,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
     //----------- TABLE COLUMNS for Amenities -----------//
     public static final String AmenitiesName = "AmenitiesName";
     public static final String AmenitiesType = "AmenitiesType";
-    public static final String AmenitiesLongitude = "ALongitude";
-    public static final String AmenitiesLatitude = "ALatitude";
+    public static final String AmenitiesAddress = "AmenitiesAddress";
 
     //----------- TABLE COLUMNS for Grants -----------//
     public static final String IncomeRequired = "IncomeRequired";
@@ -99,7 +99,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
     public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + HDBFlatAffordability + " BOOLEAN, " + " FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
 
-    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + "(" +  AmenitiesName + " TEXT PRIMARY KEY, " +  AmenitiesType + " TEXT, " + AmenitiesLongitude + " REAL, " + AmenitiesLatitude + " REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
+    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + "(" +  ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + AmenitiesName + " TEXT, " +  AmenitiesType + " TEXT, " + AmenitiesAddress + " TEXT " + ");";
 
     public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + "(" + IncomeRequired + " TEXT PRIMARY KEY, " + GrantType + " TEXT, " + GrantAmount +
             " REAL);";
@@ -132,7 +132,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         //On creation of DBC the table SQL_HDB will be created
         sqLiteDatabase.execSQL(SQL_HDBDevelopment);
         sqLiteDatabase.execSQL(SQL_FlatType);
-        //sqLiteDatabase.execSQL(SQL_Amenities);
+        sqLiteDatabase.execSQL(SQL_Amenities);
         sqLiteDatabase.execSQL(SQL_Grants);
         sqLiteDatabase.execSQL(SQL_UserData);
         sqLiteDatabase.execSQL(SQL_membersSalaryList_);
@@ -186,7 +186,6 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         }
 
 
-        //writeAmenitiesData(HDBDevelopmentName);
 
         //The first argument is the table name.
         //The second argument tells the framework what to do if ContentValues is empty
@@ -305,6 +304,30 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
         return false;
 
+    }
+
+    public boolean writeAmenitiesData(ArrayList<HashMap<String, String>> infoList){
+
+        // Gets the data repository in write mode , getWritableDatabase is sqlite function
+        SQLiteDatabase db = getWritableDatabase();
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+
+        for(HashMap<String, String> i : infoList){
+            for (String key: i.keySet()){
+                if(key.equals("AmenitiesType")){
+                    values.put(AmenitiesType, i.get(key));
+                }else if(key.equals("AmenitiesName")){
+                    values.put(AmenitiesName, i.get(key));
+                }else{
+                    values.put(AmenitiesAddress, i.get(key));
+                }
+            }
+        }
+
+        long newRowId = db.insert(TABLE_NAME3, null, values);
+        db.close();
+        return true;
     }
 
 //////////////////////////////////////Read functions///////////////////////////////////////////////////////////////////////
