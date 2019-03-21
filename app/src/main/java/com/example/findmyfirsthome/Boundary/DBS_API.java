@@ -34,6 +34,6 @@ public class DBS_API {
 
     public double calculateMaxLoan() {
         calculateLoanperiod();
-        return calculateMonthlyInstallment()*(pow((1+monthIR),(loanperiod*12)) -1)/monthIR*(pow((1+monthIR),(loanperiod*12)));
+        return calculateMonthlyInstallment()*(Math.pow((monthIR+1),(loanperiod*12))-1)/(monthIR*Math.pow((1+monthIR),(loanperiod*12)));
     }
 }
