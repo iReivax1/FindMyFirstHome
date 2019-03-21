@@ -15,7 +15,7 @@ public class SplashScreenUI extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
-        Intent i = new Intent( SplashScreenUI.this, ProfileUI.class);
+        Intent i = new Intent( SplashScreenUI.this, DataGovAPI.class);
         startActivity(i);
         StartupControl sc1 = new StartupControl();
         sc1.run();

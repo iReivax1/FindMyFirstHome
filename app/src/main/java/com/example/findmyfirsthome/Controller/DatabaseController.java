@@ -29,7 +29,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
 
 
     //Change version if schema changed;
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     //----------- TABLE COLUMNS for ALL -----------//
     public static final String ID = "ID";
@@ -83,6 +83,11 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     //ID is foreign key and primary key
     public static final String membersSalaryList = "membersSalaryList";
 
+    //----------- TABLE COLUMNS for taxRate -----------//
+    public static final String typeOfProperty = "typeOfProperty";
+    public static final String taxRate = "taxRate";
+    public static final String annualValue = "annualValue";
+
     //----------- TABLE NAMES & DATABASE NAME -----------//
     public static final String DATABASE_NAME = "FindMyFirstHome.db";
     private static final String TABLE_NAME = "HDBDevelopment";
@@ -91,6 +96,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     private static final String TABLE_NAME4 = "Grants";
     private static final String TABLE_NAME5 = "UserData";
     private static final String TABLE_NAME6 = "membersSalaryList";
+    private static final String TABLE_NAME7 = "TaxList";
 
     //Draw the table
     private static final String SQL_HDBDevelopment = "CREATE TABLE " + TABLE_NAME + " (" + HDBDevelopmentName + " TEXT PRIMARY KEY, " + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude + " REAL, " + HDBDevelopmentImgURL + " TEXT " + ");";
@@ -98,8 +104,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
 
     public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + HDBFlatAffordability + " BOOLEAN, " + " FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
 
-    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + " (" +  AmenitiesName + " TEXT PRIMARY KEY, " +  AmenitiesType + " TEXT, " + AmenitiesLongitude + " REAL, " + AmenitiesLatitude + " REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
-
+    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + " (" +  AmenitiesName + " TEXT PRIMARY KEY, " +  AmenitiesType + " TEXT, " + AmenitiesAddress + " TEXT " + ");";
     public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + " (" + IncomeRequired + " TEXT PRIMARY KEY, " + GrantType + " TEXT, " + GrantAmount +
             " REAL);";
 
@@ -111,12 +116,15 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
 
     public static final String SQL_membersSalaryList_ = "CREATE TABLE " + TABLE_NAME6 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + membersSalaryList + " REAL, " + " FOREIGN KEY (" + ID + ") REFERENCES " + TABLE_NAME5 + "(" + ID + "));";
 
+    public static final String SQL_TaxList = "CREATE TABLE " + TABLE_NAME7 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + typeOfProperty + " TEXT, " + annualValue + " REAL, "  + taxRate + " REAL " + ");";
+
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
     private static final String SQL_DELETE_ENTRIES2 = "DROP TABLE IF EXISTS " + TABLE_NAME2;
     private static final String SQL_DELETE_ENTRIES3 = "DROP TABLE IF EXISTS " + TABLE_NAME3;
     private static final String SQL_DELETE_ENTRIES4 = "DROP TABLE IF EXISTS " + TABLE_NAME4;
     private static final String SQL_DELETE_ENTRIES5 = "DROP TABLE IF EXISTS " + TABLE_NAME5;
     private static final String SQL_DELETE_ENTRIES6 = "DROP TABLE IF EXISTS " + TABLE_NAME6;
+    private static final String SQL_DELETE_ENTRIES7 = "DROP TABLE IF EXISTS " + TABLE_NAME7;
 
     private static int numID = 0;
 
@@ -137,6 +145,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         sqLiteDatabase.execSQL(SQL_Grants);
         sqLiteDatabase.execSQL(SQL_UserData);
         sqLiteDatabase.execSQL(SQL_membersSalaryList_);
+        sqLiteDatabase.execSQL(SQL_TaxList);
     }
 
     //If Database version is difference, delete all current entries and re-create new DBs
@@ -150,6 +159,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES4);
         sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES5);
         sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES6);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES7);
         onCreate(sqLiteDatabase);
     }
 
@@ -324,6 +334,29 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         }
 
         long newRowId = db.insert(TABLE_NAME3, null, values);
+        db.close();
+        return true;
+    }
+
+    public boolean writeTax(ArrayList<HashMap<String, String>> infoList){
+        // Gets the data repository in write mode , getWritableDatabase is sqlite function
+        SQLiteDatabase db = getWritableDatabase();
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+
+        for (HashMap<String, String> i : infoList) {
+            for (String key : i.keySet()) {
+                if (key.equals("typeOfProperty")) {
+                    values.put(typeOfProperty, i.get(key));
+                } else if (key.equals("taxRate")) {
+                    values.put(taxRate, i.get(key));
+                } else {
+                    values.put(annualValue, i.get(key));
+                }
+            }
+        }
+
+        long newRowId = db.insert(TABLE_NAME7, null, values);
         db.close();
         return true;
     }
