@@ -47,9 +47,10 @@ public class DataGovAPI extends AppCompatActivity {
     String childCareURL = "https://data.gov.sg/api/action/datastore_search?resource_id=4fc3fd79-64f2-4027-8d5b-ce0d7c279646&limit=";  // This is the API base URL (GitHub API)
     String marketURL = "https://data.gov.sg/api/action/datastore_search?resource_id=8f6bba57-19fc-4f36-8dcf-c0bda382364d&limit=";
     String schoolURL = "https://data.gov.sg/api/action/datastore_search?resource_id=ede26d32-01af-4228-b1ed-f05c45a1d8ee&limit=";
+    String taxURL = "https://data.gov.sg/api/action/datastore_search?resource_id=bb6f5bf8-7d0b-4526-b020-b812ea7d7d89&limit=10";
     String url;  // This will hold the full URL which will include the username entered in the etGitHubUser.
     ArrayList<HashMap<String, String>> infoList = new ArrayList<>();
-
+    ArrayList<HashMap<String, String>> taxList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +98,9 @@ public class DataGovAPI extends AppCompatActivity {
         else if(typeData.equals("school")){
             this.url = this.schoolURL + limit;
         }
+        else if(typeData.equals("tax")){
+            this.url = this.taxURL;
+        }
         // Next, we create a new JsonArrayRequest. This will use Volley to make a HTTP request
         // that expects a JSON Array Response.
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, (JSONObject) null, new Response.Listener<JSONObject>() {
@@ -111,6 +115,9 @@ public class DataGovAPI extends AppCompatActivity {
                 }
                 else if(typeData.equals("school")){
                     JSONParserSchool(response);
+                }
+                else if(typeData.equals("tax")){
+                    JSONParserTax(response);
                 }
 
             }
@@ -175,7 +182,7 @@ public class DataGovAPI extends AppCompatActivity {
                     addToList("Childcare : ", centre_name, centre_address);
                     // adding contact to contact list
                     infoList.add(info);
-                    writeAmenitiesToDB();
+                    writeAmenitiesToDB(infoList);
                 }
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
@@ -211,7 +218,7 @@ public class DataGovAPI extends AppCompatActivity {
                     addToList("Markets : ", name_of_centre, location_of_centre);
                     // adding contact to contact list
                     infoList.add(info);
-                    writeAmenitiesToDB();
+                    writeAmenitiesToDB(infoList);
                 }
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
@@ -248,7 +255,7 @@ public class DataGovAPI extends AppCompatActivity {
                     addToList("School : ", schoolName, postalCode);
                     // adding contact to contact list
                     infoList.add(info);
-                    writeAmenitiesToDB();
+                    writeAmenitiesToDB(infoList);
                 }
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
@@ -260,9 +267,47 @@ public class DataGovAPI extends AppCompatActivity {
 
     }
 
-    public void writeAmenitiesToDB(){
+    public void JSONParserTax(JSONObject obj) {
+        if (obj != null) {
+            try {
+                JSONObject jsonObj = obj;
+                //Log.d("test", obj.toString());
+                // Getting JSON Array node
+                JSONObject result = jsonObj.getJSONObject("result");
+                JSONArray records = result.getJSONArray("records");
+                Log.d("Error", Integer.toString(records.length()));
+                // looping through All Contacts
+                for (int i = 0; i < records.length(); i++) {
+                    JSONObject c = records.getJSONObject(i);
+
+                    String typeOfProperty = c.getString("type_of_property");
+                    String taxRate = c.getString("tax_rate");
+                    String annualValue = c.getString("annual_value");
+                    // tmp hash map for single contact
+                    HashMap<String, String> info = new HashMap<>();
+
+                    // adding each child node to HashMap key => value
+                    info.put("typeOfProperty", typeOfProperty);
+                    info.put("taxRate", taxRate);
+                    info.put("annualValue", annualValue);
+                    addToList(typeOfProperty, taxRate, annualValue);
+                    // adding contact to contact list
+                    taxList.add(info);
+                    writeAmenitiesToDB(taxList);
+                }
+            } catch (final JSONException e) {
+                Log.e("ERROR", "Json parsing error: " + e.getMessage());
+            }
+        }
+        else {
+            Log.e("ERROR", "Couldn't get json from server.");
+        }
+
+    }
+
+    public void writeAmenitiesToDB(ArrayList<HashMap<String, String>> list){
         DataAccessInterfaceClass db = new DatabaseController(this.getApplicationContext());
-        db.writeAmenitiesData(infoList);
+        db.writeAmenitiesData(list);
 
     }
 
