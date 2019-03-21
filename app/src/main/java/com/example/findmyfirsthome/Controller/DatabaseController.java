@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Debug;
 import android.provider.BaseColumns;
 import android.util.Log;
 
@@ -15,9 +14,9 @@ import com.example.findmyfirsthome.Entity.MapData;
 import com.example.findmyfirsthome.Entity.UserData;
 import com.google.android.gms.maps.model.LatLng;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.lang.*;
 
 //Basically this is our DAO;
 //Need to refactor this class to an interface class.
@@ -26,14 +25,11 @@ import java.util.HashMap;
 
 //TODO: Redesign database, each enitity = 1 table
 //TODO: add writeGrants, and getGrants
-public class DatabaseController extends SQLiteOpenHelper implements  DataAccessInterfaceClass, BaseColumns{
+public class DatabaseController extends SQLiteOpenHelper implements DataAccessInterfaceClass, BaseColumns {
 
 
     //Change version if schema changed;
     public static final int DATABASE_VERSION = 1;
-
-
-
 
     //----------- TABLE COLUMNS for ALL -----------//
     public static final String ID = "ID";
@@ -52,8 +48,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
     //----------- TABLE COLUMNS for Amenities -----------//
     public static final String AmenitiesName = "AmenitiesName";
     public static final String AmenitiesType = "AmenitiesType";
-    public static final String AmenitiesLongitude = "ALongitude";
-    public static final String AmenitiesLatitude = "ALatitude";
+    public static final String AmenitiesAddress = "AmenitiesAddress";
 
     //----------- TABLE COLUMNS for Grants -----------//
     public static final String IncomeRequired = "IncomeRequired";
@@ -98,23 +93,17 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
     private static final String TABLE_NAME6 = "membersSalaryList";
 
     //Draw the table
-    private static final String SQL_HDBDevelopment = "CREATE TABLE " + TABLE_NAME + " ("  + HDBDevelopmentName + " TEXT PRIMARY KEY, "
-            + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude
-            + " REAL, " + HDBDevelopmentImgURL + " TEXT " + ");";
+    private static final String SQL_HDBDevelopment = "CREATE TABLE " + TABLE_NAME + " (" + HDBDevelopmentName + " TEXT PRIMARY KEY, " + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude + " REAL, " + HDBDevelopmentImgURL + " TEXT " + ");";
 
-    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + HDBFlatAffordability + " BOOLEAN, " + " FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
+    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + HDBFlatAffordability + " BOOLEAN, " + " FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName + "));";
 
-    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + "(" +  AmenitiesName + " TEXT PRIMARY KEY, " +  AmenitiesType + " TEXT, " + AmenitiesLongitude + " REAL, " + AmenitiesLatitude + " REAL, " + "FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
+    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + AmenitiesName + " TEXT, " + AmenitiesType + " TEXT, " + AmenitiesAddress + " TEXT " + ");";
 
-    public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + "(" + IncomeRequired + " TEXT PRIMARY KEY, " + GrantType + " TEXT, " + GrantAmount +
-            " REAL);";
+    public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + "(" + IncomeRequired + " TEXT PRIMARY KEY, " + GrantType + " TEXT, " + GrantAmount + " REAL);";
 
-    public static final String SQL_UserData = "CREATE TABLE " + TABLE_NAME5 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + isMarried + " BOOLEAN, "
-            + isFirstTimeBuyer + " BOOLEAN, " + isSingaporean + " BOOLEAN, " + age + " REAL, " + grossSalary + " REAL, " + isFirstTimeBuyerPartner + "BOOLEAN, " + isSingaporeanPartner + " BOOLEAN, " + agePartner + " REAL, " + grossSalaryPartner + " REAL, "
-            + carLoan + " REAL, " + creditLoan + " REAL, " + studyLoan + " REAL, " + otherCommitments + " REAL, " + buyer1CPF + " REAL, " + buyer2CPF + " REAL,"
-            + numberOfAdditionalHouseholdMembers + " REAL " + ")";
+    public static final String SQL_UserData = "CREATE TABLE " + TABLE_NAME5 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + isMarried + " BOOLEAN, " + isFirstTimeBuyer + " BOOLEAN, " + isSingaporean + " BOOLEAN, " + age + " REAL, " + grossSalary + " REAL, " + isFirstTimeBuyerPartner + "BOOLEAN, " + isSingaporeanPartner + " BOOLEAN, " + agePartner + " REAL, " + grossSalaryPartner + " REAL, " + carLoan + " REAL, " + creditLoan + " REAL, " + studyLoan + " REAL, " + otherCommitments + " REAL, " + buyer1CPF + " REAL, " + buyer2CPF + " REAL," + numberOfAdditionalHouseholdMembers + " REAL " + ")";
 
-    public static final String SQL_membersSalaryList_ = "CREATE TABLE " + TABLE_NAME6  + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + membersSalaryList + " REAL, " + " FOREIGN KEY (" + ID + ") REFERENCES " + TABLE_NAME5 + "(" + ID + "));";
+    public static final String SQL_membersSalaryList_ = "CREATE TABLE " + TABLE_NAME6 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + membersSalaryList + " REAL, " + " FOREIGN KEY (" + ID + ") REFERENCES " + TABLE_NAME5 + "(" + ID + "));";
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
     private static final String SQL_DELETE_ENTRIES2 = "DROP TABLE IF EXISTS " + TABLE_NAME2;
@@ -124,6 +113,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
     private static final String SQL_DELETE_ENTRIES6 = "DROP TABLE IF EXISTS " + TABLE_NAME6;
 
     private static int numID = 0;
+
     //use this to create the databaseContoller to write and get data; Like so;
     //DatabaseController dbC = new DatabaseController(getContext()); check out mapsControlelr
     //getContext() - Returns the context view only current running activity.
@@ -137,7 +127,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         //On creation of DBC the table SQL_HDB will be created
         sqLiteDatabase.execSQL(SQL_HDBDevelopment);
         sqLiteDatabase.execSQL(SQL_FlatType);
-        //sqLiteDatabase.execSQL(SQL_Amenities);
+        sqLiteDatabase.execSQL(SQL_Amenities);
         sqLiteDatabase.execSQL(SQL_Grants);
         sqLiteDatabase.execSQL(SQL_UserData);
         sqLiteDatabase.execSQL(SQL_membersSalaryList_);
@@ -170,13 +160,12 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
      such as with AsyncTask or IntentService. */
 
 
-    public boolean writeHDBData(String name, HashMap<String, Object>ListFlatType, String descriptionText, String ImgUrl) {
+    public boolean writeHDBData(String name, String descriptionText, String ImgUrl) {
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
 
-        boolean checkWriteFlatData = false;
         values.put(HDBDevelopmentName, name);
         values.put(HDBDevelopmentDescription, descriptionText);
         //String HDBlat = Double.toString(getHDBDevelopmentCoordinates(HDBDevelopmentName).latitude);
@@ -184,47 +173,51 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         values.put(HDBDevelopmentLatitude, 0.0);
         values.put(HDBDevelopmentLongitude, 0.0);
         values.put(HDBDevelopmentImgURL, ImgUrl);
-        for (String key : ListFlatType.keySet()) {
-            String HDBFlatTypeKey = key;
-            Object HDBFTObj = ListFlatType.get(key);
-            writeHDBFlatTypeData(HDBDevelopmentName, HDBFlatTypeKey, HDBFTObj);
-        }
 
-
+        System.out.println(values);
+        long newRowId = db.insert(TABLE_NAME, null, values);
+        System.out.println(newRowId);
+        db.close();
+        /*int i=0;
+            for (String key : ListFlatType.keySet()) {
+                i++;
+                String HDBFlatTypeKey = key;
+                Object HDBFTObj = ListFlatType.get(key);
+                writeHDBFlatTypeData(HDBDevelopmentName, HDBFlatTypeKey, HDBFTObj);
+            }*/
+        return true;
         //writeAmenitiesData(HDBDevelopmentName);
-
         //The first argument is the table name.
         //The second argument tells the framework what to do if ContentValues is empty
         //Third argument is  content;
         // Insert the new row, returning the primary key value of the new row
         //put id number;
         //assert checkWriteFlatData == true;
-        long newRowId = db.insert(TABLE_NAME, null, values);
-        db.close();
-        return true;
     }
 
-    public boolean writeHDBFlatTypeData(String name, String key, Object obj){
+    public void writeHDBFlatTypeData(String name, HashMap<String, Object> ListFlatType) {
         long newRowId;
 
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
-
-
         values.put(HDBDevelopmentName, name);
-       if(key.contains("price")){
-           values.put(HDBFlatPrice, (Double) obj);
-       }
-       else if(key.contains("flatType")){
-           values.put(HDBFlatType, obj.toString());
-       }
-       else if(key.contains("affordability")){
-           values.put(HDBFlatAffordability, false);
-       }
-
-        return true;
+        for (String key : ListFlatType.keySet()) {
+            String obj;
+            if (key.contains("price")) {
+                obj = (ListFlatType.get(key).toString()).replace(",", "").substring(6);
+                values.put(HDBFlatPrice, Double.valueOf(obj));
+            } else if (key.contains("flatType")) {
+                values.put(HDBFlatType, ListFlatType.get(key).toString());
+            } else if (key.contains("affordability")) {
+                values.put(HDBFlatAffordability, false);
+            }
+        }
+        System.out.println(values);
+        newRowId = db.insert(TABLE_NAME2, null, values);
+        System.out.println(newRowId);
+        db.close();
     }
 
 
@@ -255,13 +248,12 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
     */
 
 
-    public boolean writeHDBGrantData(String incomeReq, HashMap<String, Double> grantList){
+    public boolean writeHDBGrantData(String incomeReq, HashMap<String, Double> grantList) {
 
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
-
         values.put(IncomeRequired, incomeReq);
         for (String key : grantList.keySet()) {
             String grantType = key;
@@ -274,7 +266,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         return true;
     }
 
-    public boolean writeProfileData(UserData ud){
+    public boolean writeProfileData(UserData ud) {
 
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
@@ -283,7 +275,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         ContentValues valueSalary = new ContentValues();
 
         values.put(isMarried, ud.isMarried());
-        values.put(isFirstTimeBuyer,ud.isFirstTimeBuyer());
+        values.put(isFirstTimeBuyer, ud.isFirstTimeBuyer());
         values.put(isSingaporean, ud.isSingaporean());
         values.put(age, ud.getAge());
         values.put(grossSalary, ud.getGrossSalary());
@@ -301,7 +293,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         values.put(buyer1CPF, ud.getBuyer1CPF());
         values.put(buyer2CPF, ud.getBuyer2CPF());
 
-        for(Double salary : ud.getMembersSalaryList()){
+        for (Double salary : ud.getMembersSalaryList()) {
             valueSalary.put(numberOfAdditionalHouseholdMembers, salary);
         }
         long newRowId = db.insert(TABLE_NAME5, null, values);
@@ -312,15 +304,39 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
     }
 
+    public boolean writeAmenitiesData(ArrayList<HashMap<String, String>> infoList) {
+
+        // Gets the data repository in write mode , getWritableDatabase is sqlite function
+        SQLiteDatabase db = getWritableDatabase();
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+
+        for (HashMap<String, String> i : infoList) {
+            for (String key : i.keySet()) {
+                if (key.equals("AmenitiesType")) {
+                    values.put(AmenitiesType, i.get(key));
+                } else if (key.equals("AmenitiesName")) {
+                    values.put(AmenitiesName, i.get(key));
+                } else {
+                    values.put(AmenitiesAddress, i.get(key));
+                }
+            }
+        }
+
+        long newRowId = db.insert(TABLE_NAME3, null, values);
+        db.close();
+        return true;
+    }
+
 //////////////////////////////////////Read functions///////////////////////////////////////////////////////////////////////
 
-    public ArrayList<HDBDevelopment> readHDBData(){
+    public ArrayList<HDBDevelopment> readHDBData() {
         SQLiteDatabase db = getReadableDatabase();
 
         // How you want the results sorted in the resulting Cursor
         //Potential problem, potential solution query by ID.
 
-        String rawQuery = "SELECT * FROM "+ TABLE_NAME + "as D, " + TABLE_NAME2 + "as FT WHERE D.HDBDevelopmentName = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT * FROM " + TABLE_NAME + "as D, " + TABLE_NAME2 + "as FT WHERE D.HDBDevelopmentName = FT.HDBDevelopmentName";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
@@ -334,7 +350,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         String DevelopmentDescription = "";
         String DevelopmentImgURL = "";
 
-        while(cursor.moveToNext() && cursor != null) {
+        while (cursor.moveToNext() && cursor != null) {
 
             int index;
 
@@ -368,14 +384,13 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
     }
 
-    public HDBDevelopment readHDBData(String developmentName){
+    public HDBDevelopment readHDBData(String developmentName) {
         SQLiteDatabase db = getReadableDatabase();
 
         // How you want the results sorted in the resulting Cursor
         //Potential problem, potential solution query by ID.
 
-        String rawQuery = "SELECT * FROM " + TABLE_NAME + " as D, " + TABLE_NAME2 + " as FT WHERE D.HDBDevelopmentName = '" + developmentName
-                + "' AND D.HDBDevelopmentName = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT * FROM " + TABLE_NAME + " as D, " + TABLE_NAME2 + " as FT WHERE D.HDBDevelopmentName = '" + developmentName + "' AND D.HDBDevelopmentName = FT.HDBDevelopmentName";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
@@ -388,7 +403,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         String DevelopmentName = developmentName;
         String DevelopmentDescription = "";
         String DevelopmentImgURL = "";
-        while(cursor.moveToNext() && cursor != null) {
+        while (cursor.moveToNext() && cursor != null) {
 
             int index;
 
@@ -417,10 +432,8 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         cursor.close();
 
         //if cursor is empty
-        if(HDBFTList == null)
-            HDBFTList = new ArrayList<>();
-        if(mdList == null)
-            mdList = new ArrayList<>();
+        if (HDBFTList == null) HDBFTList = new ArrayList<>();
+        if (mdList == null) mdList = new ArrayList<>();
 
         //TODO: Return created objects by calling the creation method
         HDBD = createHDBDevelopmentObject(HDBFTList, DevelopmentName, DevelopmentDescription, false, coord, mdList, DevelopmentImgURL);
@@ -429,16 +442,16 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
     }
 
-    public ArrayList<MapData> readMapData(String name){
+    public ArrayList<MapData> readMapData(String name) {
         SQLiteDatabase db = getReadableDatabase();
 
-        String rawQuery = "SELECT AmenitiesName, AmenitiesType, AmenitiesLongitude, AmenitiesLatitude FROM "+ TABLE_NAME + " as D, " + HDBFlatType + " as FT WHERE name = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT AmenitiesName, AmenitiesType, AmenitiesLongitude, AmenitiesLatitude FROM " + TABLE_NAME + " as D, " + HDBFlatType + " as FT WHERE name = FT.HDBDevelopmentName";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
         ArrayList<MapData> md = new ArrayList<MapData>();
 
-        while(cursor.moveToNext() && cursor != null) {
+        while (cursor.moveToNext() && cursor != null) {
 
             int index;
 
@@ -460,7 +473,7 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
 
             //add data to mapData arrayList
-            md.add(new MapData(AName,AType,Acoord));
+            md.add(new MapData(AName, AType, Acoord));
 
         }
 
@@ -469,18 +482,18 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         return md;
     }
 
-    public ArrayList<HashMap<String, Object>> readHDBFlatType(String name){
+    public ArrayList<HashMap<String, Object>> readHDBFlatType(String name) {
         assert getReadableDatabase() != null;
         SQLiteDatabase db = getReadableDatabase();
 
         HashMap<String, Object> flatTypeDetails = null;
         ArrayList<HashMap<String, Object>> HDBFlatTypedetailsList = new ArrayList<HashMap<String, Object>>();
 
-        String rawQuery = "SELECT HDBFlatType, HDBFlatPrice FROM "+ TABLE_NAME2 + " as D" + " WHERE name = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT HDBFlatType, HDBFlatPrice FROM " + TABLE_NAME2 + " as D" + " WHERE name = FT.HDBDevelopmentName";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
-        while(cursor.moveToNext() && cursor != null) {
+        while (cursor.moveToNext() && cursor != null) {
 
             int index;
 
@@ -506,17 +519,17 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
     }
 
 
-    public LatLng readHDBDevelopmentCoordinates(String name){
+    public LatLng readHDBDevelopmentCoordinates(String name) {
         assert getReadableDatabase() != null;
         SQLiteDatabase db = getReadableDatabase();
 
-        LatLng coord = new LatLng(0,0);
+        LatLng coord = new LatLng(0, 0);
 
-        String rawQuery = "SELECT HDBDevelopmentLatitude, HDBDevelopmentLongitude FROM "+ TABLE_NAME + " as D" + " WHERE name = D.HDBDevelopmentName";
+        String rawQuery = "SELECT HDBDevelopmentLatitude, HDBDevelopmentLongitude FROM " + TABLE_NAME + " as D" + " WHERE name = D.HDBDevelopmentName";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
-        while(cursor.moveToNext() && cursor != null) {
+        while (cursor.moveToNext() && cursor != null) {
 
             int index;
 
@@ -535,23 +548,23 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
     }
 
-    public HashMap<String, Double> readHDBGrantData(String incomeReq){
+    public HashMap<String, Double> readHDBGrantData(String incomeReq) {
 
         assert getReadableDatabase() != null;
         SQLiteDatabase db = getReadableDatabase();
         HashMap<String, Double> grants = new HashMap<String, Double>();
 
 
-        String rawQuery = "SELECT GrantType, GrantAmount FROM "+ TABLE_NAME4 + " as D" + " WHERE incomeReq = D.incomeReq";
+        String rawQuery = "SELECT GrantType, GrantAmount FROM " + TABLE_NAME4 + " as D" + " WHERE incomeReq = D.incomeReq";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
-        while(cursor.moveToNext() && cursor != null) {
+        while (cursor.moveToNext() && cursor != null) {
 
             int index;
 
             index = cursor.getColumnIndexOrThrow("GrantType");
-            String type =cursor.getString(index);
+            String type = cursor.getString(index);
 
             index = cursor.getColumnIndexOrThrow("GrantAmount");
             Double amount = cursor.getDouble(index);
@@ -563,20 +576,14 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
     }
 
 
-    private HDBDevelopment createHDBDevelopmentObject(ArrayList<HashMap<String, Object>> HDBFTList, String HDBDevelopmentName, String HDBDevelopmentDescription,
-                                                     boolean affordable, LatLng coordinates, ArrayList<MapData> amenities, String ImgURL){
-        HDBDevelopment HDBD =  new HDBDevelopment(HDBFTList, HDBDevelopmentName,  HDBDevelopmentDescription,
-                false, coordinates, amenities, ImgURL);
+    private HDBDevelopment createHDBDevelopmentObject(ArrayList<HashMap<String, Object>> HDBFTList, String HDBDevelopmentName, String HDBDevelopmentDescription, boolean affordable, LatLng coordinates, ArrayList<MapData> amenities, String ImgURL) {
+        HDBDevelopment HDBD = new HDBDevelopment(HDBFTList, HDBDevelopmentName, HDBDevelopmentDescription, false, coordinates, amenities, ImgURL);
         return HDBD;
-        }
-
-    private LatLng getHDBDevelopmentCoordinates(String HDBDevelopmentName){
-            MapAPI mapi = new MapAPI();
-            LatLng coord = mapi.getHDBCoordinates(HDBDevelopmentName);
-            return coord;
     }
 
-
-
-
+    private LatLng getHDBDevelopmentCoordinates(String HDBDevelopmentName) {
+        MapAPI mapi = new MapAPI();
+        LatLng coord = mapi.getHDBCoordinates(HDBDevelopmentName);
+        return coord;
+    }
 }

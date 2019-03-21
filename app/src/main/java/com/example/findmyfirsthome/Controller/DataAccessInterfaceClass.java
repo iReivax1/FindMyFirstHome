@@ -1,8 +1,5 @@
 package com.example.findmyfirsthome.Controller;
 
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
 import com.example.findmyfirsthome.Entity.MapData;
 import com.google.android.gms.maps.model.LatLng;
@@ -13,11 +10,13 @@ import java.util.HashMap;
 public interface DataAccessInterfaceClass {
 
     /////////////////////////////////////////////////////write/////////////////////////////////////////////////////////////////
-    boolean writeHDBFlatTypeData(String name, String key, Object obj);
+    void writeHDBFlatTypeData(String name, HashMap<String, Object> ListFlatType);
 
-    boolean writeHDBData(String name, HashMap<String, Object>ListFlatType, String descriptionText, String ImgUrl);
+    boolean writeHDBData(String name, String descriptionText, String ImgUrl);
 
     boolean writeHDBGrantData(String incomeReq, HashMap<String, Double> grantList);
+
+    boolean writeAmenitiesData(ArrayList<HashMap<String, String>> infoList);
 
     //boolean writeAmenitiesData(String name);
     /////////////////////////////////////////////////////read/////////////////////////////////////////////////////////////////
@@ -30,5 +29,6 @@ public interface DataAccessInterfaceClass {
     ArrayList<HashMap<String, Object>> readHDBFlatType(String name);
 
     LatLng readHDBDevelopmentCoordinates(String name);
+
 
 }

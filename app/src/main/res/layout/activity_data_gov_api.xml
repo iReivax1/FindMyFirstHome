@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,13 +9,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:hint="Hello"
-        android:text="Hello"
+        android:hint="Limit number of queries"
+        android:text="2"
         android:ems="10"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/et_github_user"
+        android:id="@+id/limit"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:layout_below="@+id/limit"
+        android:hint="Data Type"
+        android:text="childCare"
+        android:ems="10"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/data_type"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
@@ -24,10 +37,10 @@
         android:text="Get Repos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/et_github_user"
+        android:layout_below="@+id/data_type"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/btn_get_repos"
+        android:id="@+id/get_data"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:onClick="getReposClicked" />
@@ -35,10 +48,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_get_repos"
+        android:layout_below="@+id/get_data"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/tv_repo_list"
+        android:id="@+id/data_list"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:scrollbars="vertical"

@@ -10,6 +10,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.findmyfirsthome.Controller.DataAccessInterfaceClass;
+import com.example.findmyfirsthome.Controller.DatabaseController;
 import com.example.findmyfirsthome.R;
 
 
@@ -21,7 +24,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.Response;
 import com.android.volley.Request;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
 
@@ -31,153 +33,239 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class DataGovAPI extends AppCompatActivity {
 
-    EditText etGitHubUser; // This will be a reference to our GitHub username input.
-    Button btnGetRepos;  // This is a reference to the "Get Repos" button.
-    TextView tvRepoList;  // This will reference our repo list text box.
+    EditText limit; // This will be a reference to our GitHub username input.
+    EditText dataType;
+    Button getData;  // This is a reference to the "Get Repos" button.
+    TextView dataList;  // This will reference our repo list text box.
     RequestQueue requestQueue;  // This is our requests queue to process our HTTP requests.
-
-    String baseUrl = "https://api.github.com/users/";  // This is the API base URL (GitHub API)
+    String typeData;
+    String childCareURL = "https://data.gov.sg/api/action/datastore_search?resource_id=4fc3fd79-64f2-4027-8d5b-ce0d7c279646&limit=";  // This is the API base URL (GitHub API)
+    String marketURL = "https://data.gov.sg/api/action/datastore_search?resource_id=8f6bba57-19fc-4f36-8dcf-c0bda382364d&limit=";
+    String schoolURL = "https://data.gov.sg/api/action/datastore_search?resource_id=ede26d32-01af-4228-b1ed-f05c45a1d8ee&limit=";
     String url;  // This will hold the full URL which will include the username entered in the etGitHubUser.
+    ArrayList<HashMap<String, String>> infoList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_gov_api);
 
-        this.etGitHubUser = findViewById(R.id.et_github_user);  // Link our github user text box.
-        this.btnGetRepos = findViewById(R.id.btn_get_repos);  // Link our click button.
-        this.tvRepoList = findViewById(R.id.tv_repo_list);  // Link our repository list text output box.
-        this.tvRepoList.setMovementMethod(new ScrollingMovementMethod());  // This makes our text box scrollable, for those big GitHub contributors with lots of repos :)
-
+        this.dataType = findViewById(R.id.data_type);
+        this.limit = findViewById(R.id.limit);  // Link our github user text box.
+        this.getData = findViewById(R.id.get_data);  // Link our click button.
+        this.dataList = findViewById(R.id.data_list);  // Link our repository list text output box.
+        this.dataList.setMovementMethod(new ScrollingMovementMethod());  // This makes our text box scrollable, for those big GitHub contributors with lots of repos :)
         requestQueue = Volley.newRequestQueue(this);  // This setups up a new request queue which we will need to make HTTP requests.
     }
 
     private void clearRepoList() {
         // This will clear the repo list (set it as a blank string).
-        this.tvRepoList.setText("");
+        this.dataList.setText("");
     }
 
-    private void addToRepoList(String repoName, String lastUpdated) {
-        // This will add a new repo to our list.
-        // It combines the repoName and lastUpdated strings together.
-        // And then adds them followed by a new line (\n\n make two new lines).
-        String strRow = repoName + " / " + lastUpdated;
-        String currentText = tvRepoList.getText().toString();
-        this.tvRepoList.setText(currentText + "\n\n" + strRow);
+    private void addToList(String type, String name, String address) {
+        // This will add new data to our list.
+        // (\n\n make two new lines).
+        String currentText = dataList.getText().toString();
+        this.dataList.setText(currentText + "\n\n" +type + " " + name + " " + address);
     }
 
     private void setRepoListText(String str) {
         // This is used for setting the text of our repo list box to a specific string.
         // We will use this to write a "No repos found" message if the user doens't have any.
-        this.tvRepoList.setText(str);
+        this.dataList.setText(str);
     }
 
-    private void getRepoList(String username) {
-        // First, we insert the username into the repo url.
+    //limit is the limit number for the number of search queries > 1 please.
+    private void getList(String type, String limit) {
         // The repo url is defined in GitHubs API docs (https://developer.github.com/v3/repos/).
-        this.url = this.baseUrl + username + "/repos";
+        //this is the datagov limit
+        this.typeData = type;
 
+        //Check type to set url
+        if(typeData.equals("childCare")){
+            this.url = this.childCareURL + limit;
+        }
+        else if(typeData.equals("market")){
+            this.url = this.marketURL + limit;
+        }
+        else if(typeData.equals("school")){
+            this.url = this.schoolURL + limit;
+        }
         // Next, we create a new JsonArrayRequest. This will use Volley to make a HTTP request
         // that expects a JSON Array Response.
-        // To fully understand this, I'd recommend readng the office docs: https://developer.android.com/training/volley/index.html
-        JsonArrayRequest arrReq = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                // Check the length of our response (to see if the user has any repos)
-                if (response.length() > 0) {
-                    // The user does have repos, so let's loop through them all.
-                    for (int i = 0; i < response.length(); i++) {
-                        try {
-                            // For each repo, add a new line to our repo list.
-                            JSONObject jsonObj = response.getJSONObject(i);
-                            String repoName = jsonObj.get("name").toString();
-                            String lastUpdated = jsonObj.get("updated_at").toString();
-                            addToRepoList(repoName, lastUpdated);
-                        } catch (JSONException e) {
-                            // If there is an error then output this to the logs.
-                            Log.e("Volley", "Invalid JSON Object.");
-                        }
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, (JSONObject) null, new Response.Listener<JSONObject>() {
 
-                    }
-                } else {
-                    // The user didn't have any repos.
-                    setRepoListText("No repos found.");
+            @Override
+            public void onResponse(JSONObject response) {
+                if(typeData.equals("childCare")) {
+                    JSONParserChildCare(response);
+                }
+                else if(typeData.equals("market")){
+                    JSONParserMarket(response);
+                }
+                else if(typeData.equals("school")){
+                    JSONParserSchool(response);
                 }
 
             }
-        },
+        }, new Response.ErrorListener() {
 
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // If there a HTTP error then add a note to our repo list.
-                        setRepoListText("Error while calling REST API");
-                        Log.e("Volley", error.toString());
-                    }
-                });
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("test", "error");
+                setRepoListText("error");
+            }
+        });
+
         // Add the request we just defined to our request queue.
         // The request queue will automatically handle the request as soon as it can.
-        requestQueue.add(arrReq);
+        requestQueue.add(jsonObjReq);
     }
 
     public void getReposClicked(View v) {
         // Clear the repo list (so we have a fresh screen to add to)
         clearRepoList();
-        // Call our getRepoList() function that is defined above and pass in the
+        // Call our getList() function that is defined above and pass in the
         // text which has been entered into the etGitHubUser text input field.
-        getRepoList(etGitHubUser.getText().toString());
+        getList(dataType.getText().toString(),limit.getText().toString());
     }
 
-    public boolean writeAmenitiesCoord() {
+    public boolean writeAmenitiesCoord(String amenitiesType, String Address) {
         return false;
     }
 
-    public boolean writeTaxInfo() {
-        return false;
-    }
 
-    public boolean writeGrantsInfo() {
-        return false;
-    }
+//    public void query(String condition) {
+//      ("https://data.gov.sg/api/action/datastore_search?resource_id=ede26d32-01af-4228-b1ed-f05c45a1d8ee&q=" + condition);
+//        ("https://data.gov.sg/api/action/datastore_search?resource_id=4fc3fd79-64f2-4027-8d5b-ce0d7c279646&limit=5");
+//
+//        ("https://data.gov.sg/api/action/datastore_search?resource_id=bb6f5bf8-7d0b-4526-b020-b812ea7d7d89&q=" + condition);
+//        //HDB confirm 4%; For owner-occupied HDB flats, you need not pay tax on the first $8,000 of the AV from 2014. The remaining AV will be taxed at the lowest tier of 4%.
+//    }
 
-    public void query(String condition) {
-        InputStream school = JSONconnector("https://data.gov.sg/api/action/datastore_search?resource_id=ede26d32-01af-4228-b1ed-f05c45a1d8ee&q=" + condition);
-        InputStream pre_school = JSONconnector("https://data.gov.sg/api/action/datastore_search?resource_id=4fc3fd79-64f2-4027-8d5b-ce0d7c279646&limit=5");
+    public void JSONParserChildCare(JSONObject obj) {
+        if (obj != null) {
+            try {
+                JSONObject jsonObj = obj;
+                //Log.d("test", obj.toString());
+                // Getting JSON Array node
+                JSONObject result = jsonObj.getJSONObject("result");
+                JSONArray records = result.getJSONArray("records");
+                Log.d("Error", Integer.toString(records.length()));
+                // looping through All Contacts
+                for (int i = 0; i < records.length(); i++) {
+                    JSONObject c = records.getJSONObject(i);
 
-        InputStream tax_rate = JSONconnector("https://data.gov.sg/api/action/datastore_search?resource_id=bb6f5bf8-7d0b-4526-b020-b812ea7d7d89&q=" + condition);
-        //HDB confirm 4%; For owner-occupied HDB flats, you need not pay tax on the first $8,000 of the AV from 2014. The remaining AV will be taxed at the lowest tier of 4%.
-    }
+                    String centre_name = c.getString("centre_name");
+                    String centre_address = c.getString("centre_address");
 
-    public void JSONParser() {
+                    // tmp hash map for single contact
+                    HashMap<String, String> info = new HashMap<>();
 
-    }
-
-    public InputStream JSONconnector(String url) {
-        URL u = null;
-        try {
-            u = new URL(url);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+                    // adding each child node to HashMap key => value
+                    info.put("AmenitiesType", "ChildCare");
+                    info.put("AmenitiesName", centre_name);
+                    info.put("AmenitiesAddress", centre_address);
+                    addToList("Childcare : ", centre_name, centre_address);
+                    // adding contact to contact list
+                    infoList.add(info);
+                    writeAmenitiesToDB();
+                }
+            } catch (final JSONException e) {
+                Log.e("ERROR", "Json parsing error: " + e.getMessage());
+                }
+            }
+        else {
+            Log.e("ERROR", "Couldn't get json from server.");
         }
-        URLConnection conn = null;
-        try {
-            conn = u.openConnection();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+    }
+
+    public void JSONParserMarket(JSONObject obj) {
+        if (obj != null) {
+            try {
+                JSONObject jsonObj = obj;
+                //Log.d("test", obj.toString());
+                // Getting JSON Array node
+                JSONObject result = jsonObj.getJSONObject("result");
+                JSONArray records = result.getJSONArray("records");
+                // looping through All Contacts
+                for (int i = 0; i < records.length(); i++) {
+                    JSONObject c = records.getJSONObject(i);
+
+                    String name_of_centre = c.getString("name_of_centre");
+                    String location_of_centre = c.getString("location_of_centre");
+                    // tmp hash map for single contact
+                    HashMap<String, String> info = new HashMap<>();
+
+                    // adding each child node to HashMap key => value
+                    info.put("AmenitiesType", "Market");
+                    info.put("AmenitiesName", name_of_centre);
+                    info.put("AmenitiesAddress", location_of_centre);
+                    addToList("Markets : ", name_of_centre, location_of_centre);
+                    // adding contact to contact list
+                    infoList.add(info);
+                    writeAmenitiesToDB();
+                }
+            } catch (final JSONException e) {
+                Log.e("ERROR", "Json parsing error: " + e.getMessage());
+            }
         }
-        InputStream is = null;
-        try {
-            is = conn.getInputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
+        else {
+            Log.e("ERROR", "Couldn't get json from server.");
         }
 
-        return is;
     }
+
+    public void JSONParserSchool(JSONObject obj) {
+        if (obj != null) {
+            try {
+                JSONObject jsonObj = obj;
+                //Log.d("test", obj.toString());
+                // Getting JSON Array node
+                JSONObject result = jsonObj.getJSONObject("result");
+                JSONArray records = result.getJSONArray("records");
+                Log.d("Error", Integer.toString(records.length()));
+                // looping through All Contacts
+                for (int i = 0; i < records.length(); i++) {
+                    JSONObject c = records.getJSONObject(i);
+
+                    String schoolName = c.getString("school_name");
+                    String postalCode = c.getString("postal_code");
+                    // tmp hash map for single contact
+                    HashMap<String, String> info = new HashMap<>();
+
+                    // adding each child node to HashMap key => value
+                    info.put("AmenitiesType", "School");
+                    info.put("AmenitiesName", schoolName);
+                    info.put("AmenitiesAddress", postalCode);
+                    addToList("School : ", schoolName, postalCode);
+                    // adding contact to contact list
+                    infoList.add(info);
+                    writeAmenitiesToDB();
+                }
+            } catch (final JSONException e) {
+                Log.e("ERROR", "Json parsing error: " + e.getMessage());
+            }
+        }
+        else {
+            Log.e("ERROR", "Couldn't get json from server.");
+        }
+
+    }
+
+    public void writeAmenitiesToDB(){
+        DataAccessInterfaceClass db = new DatabaseController(this.getApplicationContext());
+        db.writeAmenitiesData(infoList);
+
+    }
+
 
     public void KMLConnector() {
 

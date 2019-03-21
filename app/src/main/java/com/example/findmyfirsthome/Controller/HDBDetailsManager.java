@@ -1,8 +1,8 @@
 package com.example.findmyfirsthome.Controller;
+
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-
-import com.example.findmyfirsthome.Entity.HDBDevelopment;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -43,7 +43,12 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     private String ImgURL1;
     private String ImgURL2;
     private String ImgURL3;
+    private Context mContext;
 
+
+    public HDBDetailsManager (Context mContext){
+        this.mContext=mContext;
+    }
 
     @Override
     protected void onPreExecute() {
@@ -57,30 +62,36 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         ///////////////////////////////////Jurong///////////////////////////////////
         //Scrap development name : BoonLay & Jurong west
         HDBDevelopmentNames1 = (scrapDevelopmentName(urlALL, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
+        System.out.println(HDBDevelopmentNames1);
         //Scrap List of flat type for Boonlay's HDB
         ListFlatTypePrice1 = (scrapFlatType(urlALL, 0, 3, 4, 8));
+        System.out.println(ListFlatTypePrice1);
         //Scrap description text for this development
         descriptionText1 = description(urlMain1, HDBDevelopmentNames1.get(0), HDBDevelopmentNames1.get(1)); //"jurong west jewel", Boon Lay Glade
+        System.out.println(descriptionText1);
         ImgURL1 = scrapImage(urlMain1);
-
         ///////////////////////////////////SK///////////////////////////////////
         //Scrap development name : SK
         HDBDevelopmentNames2 = (scrapDevelopmentName(urlALL, 0, 8, 1));
+        System.out.println(HDBDevelopmentNames2);
         //Scrap List of flat type for SK's HDB
         ListFlatTypePrice2 = (scrapFlatType(urlALL, 0, 8, 9, 13));
+        System.out.println(ListFlatTypePrice2);
         //Scrap description text for this development
-        descriptionText2 = description(urlMain2, HDBDevelopmentNames2.get(2)); //"SK one"
+        descriptionText2 = description(urlMain2, HDBDevelopmentNames2.get(0)); //"SK one" ERROR IS HERE
+        System.out.println(descriptionText2);
         ImgURL2 = scrapImage(urlMain2);
-
         ///////////////////////////////////Kallang///////////////////////////////////
         //Scrap development name : Kallang
-        HDBDevelopmentNames3 = (scrapDevelopmentName(urlALL, 0, 4, 1));
+        HDBDevelopmentNames3 = (scrapDevelopmentName(urlALL, 0, 14, 1));
+        System.out.println(HDBDevelopmentNames3);
         //Scrap List of flat type for Kallang's HDB
         ListFlatTypePrice3 = (scrapFlatType(urlALL, 0, 8, 9, 13));
+        System.out.println(ListFlatTypePrice3);
         //Scrap description text for this development
-        descriptionText3 = description(urlMain3, HDBDevelopmentNames3.get(3)); // Kallang /whampoa one
+        descriptionText3 = description(urlMain3, HDBDevelopmentNames3.get(0)); // Kallang /whampoa one
+        System.out.println(descriptionText3);
         ImgURL3 = scrapImage(urlMain3);
-
         //scrap grants
         firstTimerGrantList = scrapGrants(urlGrants1);
         fsTimerGrantList = scrapGrants(urlGrants2);
@@ -98,18 +109,20 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         adaptGrants(firstTimerGrantList);
         adaptGrants(fsTimerGrantList);
     }
-    
+
+
 
     public boolean adaptHDBD(ArrayList<String> HDBDevelopmentNames, ArrayList<HashMap<String, Object>> ListFlatType, String descriptionText, String ImgURL) {
 
-        HDBSplashscreenController adapter = new HDBSplashscreenController();
-
-
         //For each of the HDBDevelopmenet
         for (String name : HDBDevelopmentNames) {
-            //Write each of the hashmap into each development name
-            for(HashMap<String, Object> ft : ListFlatType){
-                adapter.writeHDBD(name, ft, descriptionText, ImgURL);
+            writeHDBData(name, descriptionText, ImgURL);
+            for(int i=0;i<ListFlatType.size();i++) {
+                HashMap<String, Object> ftNew = new HashMap<String, Object>();
+                for(String ft : ListFlatType.get(i).keySet()) {
+                    ftNew.put(ft,ListFlatType.get(i).get(ft));
+                }
+                writeHDBFlatData(name, ftNew);
             }
         }
 
@@ -117,15 +130,35 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     }
 
     public void adaptGrants(HashMap<String, HashMap<String, Double>> list) {
-        HDBSplashscreenController adapter = new HDBSplashscreenController();
 
         for (String key : list.keySet()) {
             String incomeReq = key;
             HashMap<String, Double> grant = list.get(key);
-            adapter.writeHDBGrantData(incomeReq, grant);
+            writeHDBGrantData(incomeReq, grant);
         }
     }
 
+    public void writeHDBData(String HDBDevelopmentNames, String descriptionText, String ImgURL){
+        //if(getStatus() == AsyncTask.Status.FINISHED){
+            DatabaseController db = new DatabaseController(mContext);
+            db.writeHDBData(HDBDevelopmentNames,descriptionText,ImgURL);
+        /*}
+        else{
+            System.out.println("SplashScreenController write HDB, Fail to write "+HDBDevelopmentNames);
+        }*/
+
+    }
+
+    public void writeHDBFlatData(String HDBDevelopmentNames, HashMap<String, Object> ListFlatType){
+        DatabaseController db = new DatabaseController(mContext);
+        db.writeHDBFlatTypeData(HDBDevelopmentNames,ListFlatType);
+    }
+
+    public void writeHDBGrantData(String incomeReq, HashMap<String, Double> grant){
+        DatabaseController db = new DatabaseController(mContext);
+        db.writeHDBGrantData(incomeReq, grant);
+        System.out.println("SplashScreenController write HDB Grant, Success in writing "+incomeReq);
+    }
 
     protected String description(String url, String developmentName1, String developmentName2) {
 
@@ -269,7 +302,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         ArrayList<Double> SHG = new ArrayList<Double>();
         String[] temp = null;
         try {
-            Document document = Jsoup.connect("url").get();
+            Document document = Jsoup.connect(url).get();
 
             Element table = document.select("table").get(1); //select the second table.
             Elements body = table.select("tbody");
@@ -325,6 +358,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
                 tempHM.put("SHG", SHG.get(i));
                 tempHM.put("AHG", AHG.get(i));
                 grantList.put(incomeReq.get(i), tempHM);
+                System.out.println(grantList);
             }
 
         } catch (IOException e) {
