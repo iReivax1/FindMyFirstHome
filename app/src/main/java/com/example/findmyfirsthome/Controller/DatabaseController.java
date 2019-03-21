@@ -5,9 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Debug;
 import android.provider.BaseColumns;
-import android.util.Log;
 
 import com.example.findmyfirsthome.Boundary.MapAPI;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
@@ -15,9 +13,9 @@ import com.example.findmyfirsthome.Entity.MapData;
 import com.example.findmyfirsthome.Entity.UserData;
 import com.google.android.gms.maps.model.LatLng;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.lang.*;
 
 //Basically this is our DAO;
 //Need to refactor this class to an interface class.
@@ -31,9 +29,6 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
     //Change version if schema changed;
     public static final int DATABASE_VERSION = 1;
-
-
-
 
     //----------- TABLE COLUMNS for ALL -----------//
     public static final String ID = "ID";
@@ -215,7 +210,8 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
 
         values.put(HDBDevelopmentName, name);
        if(key.contains("price")){
-           values.put(HDBFlatPrice, (Double) obj);
+           obj = ((String)obj).replace(",","").substring(6);
+           values.put(HDBFlatPrice, Double.valueOf((String)obj));
        }
        else if(key.contains("flatType")){
            values.put(HDBFlatType, obj.toString());
@@ -261,7 +257,6 @@ public class DatabaseController extends SQLiteOpenHelper implements  DataAccessI
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
-
         values.put(IncomeRequired, incomeReq);
         for (String key : grantList.keySet()) {
             String grantType = key;

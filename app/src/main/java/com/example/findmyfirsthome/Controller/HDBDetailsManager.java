@@ -1,4 +1,6 @@
 package com.example.findmyfirsthome.Controller;
+
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -41,7 +43,12 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     private String ImgURL1;
     private String ImgURL2;
     private String ImgURL3;
+    private Context mContext;
 
+
+    public HDBDetailsManager (Context mContext){
+        this.mContext=mContext;
+    }
 
     @Override
     protected void onPreExecute() {
@@ -52,40 +59,40 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     @Override
     protected Void doInBackground(String... url) {
 
-//        ///////////////////////////////////Jurong///////////////////////////////////
-//        //Scrap development name : BoonLay & Jurong west
-//        HDBDevelopmentNames1 = (scrapDevelopmentName(urlALL, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
-//        //Scrap List of flat type for Boonlay's HDB
-//        ListFlatTypePrice1 = (scrapFlatType(urlALL, 0, 3, 4, 8));
-//        //Scrap description text for this development
-//        descriptionText1 = description(urlMain1, HDBDevelopmentNames1.get(0), HDBDevelopmentNames1.get(1)); //"jurong west jewel", Boon Lay Glade
-//        ImgURL1 = scrapImage(urlMain1);
-//        ///////////////////////////////////SK///////////////////////////////////
-//        //Scrap development name : SK
-//        HDBDevelopmentNames2 = (scrapDevelopmentName(urlALL, 0, 8, 1));
-//        //Scrap List of flat type for SK's HDB
-//        ListFlatTypePrice2 = (scrapFlatType(urlALL, 0, 8, 9, 13));
-//        System.out.println("Scrapped 2.2");
-//        //Scrap description text for this development
-//        descriptionText2 = description(urlMain2, HDBDevelopmentNames2.get(2)); //"SK one" ERROR IS HERE
-//        System.out.println("Scrapped 2.3");
-//        ImgURL2 = scrapImage(urlMain2);
-//        System.out.println("Scrapped Second Development");
-//        ///////////////////////////////////Kallang///////////////////////////////////
-//        //Scrap development name : Kallang
-//        HDBDevelopmentNames3 = (scrapDevelopmentName(urlALL, 0, 14, 1));
-//        //Scrap List of flat type for Kallang's HDB
-//        ListFlatTypePrice3 = (scrapFlatType(urlALL, 0, 8, 9, 13));
-//        //Scrap description text for this development
-//        descriptionText3 = description(urlMain3, HDBDevelopmentNames3.get(3)); // Kallang /whampoa one
-//        ImgURL3 = scrapImage(urlMain3);
-//        System.out.println("Scrapped Third Development");
-//        //scrap grants
-//        firstTimerGrantList = scrapGrants(urlGrants1);
-//        fsTimerGrantList = scrapGrants(urlGrants2);
-//
-//        //HDBDevelopmentName => HDBDevelopmentName
-//        //Flat type for that hdb name => ListFlatTypePrice
+        ///////////////////////////////////Jurong///////////////////////////////////
+        //Scrap development name : BoonLay & Jurong west
+        HDBDevelopmentNames1 = (scrapDevelopmentName(urlALL, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
+        //Scrap List of flat type for Boonlay's HDB
+        ListFlatTypePrice1 = (scrapFlatType(urlALL, 0, 3, 4, 8));
+        //Scrap description text for this development
+        descriptionText1 = description(urlMain1, HDBDevelopmentNames1.get(0), HDBDevelopmentNames1.get(1)); //"jurong west jewel", Boon Lay Glade
+        ImgURL1 = scrapImage(urlMain1);
+        ///////////////////////////////////SK///////////////////////////////////
+        //Scrap development name : SK
+        HDBDevelopmentNames2 = (scrapDevelopmentName(urlALL, 0, 8, 1));
+        //Scrap List of flat type for SK's HDB
+        ListFlatTypePrice2 = (scrapFlatType(urlALL, 0, 8, 9, 13));
+        System.out.println("Scrapped 2.2");
+        //Scrap description text for this development
+        descriptionText2 = description(urlMain2, HDBDevelopmentNames2.get(0)); //"SK one" ERROR IS HERE
+        System.out.println("Scrapped 2.3");
+        ImgURL2 = scrapImage(urlMain2);
+        System.out.println("Scrapped Second Development");
+        ///////////////////////////////////Kallang///////////////////////////////////
+        //Scrap development name : Kallang
+        HDBDevelopmentNames3 = (scrapDevelopmentName(urlALL, 0, 14, 1));
+        //Scrap List of flat type for Kallang's HDB
+        ListFlatTypePrice3 = (scrapFlatType(urlALL, 0, 8, 9, 13));
+        //Scrap description text for this development
+        descriptionText3 = description(urlMain3, HDBDevelopmentNames3.get(0)); // Kallang /whampoa one
+        ImgURL3 = scrapImage(urlMain3);
+        System.out.println("Scrapped Third Development");
+        //scrap grants
+        firstTimerGrantList = scrapGrants(urlGrants1);
+        fsTimerGrantList = scrapGrants(urlGrants2);
+
+        //HDBDevelopmentName => HDBDevelopmentName
+        //Flat type for that hdb name => ListFlatTypePrice
         return null;
     }
 
@@ -101,14 +108,11 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
 
     public boolean adaptHDBD(ArrayList<String> HDBDevelopmentNames, ArrayList<HashMap<String, Object>> ListFlatType, String descriptionText, String ImgURL) {
 
-        HDBSplashscreenController adapter = new HDBSplashscreenController();
-
-
         //For each of the HDBDevelopmenet
         for (String name : HDBDevelopmentNames) {
             //Write each of the hashmap into each development name
             for(HashMap<String, Object> ft : ListFlatType){
-                adapter.writeHDBD(name, ft, descriptionText, ImgURL);
+                writeHDBD(name, ft, descriptionText, ImgURL);
             }
         }
 
@@ -116,15 +120,32 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     }
 
     public void adaptGrants(HashMap<String, HashMap<String, Double>> list) {
-        HDBSplashscreenController adapter = new HDBSplashscreenController();
 
         for (String key : list.keySet()) {
             String incomeReq = key;
             HashMap<String, Double> grant = list.get(key);
-            adapter.writeHDBGrantData(incomeReq, grant);
+            writeHDBGrantData(incomeReq, grant);
         }
     }
 
+    public void writeHDBD(String HDBDevelopmentNames, HashMap<String, Object> ListFlatType, String descriptionText, String ImgURL){
+        //if(getStatus() == AsyncTask.Status.FINISHED){
+            System.out.println("Reached database");
+            DatabaseController db = new DatabaseController(mContext);
+            db.writeHDBData(HDBDevelopmentNames,ListFlatType,descriptionText,ImgURL);
+            System.out.println("SplashScreenController write HDB, Success in writing "+HDBDevelopmentNames);
+        /*}
+        else{
+            System.out.println("SplashScreenController write HDB, Fail to write "+HDBDevelopmentNames);
+        }*/
+
+    }
+
+    public void writeHDBGrantData(String incomeReq, HashMap<String, Double> grant){
+        DatabaseController db = new DatabaseController(mContext);
+        db.writeHDBGrantData(incomeReq, grant);
+        System.out.println("SplashScreenController write HDB Grant, Success in writing "+incomeReq);
+    }
 
     protected String description(String url, String developmentName1, String developmentName2) {
 
@@ -268,7 +289,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         ArrayList<Double> SHG = new ArrayList<Double>();
         String[] temp = null;
         try {
-            Document document = Jsoup.connect("url").get();
+            Document document = Jsoup.connect(url).get();
 
             Element table = document.select("table").get(1); //select the second table.
             Elements body = table.select("tbody");
