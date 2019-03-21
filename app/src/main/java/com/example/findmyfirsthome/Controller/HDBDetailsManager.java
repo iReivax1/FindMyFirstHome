@@ -319,7 +319,6 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
                             col = cols.get(j);
                             String income = col.text();
                             incomeReq.add(income);
-                            //System.out.println(income);
                             break;
                         //j == 1 AHG grant
                         case (1):
@@ -358,7 +357,6 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
                 tempHM.put("SHG", SHG.get(i));
                 tempHM.put("AHG", AHG.get(i));
                 grantList.put(incomeReq.get(i), tempHM);
-                System.out.println(grantList);
             }
 
         } catch (IOException e) {

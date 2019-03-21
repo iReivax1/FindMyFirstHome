@@ -26,4 +26,6 @@ public class CalculateProfileControl{
     public double calculateDownpayment() {
         return 0.1 * calculateMaxPropertyPrice();
     }
+
+    //return values to database controller
 }
