@@ -2,8 +2,10 @@ package com.example.findmyfirsthome.Boundary;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.findmyfirsthome.Controller.StartupControl;
 import com.example.findmyfirsthome.R;
 
 public class SplashScreenUI extends AppCompatActivity {
@@ -15,7 +17,7 @@ public class SplashScreenUI extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
-        Intent i = new Intent( SplashScreenUI.this, DataGovAPI.class);
+        Intent i = new Intent( SplashScreenUI.this, ProfileUI.class);
         startActivity(i);
         StartupControl sc1 = new StartupControl();
         sc1.run();
