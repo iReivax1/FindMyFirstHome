@@ -109,8 +109,6 @@ public class ProfileUI2 extends AppCompatActivity implements View.OnFocusChangeL
             }
         });
 
-
-
     }
     @Override
     public void onFocusChange(View v, boolean hasFocus) { //set field to 0 if empty
