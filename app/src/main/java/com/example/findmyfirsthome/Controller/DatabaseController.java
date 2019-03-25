@@ -29,7 +29,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
 
 
     //Change version if schema changed;
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 1;
 
     //----------- TABLE COLUMNS for ALL -----------//
     public static final String ID = "ID";

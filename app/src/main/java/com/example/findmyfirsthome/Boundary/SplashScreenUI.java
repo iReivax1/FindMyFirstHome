@@ -17,6 +17,7 @@ public class SplashScreenUI extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
+        //Initialize the back-end controller classes, i.e database, hdbmanager, and do all the get data
         StartupControl sc1 = new StartupControl();
         sc1.run();
         new Handler().postDelayed(new Runnable() {
@@ -28,11 +29,9 @@ public class SplashScreenUI extends AppCompatActivity {
             @Override
             public void run() {
                 // This method will be executed once the timer is over
-                // Start your app main activity
+                // Start profileUI activity
                 Intent i = new Intent( SplashScreenUI.this, ProfileUI.class);
                 startActivity(i);
-
-
                 // close this activity
                 finish();
             }

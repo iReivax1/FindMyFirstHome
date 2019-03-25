@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.findmyfirsthome.Entity.HDBDevelopment;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -37,9 +39,9 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     private ArrayList<HashMap<String, Object>> ListFlatTypePrice3 = new ArrayList<HashMap<String, Object>>();
     private HashMap<String, HashMap<String, Double>> firstTimerGrantList = new HashMap<String, HashMap<String, Double>>();
     private HashMap<String, HashMap<String, Double>> fsTimerGrantList = new HashMap<String, HashMap<String, Double>>();
-    private String descriptionText1;
-    private String descriptionText2;
-    private String descriptionText3;
+    private ArrayList<String> descriptionText1 = new ArrayList<>();
+    private ArrayList<String> descriptionText2 = new ArrayList<>();
+    private ArrayList<String> descriptionText3 = new ArrayList<>();
     private String ImgURL1;
     private String ImgURL2;
     private String ImgURL3;
@@ -67,9 +69,13 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         ListFlatTypePrice1 = (scrapFlatType(urlALL, 0, 3, 4, 8));
         System.out.println(ListFlatTypePrice1);
         //Scrap description text for this development
-        descriptionText1 = description(urlMain1, HDBDevelopmentNames1.get(0), HDBDevelopmentNames1.get(1)); //"jurong west jewel", Boon Lay Glade
+        for(int index = 0; index < HDBDevelopmentNames1.size(); index++){
+            //"jurong west jewel", Boon Lay Glade
+            descriptionText1.add(description(urlMain1, HDBDevelopmentNames1.get(0)));
+        }
         System.out.println(descriptionText1);
         ImgURL1 = scrapImage(urlMain1);
+
         ///////////////////////////////////SK///////////////////////////////////
         //Scrap development name : SK
         HDBDevelopmentNames2 = (scrapDevelopmentName(urlALL, 0, 8, 1));
@@ -78,18 +84,23 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         ListFlatTypePrice2 = (scrapFlatType(urlALL, 0, 8, 9, 13));
         System.out.println(ListFlatTypePrice2);
         //Scrap description text for this development
-        descriptionText2 = description(urlMain2, HDBDevelopmentNames2.get(0)); //"SK one" ERROR IS HERE
+        for(int index = 0; index < HDBDevelopmentNames2.size(); index++){
+            descriptionText2.add(description(urlMain2, HDBDevelopmentNames2.get(index)));//"Fernvale"
+        }
         System.out.println(descriptionText2);
         ImgURL2 = scrapImage(urlMain2);
+
         ///////////////////////////////////Kallang///////////////////////////////////
         //Scrap development name : Kallang
         HDBDevelopmentNames3 = (scrapDevelopmentName(urlALL, 0, 14, 1));
         System.out.println(HDBDevelopmentNames3);
         //Scrap List of flat type for Kallang's HDB
-        ListFlatTypePrice3 = (scrapFlatType(urlALL, 0, 8, 9, 13));
+        ListFlatTypePrice3 = (scrapFlatType(urlALL, 0, 14, 15, 16));
         System.out.println(ListFlatTypePrice3);
         //Scrap description text for this development
-        descriptionText3 = description(urlMain3, HDBDevelopmentNames3.get(0)); // Kallang /whampoa one
+        for(int index = 0; index < HDBDevelopmentNames3.size(); index++){
+            descriptionText3.add(description(urlMain3, HDBDevelopmentNames3.get(index))); //"Kallang" , "Tower crest"
+        }
         System.out.println(descriptionText3);
         ImgURL3 = scrapImage(urlMain3);
         //scrap grants
@@ -112,11 +123,12 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
 
 
 
-    public boolean adaptHDBD(ArrayList<String> HDBDevelopmentNames, ArrayList<HashMap<String, Object>> ListFlatType, String descriptionText, String ImgURL) {
+    public boolean adaptHDBD(ArrayList<String> HDBDevelopmentNames, ArrayList<HashMap<String, Object>> ListFlatType, ArrayList<String> descriptionText, String ImgURL) {
 
         //For each of the HDBDevelopmenet
+        int index = 0;
         for (String name : HDBDevelopmentNames) {
-            writeHDBData(name, descriptionText, ImgURL);
+            writeHDBData(name, descriptionText.get(index), ImgURL);
             for(int i=0;i<ListFlatType.size();i++) {
                 HashMap<String, Object> ftNew = new HashMap<String, Object>();
                 for(String ft : ListFlatType.get(i).keySet()) {
@@ -124,6 +136,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
                 }
                 writeHDBFlatData(name, ftNew);
             }
+            index++;
         }
 
         return true;
@@ -160,42 +173,20 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         System.out.println("SplashScreenController write HDB Grant, Success in writing "+incomeReq);
     }
 
-    protected String description(String url, String developmentName1, String developmentName2) {
-
-        try {
-            Document document = Jsoup.connect(url).get();
-            for (int i = 0; i < document.select("p").size(); i++) {
-                Element paragraphs = document.select("p").get(i);
-                if (paragraphs.text().length() > 150) {
-                    String description = paragraphs.text();
-                    if (description.contains(developmentName1)) {
-                        return (developmentName1 + ": " + description);
-                    } else if (description.contains(developmentName2)) {
-                        return ('\n' + developmentName2 + ": " + description);
-                    }
-
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
 
     //overloading cuz HDB a bitch
-    protected String description(String url, String developmentName1) {
+    protected String description(String url, String developmentName) {
+        String allDesc = "";
         try {
             Document document = Jsoup.connect(url).get();
-            for (int i = 0; i < document.select("p").size(); i++) {
+            for(int i = 0; i <  document.select("p").size(); i ++) {
                 Element paragraphs = document.select("p").get(i);
-                if (paragraphs.text().length() > 150) {
-                    String description = paragraphs.text();
-                    if (description.contains(developmentName1)) {
-                        return (developmentName1 + ": " + description);
-                    }
-                }
+                String description = paragraphs.text();
+                allDesc +=description;
             }
+            allDesc = developmentName +": "+ allDesc;
+            System.out.println(allDesc);
+            return allDesc;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -276,6 +267,9 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
             }
             if (text.contains("<sup>")) {
                 text = cols.get(colNumber).text();
+                if(text.contains("#")) {
+                    text = text.replace("#", "");
+                }
                 textList.add(text);
             }
             return textList;
