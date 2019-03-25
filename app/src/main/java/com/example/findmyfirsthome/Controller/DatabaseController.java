@@ -29,7 +29,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
 
 
     //Change version if schema changed;
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
 
     //----------- TABLE COLUMNS for ALL -----------//
     public static final String ID = "ID";
@@ -101,18 +101,16 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     //Draw the table
     private static final String SQL_HDBDevelopment = "CREATE TABLE " + TABLE_NAME + " (" + HDBDevelopmentName + " TEXT PRIMARY KEY, " + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude + " REAL, " + HDBDevelopmentImgURL + " TEXT " + ");";
 
-
     public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + HDBFlatAffordability + " BOOLEAN, " + " FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
 
     public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + " (" +  AmenitiesName + " TEXT PRIMARY KEY, " +  AmenitiesType + " TEXT, " + AmenitiesAddress + " TEXT " + ");";
-    public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + " (" + IncomeRequired + " TEXT PRIMARY KEY, " + GrantType + " TEXT, " + GrantAmount +
-            " REAL);";
+
+    public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + IncomeRequired + " TEXT, " + GrantType + " TEXT, " + GrantAmount + " REAL " + ");";
 
     public static final String SQL_UserData = "CREATE TABLE " + TABLE_NAME5 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + isMarried + " BOOLEAN, "
             + isFirstTimeBuyer + " BOOLEAN, " + isSingaporean + " BOOLEAN, " + age + " REAL, " + grossSalary + " REAL, " + isFirstTimeBuyerPartner + "BOOLEAN, " + isSingaporeanPartner + " BOOLEAN, " + agePartner + " REAL, " + grossSalaryPartner + " REAL, "
             + carLoan + " REAL, " + creditLoan + " REAL, " + studyLoan + " REAL, " + otherCommitments + " REAL, " + buyer1CPF + " REAL, " + buyer2CPF + " REAL, "
             + numberOfAdditionalHouseholdMembers + " REAL " + ")";
-
 
     public static final String SQL_membersSalaryList_ = "CREATE TABLE " + TABLE_NAME6 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + membersSalaryList + " REAL, " + " FOREIGN KEY (" + ID + ") REFERENCES " + TABLE_NAME5 + "(" + ID + "));";
 
@@ -126,10 +124,6 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     private static final String SQL_DELETE_ENTRIES6 = "DROP TABLE IF EXISTS " + TABLE_NAME6;
     private static final String SQL_DELETE_ENTRIES7 = "DROP TABLE IF EXISTS " + TABLE_NAME7;
 
-    private static int numID = 0;
-
-    //use this to create the databaseContoller to write and get data; Like so;
-    //DatabaseController dbC = new DatabaseController(getContext()); check out mapsControlelr
     //getContext() - Returns the context view only current running activity.
     public DatabaseController(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -230,33 +224,29 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         db.close();
     }
 
-
-    /*
-    //where to get amaneities
-    public void writeAmenitiesData(String name){
+    public boolean writeAmenitiesData(ArrayList<HashMap<String, String>> infoList) {
 
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
 
-        ArrayList<MapData> HDBAmenities = HDBD.getAmenities();
-        for (MapData j : HDBAmenities) {
-            values.put(AmenitiesName, j.getAmenitiesName());
-            values.put(AmenitiesType, j.getAmenityType());
-            LatLng ACoord = j.getCoordinates();
-            String Alat = Double.toString(ACoord.latitude);
-            String Alon = Double.toString(ACoord.longitude);
-            values.put(AmenitiesLatitude, Alat);
-            values.put(AmenitiesLongitude, Alon);
+        for (HashMap<String, String> i : infoList) {
+            for (String key : i.keySet()) {
+                if (key.equals("AmenitiesType")) {
+                    values.put(AmenitiesType, i.get(key));
+                } else if (key.equals("AmenitiesName")) {
+                    values.put(AmenitiesName, i.get(key));
+                } else {
+                    values.put(AmenitiesAddress, i.get(key));
+                }
+            }
         }
 
         long newRowId = db.insert(TABLE_NAME3, null, values);
-
-
+        db.close();
+        return true;
     }
-    */
-
 
     public boolean writeHDBGrantData(String incomeReq, HashMap<String, Double> grantList) {
 
@@ -264,14 +254,20 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
+
+        long newRowId = 0;
+
         values.put(IncomeRequired, incomeReq);
         for (String key : grantList.keySet()) {
             String grantType = key;
             Double grantAmount = grantList.get(key);
             values.put(GrantType, grantType);
             values.put(GrantAmount, grantAmount);
+            newRowId += db.insert(TABLE_NAME4, null, values);
+            //clear values
+            values.clear();
         }
-        long newRowId = db.insert(TABLE_NAME4, null, values);
+
         db.close();
         return true;
     }
@@ -311,31 +307,6 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         db.close();
 
         return false;
-
-    }
-
-    public boolean writeAmenitiesData(ArrayList<HashMap<String, String>> infoList) {
-
-        // Gets the data repository in write mode , getWritableDatabase is sqlite function
-        SQLiteDatabase db = getWritableDatabase();
-        // Create a new map of values, where column names are the keys
-        ContentValues values = new ContentValues();
-
-        for (HashMap<String, String> i : infoList) {
-            for (String key : i.keySet()) {
-                if (key.equals("AmenitiesType")) {
-                    values.put(AmenitiesType, i.get(key));
-                } else if (key.equals("AmenitiesName")) {
-                    values.put(AmenitiesName, i.get(key));
-                } else {
-                    values.put(AmenitiesAddress, i.get(key));
-                }
-            }
-        }
-
-        long newRowId = db.insert(TABLE_NAME3, null, values);
-        db.close();
-        return true;
     }
 
     public boolean writeTax(ArrayList<HashMap<String, String>> infoList){
