@@ -189,10 +189,10 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
             LatLng developmentLoc = ddc.getDevelopmentLocation();
             mMap.addMarker(new MarkerOptions().position(developmentLoc).title(ddc.getDevelopmentName()));
 
-            for(ArrayList amemity : amenitiesDetailsList) {
+            for(ArrayList amenity : amenitiesDetailsList) {
                 LatLng nearBy = new LatLng(1.345734, 103.681283);
-                mMap.addMarker(new MarkerOptions().position((LatLng) amemity.get(MapData.COORDINATES))
-                        .title((String) amemity.get(MapData.AMENITIESNAME)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                mMap.addMarker(new MarkerOptions().position((LatLng) amenity.get(MapData.COORDINATES))
+                        .title((String) amenity.get(MapData.AMENITIESNAME)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
             }
 
             //move map focus to the location of the main marker
