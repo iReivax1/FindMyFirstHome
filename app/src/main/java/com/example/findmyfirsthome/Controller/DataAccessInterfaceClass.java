@@ -17,7 +17,7 @@ public interface DataAccessInterfaceClass {
 
     boolean writeHDBGrantData(String incomeReq, HashMap<String, Double> grantList);
 
-    boolean writeAmenitiesData( HashMap<String, Object> infoList);
+    boolean writeAmenitiesData(HashMap<String, Object> infoList);
 
     boolean writeCalculatedProfile(CalculatedProfile cp);
 

@@ -22,9 +22,8 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
 
 
     private GoogleMap mMap;
-    private MapsController MC = new MapsController();
-    private String[] DevelopmentName;
-    LatLng point;
+    Context context = this.getApplicationContext();
+
 
     public void onPause() {
         super.onPause();
@@ -36,60 +35,62 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
-        HashMap<String, LatLng> HDBList = MC.getHDBListCoord();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
     }
 
     //Controller will call this
     //self call GeoCooding
     //To write in database
     public LatLng getHDBCoordinates(String name){
-        Context context = getApplicationContext();
-        Geocoder gc = new Geocoder(context);
-        List<Address> addresses = null;
-        point = null;
+        Geocoder coder = new Geocoder(context);
+        List<Address> address;
+        LatLng point = null;
+
         try {
-            addresses = gc.getFromLocationName(name, 5);
-            assert addresses != null; //make sure that addresss is not null
-            Address location = addresses.get(0);
+            //will error if no address given
+            address = coder.getFromLocationName(name, 1);
+            if (address == null) {
+                return null;
+            }
+            //get only the first address cuz i say only got 1 address
+            Address location = address.get(0);
             point = new LatLng(location.getLatitude(), location.getLongitude() );
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        } catch (IOException ex) {
+
+            ex.printStackTrace();
         }
         return point;
     }
 
-    public LatLng getAmeneitiesCoordinates(String name){
-        Context context = getApplicationContext();
-        Geocoder gc = new Geocoder(context);
-        List<Address> addresses = null;
-        point = null;
+
+    //name can be anything, an address or a place name, not sure about postal code
+    public LatLng getAmenitiesCoordinates(String name) {
+
+        Geocoder coder = new Geocoder(context);
+        List<Address> address;
+        LatLng point = null;
+
         try {
-            addresses = gc.getFromLocationName(name, 2);
-            assert addresses != null; //make sure that addresss is not null
-            Address location = addresses.get(0);
+            //will error if no address given
+            address = coder.getFromLocationName(name, 1);
+            if (address == null) {
+                return null;
+            }
+            //get only the first address cuz i say only got 1 address
+            Address location = address.get(0);
             point = new LatLng(location.getLatitude(), location.getLongitude() );
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        } catch (IOException ex) {
+
+            ex.printStackTrace();
         }
         return point;
     }
