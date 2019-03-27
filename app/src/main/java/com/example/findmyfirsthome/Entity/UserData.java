@@ -57,61 +57,7 @@ public class UserData {
        this.numberOfAdditionalHouseholdMembers = numberOfAdditionalHouseholdMembers;
        this.membersSalaryList = membersSalaryList;
     }
-    /*
-    //userdata constructor for couples, no optional filled
-    public UserData(boolean isMarried, boolean isFirstTimeBuyer, boolean isSingaporean, int age, double grossSalary, boolean isFirstTimeBuyerPartner, boolean isSingaporeanPartner, int agePartner, double grossSalaryPartner)
-    {
-        //Compulsory
-        this.isMarried = isMarried;
-        this.isFirstTimeBuyer = isFirstTimeBuyer;
-        this.isSingaporean = isSingaporean; //if true is singaporean
-        this.age = age;
-        this.grossSalary = grossSalary;
-        this.buyer1CPF = buyer1CPF;
 
-        //If isMarried = true
-        this.isFirstTimeBuyerPartner = isFirstTimeBuyerPartner;
-        this.isSingaporeanPartner = isSingaporeanPartner; //if true is singaporean
-        this.agePartner = agePartner;
-        this.grossSalaryPartner = grossSalaryPartner;
-        this.buyer2CPF = buyer2CPF;
-    }
-
-    //userdata constructor for singles, all optional completed
-    public UserData(boolean isMarried, boolean isFirstTimeBuyer, boolean isSingaporean, int age, double grossSalary,
-                    double carLoan, double creditLoan, double studyLoan, double otherCommitments, double buyer1CPF, int numberOfAdditionalHouseholdMembers, ArrayList<Double> membersSalaryList){
-
-        this.isMarried = isMarried;
-        this.isFirstTimeBuyer = isFirstTimeBuyer;
-        this.isSingaporean = isSingaporean; //if true is singaporean
-        this.age = age;
-        this.grossSalary = grossSalary;
-        this.buyer1CPF = buyer1CPF;
-
-        this.carLoan = carLoan;
-        this.creditLoan = creditLoan;
-        this.studyLoan = studyLoan;
-        this.otherCommitments = otherCommitments;
-
-        this.numberOfAdditionalHouseholdMembers = numberOfAdditionalHouseholdMembers;
-        this.membersSalaryList = membersSalaryList;
-    }
-
-    //userdata constructor for singles, no optional
-    public UserData(boolean isMarried, boolean isFirstTimeBuyer, boolean isSingaporean, int age, double grossSalary, boolean isFirstTimeBuyerPartner, boolean isSingaporeanPartner,
-                    double carLoan, double creditLoan, double studyLoan, double otherCommitments, double buyer1CPF, int numberOfAdditionalHouseholdMembers, ArrayList<Double> membersSalaryList){
-
-        this.isMarried = isMarried;
-        this.isFirstTimeBuyer = isFirstTimeBuyer;
-        this.isSingaporean = isSingaporean; //if true is singaporean
-        this.age = age;
-        this.grossSalary = grossSalary;
-        this.buyer1CPF = buyer1CPF;
-
-        this.numberOfAdditionalHouseholdMembers = numberOfAdditionalHouseholdMembers;
-        this.membersSalaryList = membersSalaryList;
-    }
-*/
     //get Set functions
 
     public boolean isMarried() {
