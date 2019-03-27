@@ -120,7 +120,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     public static final String SQL_UserData = "CREATE TABLE " + TABLE_NAME5 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + isMarried + " BOOLEAN, "
             + isFirstTimeBuyer + " BOOLEAN, " + isSingaporean + " BOOLEAN, " + age + " REAL, " + grossSalary + " REAL, " + isFirstTimeBuyerPartner + " BOOLEAN, " + isSingaporeanPartner + " BOOLEAN, " + agePartner + " REAL, " + grossSalaryPartner + " REAL, "
             + carLoan + " REAL, " + creditLoan + " REAL, " + studyLoan + " REAL, " + otherCommitments + " REAL, " + buyer1CPF + " REAL, " + buyer2CPF + " REAL, "
-            + numberOfAdditionalHouseholdMembers + " REAL " + ")";
+            + numberOfAdditionalHouseholdMembers + " INTEGER " + ")";
 
     public static final String SQL_membersSalaryList_ = "CREATE TABLE " + TABLE_NAME6 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + membersSalaryList + " REAL, " + " FOREIGN KEY (" + ID + ") REFERENCES " + TABLE_NAME5 + "(" + ID + "));";
 
@@ -278,7 +278,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
             Double grantAmount = grantList.get(key);
             values.put(GrantType, grantType);
             values.put(GrantAmount, grantAmount);
-            newRowId += db.insert(TABLE_NAME4, null, values);
+            newRowId = db.insert(TABLE_NAME4, null, values);
             //clear values
             values.clear();
         }
@@ -314,11 +314,12 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         values.put(buyer1CPF, ud.getBuyer1CPF());
         values.put(buyer2CPF, ud.getBuyer2CPF());
 
-        for (Double salary : ud.getMembersSalaryList()) {
-            valueSalary.put(numberOfAdditionalHouseholdMembers, salary);
-        }
         long newRowId = db.insert(TABLE_NAME5, null, values);
-        long secondNewRowId = db.insert(TABLE_NAME6, null, valueSalary);
+        for (Double salary : ud.getMembersSalaryList()) {
+            valueSalary.put(membersSalaryList, salary);
+            long secondNewRowId = db.insert(TABLE_NAME6, null, valueSalary);
+            valueSalary.clear();
+        }
         db.close();
 
         return false;
@@ -405,7 +406,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         // How you want the results sorted in the resulting Cursor
         //Potential problem, potential solution query by ID.
 
-        String rawQuery = "SELECT * FROM " + TABLE_NAME + " as D, " + TABLE_NAME2 + " as FT WHERE D.HDBDevelopmentName = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT * FROM " + TABLE_NAME;
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
@@ -418,30 +419,27 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         String DevelopmentName = "";
         String DevelopmentDescription = "";
         String DevelopmentImgURL = "";
+        if (cursor.moveToFirst()){
+            while (cursor != null) {
+                DevelopmentName = cursor.getString(cursor.getColumnIndexOrThrow("HDBDevelopmentName"));
 
-        while (cursor.moveToNext() && cursor != null) {
+                DevelopmentDescription = cursor.getString(cursor.getColumnIndexOrThrow("HDBdevelopmentDescription"));
 
-            int index;
+                Double DevelopmentLongitude = cursor.getDouble(cursor.getColumnIndexOrThrow("Longitude"));
 
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentName");
-            DevelopmentName = cursor.getString(index);
+                Double DevelopmentLatitude = cursor.getDouble(cursor.getColumnIndexOrThrow("Latitude"));
 
-            index = cursor.getColumnIndexOrThrow("HDBdevelopmentDescription");
-            DevelopmentDescription = cursor.getString(index);
+                DevelopmentImgURL = cursor.getString(cursor.getColumnIndexOrThrow("ImgURL"));
 
-            index = cursor.getColumnIndexOrThrow("Longitude");
-            Double DevelopmentLongitude = cursor.getDouble(index);
-
-            index = cursor.getColumnIndexOrThrow("Latitude");
-            Double DevelopmentLatitude = cursor.getDouble(index);
-
-            index = cursor.getColumnIndexOrThrow("ImgURL");
-            DevelopmentImgURL = cursor.getString(index);
-
-            coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
-            mdList = readMapData(DevelopmentName);
-            HDBFTList = readHDBFlatType(DevelopmentName);
-
+                System.out.println("DONE ONCE");
+                coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
+                mdList = readMapData(DevelopmentName);
+                System.out.println("Read Map Data");
+                HDBFTList = readHDBFlatType(DevelopmentName);
+                System.out.println("ReadFlatType");
+                if(cursor.isLast()) break;
+                cursor.moveToNext();
+            }
         }
 
         cursor.close();
@@ -459,7 +457,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         // How you want the results sorted in the resulting Cursor
         //Potential problem, potential solution query by ID.
 
-        String rawQuery = "SELECT * FROM " + TABLE_NAME + " as D, " + TABLE_NAME2 + " as FT WHERE D.HDBDevelopmentName = '" + developmentName + "' AND D.HDBDevelopmentName = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT * FROM " + TABLE_NAME + " as D WHERE D.HDBDevelopmentName = '" + developmentName + "'";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
@@ -472,32 +470,26 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         String DevelopmentName = developmentName;
         String DevelopmentDescription = "";
         String DevelopmentImgURL = "";
-        while (cursor.moveToNext() && cursor != null) {
+        if(cursor.moveToFirst()) {
+            while (cursor != null) {
+                DevelopmentName = cursor.getString(cursor.getColumnIndexOrThrow("HDBDevelopmentName"));
 
-            int index;
+                DevelopmentDescription = cursor.getString(cursor.getColumnIndexOrThrow("HDBdevelopmentDescription"));
 
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentName");
-            DevelopmentName = cursor.getString(index);
+                Double DevelopmentLongitude = cursor.getDouble(cursor.getColumnIndexOrThrow("Longitude"));
 
-            index = cursor.getColumnIndexOrThrow("HDBdevelopmentDescription");
-            DevelopmentDescription = cursor.getString(index);
+                Double DevelopmentLatitude = cursor.getDouble(cursor.getColumnIndexOrThrow("Latitude"));
 
-            index = cursor.getColumnIndexOrThrow("Longitude");
-            Double DevelopmentLongitude = cursor.getDouble(index);
+                coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
 
-            index = cursor.getColumnIndexOrThrow("Latitude");
-            Double DevelopmentLatitude = cursor.getDouble(index);
+                DevelopmentImgURL = cursor.getString(cursor.getColumnIndexOrThrow("ImgURL"));
 
-            coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
-
-            index = cursor.getColumnIndexOrThrow("ImgURL");
-            DevelopmentImgURL = cursor.getString(index);
-
-            mdList = readMapData(DevelopmentName);
-            HDBFTList = readHDBFlatType(DevelopmentName);
-
+                mdList = readMapData(DevelopmentName);
+                HDBFTList = readHDBFlatType(DevelopmentName);
+                if(cursor.isLast()) break;
+                cursor.moveToNext();
+            }
         }
-
         cursor.close();
 
         //if cursor is empty
@@ -514,36 +506,29 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     public ArrayList<MapData> readMapData(String name) {
         SQLiteDatabase db = getReadableDatabase();
 
-        String rawQuery = "SELECT AmenitiesName, AmenitiesType, AmenitiesLongitude, AmenitiesLatitude FROM " + TABLE_NAME + " as D, " + TABLE_NAME2 + " as FT WHERE name = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT AmenitiesName, AmenitiesType, AmenitiesLongitude, AmenitiesLatitude FROM " + TABLE_NAME3;
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
         ArrayList<MapData> md = new ArrayList<MapData>();
 
-        while (cursor.moveToNext() && cursor != null) {
+        if(cursor.moveToFirst()) {
+            while (cursor != null) {
+                String AName = cursor.getString(cursor.getColumnIndexOrThrow("AmenitiesName"));
 
-            int index;
+                Double ALongitude = cursor.getDouble(cursor.getColumnIndexOrThrow("AmenitiesLongitude"));
 
+                Double ALatitude = cursor.getDouble(cursor.getColumnIndexOrThrow("AmenitiesLatitude"));
 
-            index = cursor.getColumnIndexOrThrow("AmenitiesName");
-            String AName = cursor.getString(index);
+                String AType = cursor.getString(cursor.getColumnIndexOrThrow("AmenitiesType"));
 
-            index = cursor.getColumnIndexOrThrow("AmenitiesLongitude");
-            Double ALongitude = cursor.getDouble(index);
+                LatLng Acoord = new LatLng(ALatitude, ALongitude);
 
-            index = cursor.getColumnIndexOrThrow("AmenitiesLatitude");
-
-            Double ALatitude = cursor.getDouble(index);
-
-            index = cursor.getColumnIndexOrThrow("AmenitiesType");
-            String AType = cursor.getString(index);
-
-            LatLng Acoord = new LatLng(ALatitude, ALongitude);
-
-
-            //add data to mapData arrayList
-            md.add(new MapData(AName, AType, Acoord));
-
+                //add data to mapData arrayList
+                md.add(new MapData(AName, AType, Acoord));
+                if(cursor.isLast()) break;
+                cursor.moveToNext();
+            }
         }
 
         assert md != null;
@@ -558,27 +543,25 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         HashMap<String, Object> flatTypeDetails = null;
         ArrayList<HashMap<String, Object>> HDBFlatTypedetailsList = new ArrayList<HashMap<String, Object>>();
 
-        String rawQuery = "SELECT HDBFlatType, HDBFlatPrice FROM " + TABLE_NAME2 + " as D" + " WHERE name = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT HDBFlatType, HDBFlatPrice FROM " + TABLE_NAME2 + " as FT " + "WHERE FT.HDBDevelopmentName = '" + name +"'";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
-        while (cursor.moveToNext() && cursor != null) {
+        if(cursor.moveToFirst()) {
+            while (cursor != null) {
+                Double HDBFlatPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("HDBFlatPrice"));
 
-            int index;
+                Integer HDBFlatType = cursor.getInt(cursor.getColumnIndexOrThrow("HDBFlatType"));
 
-            index = cursor.getColumnIndexOrThrow("HDBFlatPrice");
-            Double HDBFlatPrice = cursor.getDouble(index);
-
-            index = cursor.getColumnIndexOrThrow("HDBFlatType");
-            Integer HDBFlatType = cursor.getInt(index);
-
-
-            //add data to flatType
-            flatTypeDetails = new HashMap<String, Object>();
-            flatTypeDetails.put("price", HDBFlatPrice);
-            flatTypeDetails.put("flatType", HDBFlatType);
-            flatTypeDetails.put("affordability", false);
-            HDBFlatTypedetailsList.add(flatTypeDetails);
+                //add data to flatType
+                flatTypeDetails = new HashMap<String, Object>();
+                flatTypeDetails.put("price", HDBFlatPrice);
+                flatTypeDetails.put("flatType", HDBFlatType);
+                flatTypeDetails.put("affordability", false);
+                HDBFlatTypedetailsList.add(flatTypeDetails);
+                if(cursor.isLast()) break;
+                cursor.moveToNext();
+            }
         }
 
         assert HDBFlatTypedetailsList != null;
@@ -594,20 +577,19 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
 
         LatLng coord = new LatLng(0, 0);
 
-        String rawQuery = "SELECT HDBDevelopmentLatitude, HDBDevelopmentLongitude FROM " + TABLE_NAME + " as D" + " WHERE name = D.HDBDevelopmentName";
+        String rawQuery = "SELECT HDBDevelopmentLatitude, HDBDevelopmentLongitude FROM " + TABLE_NAME + " as D" + " WHERE D.HDBDevelopmentName = '" + name +"'";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
-        while (cursor.moveToNext() && cursor != null) {
+        if(cursor.moveToFirst()) {
+            while (cursor != null) {
+                Double lat = cursor.getDouble(cursor.getColumnIndexOrThrow("HDBDevelopmentLatitude"));
 
-            int index;
-
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentLatitude");
-            Double lat = cursor.getDouble(index);
-
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentLongitude");
-            Double lng = cursor.getDouble(index);
-            coord = new LatLng(lat, lng);
+                Double lng = cursor.getDouble(cursor.getColumnIndexOrThrow("HDBDevelopmentLongitude"));
+                coord = new LatLng(lat, lng);
+                if(cursor.isLast()) break;
+                cursor.moveToNext();
+            }
         }
 
         assert coord != null;
@@ -628,17 +610,17 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
-        while (cursor.moveToNext() && cursor != null) {
+        if(cursor.moveToFirst()) {
+            while (cursor != null) {
+                String type = cursor.getString(cursor.getColumnIndexOrThrow("GrantType"));
 
-            int index;
+                Double amount = cursor.getDouble(cursor.getColumnIndexOrThrow("GrantAmount"));
 
-            index = cursor.getColumnIndexOrThrow("GrantType");
-            String type = cursor.getString(index);
-
-            index = cursor.getColumnIndexOrThrow("GrantAmount");
-            Double amount = cursor.getDouble(index);
-
-            grants.put(type, amount);
+                grants.put(type, amount);
+                if(cursor.isLast()) break;
+                cursor.moveToNext();
+            }
+            cursor.close();
         }
 
         return grants;
