@@ -17,7 +17,7 @@ public class AffordabilityReportUI extends AppCompatActivity {
     TextView tvMaxpropertyprice, tvMaxmortgage, tvMaxtenure, tvShg, tvAhg,
             tvPropertyname, tvPropertyprice, tvFlattype, tvDownpaymentreq, tvLoanreq, tvRepaymentsum;
 
-    AffordabilityReportController arc = new AffordabilityReportController();
+    AffordabilityReportController arc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +27,8 @@ public class AffordabilityReportUI extends AppCompatActivity {
         Intent intent = getIntent();
         String hdbName = intent.getStringExtra("hdbName");
         String flatType = intent.getStringExtra("flatType");
+
+        arc = new AffordabilityReportController(this, hdbName, flatType);
 
         // initializing TextViews and appending values
         tvPropertyname = (TextView) findViewById(R.id.property_name);
