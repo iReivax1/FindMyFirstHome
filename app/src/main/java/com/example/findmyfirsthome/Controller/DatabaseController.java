@@ -412,9 +412,9 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
 
         HashMap<String, Object> flatTypeDetails = null;
 
-        ArrayList<HDBDevelopment> HDBDList = null;
-        ArrayList<MapData> mdList = null;
-        ArrayList<HashMap<String, Object>> HDBFTList = null;
+        ArrayList<HDBDevelopment> HDBDList = new ArrayList<HDBDevelopment>();
+        ArrayList<MapData> mdList = new ArrayList<MapData>();
+        ArrayList<HashMap<String, Object>> HDBFTList = new ArrayList<HashMap<String, Object>>();
         LatLng coord = null;
         String DevelopmentName = "";
         String DevelopmentDescription = "";
@@ -422,30 +422,28 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         if (cursor.moveToFirst()){
             while (cursor != null) {
                 DevelopmentName = cursor.getString(cursor.getColumnIndexOrThrow("HDBDevelopmentName"));
-
+                System.out.println("1.1 "+DevelopmentName);
                 DevelopmentDescription = cursor.getString(cursor.getColumnIndexOrThrow("HDBdevelopmentDescription"));
-
+                System.out.println("1.2 "+DevelopmentDescription);
                 Double DevelopmentLongitude = cursor.getDouble(cursor.getColumnIndexOrThrow("Longitude"));
-
+                System.out.println("1.3 "+DevelopmentLongitude);
                 Double DevelopmentLatitude = cursor.getDouble(cursor.getColumnIndexOrThrow("Latitude"));
-
+                System.out.println("1.4 "+DevelopmentLatitude);
                 DevelopmentImgURL = cursor.getString(cursor.getColumnIndexOrThrow("ImgURL"));
-
-                System.out.println("DONE ONCE");
+                System.out.println("1.5 "+DevelopmentImgURL);
                 coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
+                System.out.println("1.6 "+coord);
                 mdList = readMapData(DevelopmentName);
-                System.out.println("Read Map Data");
                 HDBFTList = readHDBFlatType(DevelopmentName);
-                System.out.println("ReadFlatType");
+
+                HDBDList.add(createHDBDevelopmentObject(HDBFTList, DevelopmentName, DevelopmentDescription, false, coord, mdList, DevelopmentImgURL));
+
                 if(cursor.isLast()) break;
                 cursor.moveToNext();
             }
         }
 
         cursor.close();
-
-        //TODO: Return created objects by calling the creation method
-        createHDBDevelopmentObject(HDBFTList, DevelopmentName, DevelopmentDescription, false, coord, mdList, DevelopmentImgURL);
 
         return HDBDList;
 
@@ -531,7 +529,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
             }
         }
 
-        assert md != null;
+        //assert md != null;
         cursor.close();
         return md;
     }
