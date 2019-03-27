@@ -1,7 +1,6 @@
 package com.example.findmyfirsthome.Controller;
 
 import com.example.findmyfirsthome.Entity.UserData;
-import static java.lang.Math.*;
 
 public class CalculateProfileControl{
     UserData udSaved = new UserData();              //retrieved from database NOT NEW
@@ -14,8 +13,8 @@ public class CalculateProfileControl{
     }
 
     public double getMonthlyInstallment() {
-        private double financial_commitment = udSaved.getCarLoan() + udSaved.getCreditLoan() + udSaved.getStudyLoan() +  udSaved.getOtherCommitments();
-        private double total_income = udSaved.getGrossSalary()+udSaved.getGrossSalaryPartner();
+        double financial_commitment = udSaved.getCarLoan() + udSaved.getCreditLoan() + udSaved.getStudyLoan() +  udSaved.getOtherCommitments();
+        double total_income = udSaved.getGrossSalary()+udSaved.getGrossSalaryPartner();
         if (financial_commitment < 0.7 * total_income)
             return 0.30 * (udSaved.getGrossSalary() + udSaved.getGrossSalaryPartner());
         else

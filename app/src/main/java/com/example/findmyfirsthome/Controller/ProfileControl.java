@@ -1,21 +1,14 @@
 package com.example.findmyfirsthome.Controller;
 
 import android.app.Activity;
-import android.content.Context;
-import android.provider.ContactsContract;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.example.findmyfirsthome.Boundary.ProfileUI;
 import com.example.findmyfirsthome.Entity.UserData;
 import com.example.findmyfirsthome.R;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ProfileControl {
     private UserData ud = new UserData();
@@ -183,7 +176,7 @@ public class ProfileControl {
         }
     }
 
-    public void writeProfile(){
+    public void writeProfile(){ //XAVIER FUCK YOU
         ProfileUI ui = new ProfileUI();
         DatabaseController db = new DatabaseController(ui.getApplicationContext());
         db.writeProfileData(ud);
