@@ -3,6 +3,9 @@ package com.example.findmyfirsthome.Controller;
 import com.example.findmyfirsthome.Entity.UserData;
 import static java.lang.Math.*;
 
+/* TODO: Add Database methods to read and write
+ * TODO: Retrieve AHG and SHG values */
+
 public class CalculateProfileControl{
     UserData udSaved = new UserData();              //should change to retrieve data from database
     private final double annualIR = 0.026;
