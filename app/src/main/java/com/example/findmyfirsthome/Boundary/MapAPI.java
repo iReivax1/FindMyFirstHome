@@ -22,7 +22,7 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
 
 
     private GoogleMap mMap;
-    Context context = this.getApplicationContext();
+    Context context = this;
 
 
     public void onPause() {

@@ -19,6 +19,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.findmyfirsthome.Controller.DataAccessInterfaceClass;
 import com.example.findmyfirsthome.Controller.DatabaseController;
+import com.example.findmyfirsthome.Controller.DownloadFileManager;
 import com.example.findmyfirsthome.R;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -57,7 +58,12 @@ public class DataGovAPI extends AppCompatActivity {
         this.getData = findViewById(R.id.get_data);  // Link our click button.
         this.dataList = findViewById(R.id.data_list);  // Link our repository list text output box.
         this.dataList.setMovementMethod(new ScrollingMovementMethod());  // This makes our text box scrollable, for those big GitHub contributors with lots of repos :)
+
         requestQueue = Volley.newRequestQueue(this);  // This setups up a new request queue which we will need to make HTTP requests.
+
+        DownloadFileManager dfm = new DownloadFileManager();
+        dfm.download("https://geo.data.gov.sg/market-food-centre/2014/12/26/kml/market-food-centre.kml");
+
     }
 
     private void clearRepoList() {

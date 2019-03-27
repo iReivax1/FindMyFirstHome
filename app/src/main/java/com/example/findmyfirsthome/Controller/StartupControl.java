@@ -4,10 +4,10 @@ import com.example.findmyfirsthome.Boundary.DataGovAPI;
 import com.example.findmyfirsthome.Boundary.MapAPI;
 
 public class StartupControl {
-    public void run(){
+    public void runIt(){
 //        MapsController mapsController = new MapsController();
 //        HDBSplashscreenController SScontrol = new HDBSplashscreenController();
-//        DataGovAPI dataGovAPI = new DataGovAPI();
+          DataGovAPI dataGovAPI = new DataGovAPI();
 
         //dataGovAPI.start();
 
