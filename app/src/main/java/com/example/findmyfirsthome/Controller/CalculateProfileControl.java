@@ -4,11 +4,11 @@ import com.example.findmyfirsthome.Entity.UserData;
 import static java.lang.Math.*;
 
 public class CalculateProfileControl{
-    UserData udSaved = new UserData();              //retrieved from database NOT NEW
+    UserData udSaved = new UserData();              //should change to retrieve data from database
     private final double annualIR = 0.026;
     private final double monthIR = annualIR/12;
 
-    public double getMaxLoan(){
+    public double getMaxMortgage(){
         int loanPeriod = getMaxMortgagePeriod();
         return (getMonthlyInstallment()) * (Math.pow((1+monthIR),(loanPeriod*12)) -1)/(monthIR * (Math.pow((1+monthIR),(loanPeriod*12))));
     }
@@ -35,7 +35,7 @@ public class CalculateProfileControl{
     }
 
     public double getMaxPropertyPrice() {
-        return getMaxLoan() * 100/90 ;
+        return getMaxMortgage() * 100/90 ;
     }
 
     /* public double calculateMonthlyInstallment_Cash() {
