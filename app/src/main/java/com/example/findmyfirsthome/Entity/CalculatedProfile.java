@@ -11,97 +11,76 @@ public class CalculatedProfile {
     private double AHG;
     private double SHG;
 
-    private double maxMortgageAmt;
-    private double maxPurchasePrice;
-    private int maxMortgageTerm;
+    private double maxMortgage;
+    private double monthlyInstallment;
+    private double maxMortgagePeriod;
+    private double maxPropertyPrice;
+    private double downpayment;
+    public CalculatedProfile(){
+        AHG=0;
+        SHG=0;
 
-    private HashMap<String, Object> calProfileDetails;
-
-    //AHG GET SET
-    public double getAHG()
-    {
-        return this.AHG;
+        maxMortgage=0;
+        monthlyInstallment=0;
+        maxMortgagePeriod=0;
+        maxPropertyPrice=0;
+        downpayment=0;
     }
 
-    public void setAHG(double AHG)
-    {
+    public double getAHG() {
+        return AHG;
+    }
+
+    public void setAHG(double AHG) {
         this.AHG = AHG;
     }
 
-    //SHG GET SET
-    public double getSHG()
-    {
-        return this.SHG;
+    public double getSHG() {
+        return SHG;
     }
 
-    public void setSHG(double SHG)
-    {
+    public void setSHG(double SHG) {
         this.SHG = SHG;
     }
 
-    //maxMortgageAmt GET SET
-    public double getMaxMortgageAmt()
-    {
-        return this.maxMortgageAmt;
+    public double getMaxMortgage() {
+        return maxMortgage;
     }
 
-    public void setMaxMortgageAmt(double maxMortgageAmt)
-    {
-        this.maxMortgageAmt = maxMortgageAmt;
+    public void setMaxMortgage(double maxMortgage) {
+        this.maxMortgage = maxMortgage;
     }
 
-    //maxPurchasePrice GET SET
-    public double getMaxPurchasePrice()
-    {
-        return this.maxPurchasePrice;
+    public double getMonthlyInstallment() {
+        return monthlyInstallment;
     }
 
-    public void setMaxPurchasePrice(double maxPurchasePrice)
-    {
-        this.maxPurchasePrice = maxPurchasePrice;
+    public void setMonthlyInstallment(double monthlyInstallment) {
+        this.monthlyInstallment = monthlyInstallment;
     }
 
-    //maxPurchasePrice GET SET
-    public int getMaxMortgageTerm()
-    {
-        return this.maxMortgageTerm;
+    public double getMaxMortgagePeriod() {
+        return maxMortgagePeriod;
     }
 
-    public void setMaxMortgageTerm(int maxMortgageTerm)
-    {
-        this.maxMortgageTerm = maxMortgageTerm;
+    public void setMaxMortgagePeriod(double maxMortgagePeriod) {
+        this.maxMortgagePeriod = maxMortgagePeriod;
     }
 
-    //Calculated Profile content in list GET SET
-    public HashMap<String, Object> getCalProfileDetails()
-    {
-        this.calProfileDetails = new HashMap<String, Object>();
-
-        //get all fields and return as HashMap
-        //key of HashMap is the same as attribute
-        this.calProfileDetails.put("AHG", this.AHG);
-        this.calProfileDetails.put("SHG", this.SHG);
-        this.calProfileDetails.put("maxMortgageAmt", this.maxMortgageAmt);
-        this.calProfileDetails.put("maxPurchasePrice", this.maxPurchasePrice);
-        this.calProfileDetails.put("maxMortgageTerm", this.maxMortgageTerm);
-
-        return this.calProfileDetails;
+    public double getMaxPropertyPrice() {
+        return maxPropertyPrice;
     }
 
-    public void setCalProfileDetails(HashMap<String, Object> calProfileDetails)
-    {
-        Object temp;
-
-        //set all fields from HashMap
-        temp = calProfileDetails.get("AHG");
-        this.AHG = temp == null ? 0 : (Double)temp;
-        temp = calProfileDetails.get("SHG");
-        this.SHG = temp == null ? 0 : (Double)temp;
-        temp = calProfileDetails.get("maxMortgageAmt");
-        this.maxMortgageAmt = temp == null ? 0 : (Double)temp;
-        temp = calProfileDetails.get("maxPurchasePrice");
-        this.maxPurchasePrice = temp == null ? 0 : (Double)temp;
-        temp = calProfileDetails.get("maxMortgageTerm");
-        this.maxMortgageTerm = temp == null ? 0 : (Integer) temp;
+    public void setMaxPropertyPrice(double maxPropertyPrice) {
+        this.maxPropertyPrice = maxPropertyPrice;
     }
+
+    public double getDownpayment() {
+        return downpayment;
+    }
+
+    public void setDownpayment(double downpayment) {
+        this.downpayment = downpayment;
+    }
+
 }

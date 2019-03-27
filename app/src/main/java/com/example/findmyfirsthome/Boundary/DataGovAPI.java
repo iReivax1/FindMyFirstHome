@@ -152,7 +152,7 @@ public class DataGovAPI extends AppCompatActivity {
 
     public void JSONParserChildCare(JSONObject obj) {
         LatLng coordinates;
-
+        HashMap<String, Object> info = new HashMap<>();
         if (obj != null) {
             try {
                 JSONObject jsonObj = obj;
@@ -167,9 +167,6 @@ public class DataGovAPI extends AppCompatActivity {
                     String centre_name = c.getString("centre_name");
                     String centre_address = c.getString("centre_address");
 
-                    // tmp hash map for single contact
-                    HashMap<String, Object> info = new HashMap<>();
-
                     // adding each child node to HashMap key => value
                     info.put("AmenitiesType", "ChildCare");
                     info.put("AmenitiesName", centre_name);
@@ -178,13 +175,11 @@ public class DataGovAPI extends AppCompatActivity {
                     coordinates = maps.getAmeneitiesCoordinates(centre_address);
                     info.put("AmenitiesLat", coordinates.latitude);
                     info.put("AmenitiesLng", coordinates.longitude);
-                    writeAmenitiesToDB(info);
-
 
                     //For UI purpose, just for testing
                     addToList("childCare", centre_name, centre_address);
-
                 }
+                writeAmenitiesToDB(info);
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
             }
@@ -196,8 +191,8 @@ public class DataGovAPI extends AppCompatActivity {
     /////////////////////////////////Market/////////////////////////////////
 
     public void JSONParserMarket(JSONObject obj) {
-
         LatLng coordinates;
+        HashMap<String, Object> info = new HashMap<>();
         if (obj != null) {
             try {
                 JSONObject jsonObj = obj;
@@ -212,7 +207,6 @@ public class DataGovAPI extends AppCompatActivity {
                     String name_of_centre = c.getString("name_of_centre");
                     String location_of_centre = c.getString("location_of_centre");
                     // tmp hash map for single contact
-                    HashMap<String, Object> info = new HashMap<>();
 
                     // adding each child node to HashMap key => value
                     info.put("AmenitiesType", "Market");
@@ -222,13 +216,12 @@ public class DataGovAPI extends AppCompatActivity {
                     coordinates = maps.getAmeneitiesCoordinates(location_of_centre);
                     info.put("AmenitiesLat", coordinates.latitude);
                     info.put("AmenitiesLng", coordinates.longitude);
-                    // adding contact to contact list
-                    writeAmenitiesToDB(info);
 
                     //For UI purpose, just for testing
                     addToList("market", name_of_centre, location_of_centre);
-
                 }
+                // adding contact to contact list
+                writeAmenitiesToDB(info);
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
             }
@@ -244,6 +237,7 @@ public class DataGovAPI extends AppCompatActivity {
 
         LatLng coordinates;
         if (obj != null) {
+            HashMap<String, Object> info = new HashMap<>();
             try {
                 JSONObject jsonObj = obj;
                 //Log.d("test", obj.toString());
@@ -257,8 +251,6 @@ public class DataGovAPI extends AppCompatActivity {
 
                     String schoolName = c.getString("school_name");
                     String postalCode = c.getString("postal_code");
-                    // tmp hash map for single contact
-                    HashMap<String, Object> info = new HashMap<>();
 
                     // adding each child node to HashMap key => value
                     info.put("AmenitiesType", "School");
@@ -270,12 +262,11 @@ public class DataGovAPI extends AppCompatActivity {
                     info.put("AmenitiesLng", coordinates.longitude);
                     // adding contact to contact list
                     //infoList.add(info);
-                    writeAmenitiesToDB(info);
 
                     //For UI purpose, just for testing
                     addToList("school", schoolName, postalCode);
-
                 }
+                writeAmenitiesToDB(info);
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
             }
@@ -290,6 +281,7 @@ public class DataGovAPI extends AppCompatActivity {
 
     public void JSONParserTax(JSONObject obj) {
         if (obj != null) {
+            HashMap<String, String> info = new HashMap<>();
             try {
                 JSONObject jsonObj = obj;
                 //Log.d("test", obj.toString());
@@ -305,7 +297,7 @@ public class DataGovAPI extends AppCompatActivity {
                     String taxRate = c.getString("tax_rate");
                     String annualValue = c.getString("annual_value");
                     // tmp hash map for single contact
-                    HashMap<String, String> info = new HashMap<>();
+
 
                     // adding each child node to HashMap key => value
                     info.put("typeOfProperty", typeOfProperty);
@@ -313,8 +305,8 @@ public class DataGovAPI extends AppCompatActivity {
                     info.put("annualValue", annualValue);
                     addToList(typeOfProperty, taxRate, annualValue);
                     // adding contact to contact list
-                    writeTaxToDB(info);
                 }
+                writeTaxToDB(info);
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
             }
