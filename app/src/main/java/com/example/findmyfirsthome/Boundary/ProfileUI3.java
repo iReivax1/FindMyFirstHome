@@ -117,10 +117,9 @@ public class ProfileUI3 extends AppCompatActivity implements View.OnFocusChangeL
                 pc.setAllhMembers(hMembersValue,activity);
                 pc.printSalaries();
                 Log.d("test", "come here");
-                pc.writeProfile();
                 Intent submitting = new Intent( ProfileUI3.this, HDBDevelopmentUI.class);
                 startActivity(submitting);
-
+                pc.writeProfile(activity);
             }
         });
 
