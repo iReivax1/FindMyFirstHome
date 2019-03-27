@@ -126,7 +126,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
 
     public static final String SQL_TaxList = "CREATE TABLE " + TABLE_NAME7 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + typeOfProperty + " TEXT, " + annualValue + " REAL, "  + taxRate + " REAL " + ");";
 
-    public static final String SQL_CalculatedProfile = "CREATE TABLE " + TABLE_NAME8 + " (" +  ID + " TEXT PRIMARY KEY AUTOINCREMENT, " +  maxMortgage + " REAL, " + monthlyInstallment + " REAL, " + maxMortgagePeriod + " REAL, " + maxPropertyPrice + " REAL, " + downpayment + " REAL, " + AHG + " REAL, " + SHG + " REAL " + ");";
+    public static final String SQL_CalculatedProfile = "CREATE TABLE " + TABLE_NAME8 + " (" +  ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +  maxMortgage + " REAL, " + monthlyInstallment + " REAL, " + maxMortgagePeriod + " REAL, " + maxPropertyPrice + " REAL, " + downpayment + " REAL, " + AHG + " REAL, " + SHG + " REAL " + ");";
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
     private static final String SQL_DELETE_ENTRIES2 = "DROP TABLE IF EXISTS " + TABLE_NAME2;
