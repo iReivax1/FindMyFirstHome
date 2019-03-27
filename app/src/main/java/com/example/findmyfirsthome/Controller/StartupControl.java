@@ -8,8 +8,6 @@ public class StartupControl {
 //        MapsController mapsController = new MapsController();
 //        HDBSplashscreenController SScontrol = new HDBSplashscreenController();
 
-        //  DataGovAPI dataGovAPI = new DataGovAPI();
-
         //dataGovAPI.start();
 
     }
