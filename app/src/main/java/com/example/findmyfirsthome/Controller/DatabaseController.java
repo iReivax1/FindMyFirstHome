@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
-import android.util.Log;
 
 import com.example.findmyfirsthome.Boundary.MapAPI;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
@@ -16,7 +15,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.lang.*;
 
 //Basically this is our DAO;
 //Need to refactor this class to an interface class.
@@ -29,7 +27,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
 
 
     //Change version if schema changed;
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 1;
 
     //----------- TABLE COLUMNS for ALL -----------//
     public static final String ID = "ID";
@@ -48,7 +46,8 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     //----------- TABLE COLUMNS for Amenities -----------//
     public static final String AmenitiesName = "AmenitiesName";
     public static final String AmenitiesType = "AmenitiesType";
-    public static final String AmenitiesAddress = "AmenitiesAddress";
+    public static final String AmenitiesLongitude = "AmenitiesLongitude";
+    public static final String AmenitiesLatitude = "AmenitiesLatitude";
 
     //----------- TABLE COLUMNS for Grants -----------//
     public static final String IncomeRequired = "IncomeRequired";
@@ -64,7 +63,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     public static final String age = "age";
     public static final String grossSalary = "grossSalary";
 
-    public static final String isFirstTimeBuyerPartner = " isFirstTimeBuyerPartner";
+    public static final String isFirstTimeBuyerPartner = "isFirstTimeBuyerPartner";
     public static final String isSingaporeanPartner = "isSingaporeanPartner"; //if true is singaporean
     public static final String agePartner = "agePartner";
     public static final String grossSalaryPartner = "grossSalaryPartner";
@@ -103,12 +102,12 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
 
     public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + HDBFlatAffordability + " BOOLEAN, " + " FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
 
-    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + " (" +  AmenitiesName + " TEXT PRIMARY KEY, " +  AmenitiesType + " TEXT, " + AmenitiesAddress + " TEXT " + ");";
+    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + " (" +  AmenitiesName + " TEXT PRIMARY KEY, " +  AmenitiesType + " TEXT, " + AmenitiesLongitude + " TEXT, " + AmenitiesLatitude + " TEXT " + ");";
 
     public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + IncomeRequired + " TEXT, " + GrantType + " TEXT, " + GrantAmount + " REAL " + ");";
 
     public static final String SQL_UserData = "CREATE TABLE " + TABLE_NAME5 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + isMarried + " BOOLEAN, "
-            + isFirstTimeBuyer + " BOOLEAN, " + isSingaporean + " BOOLEAN, " + age + " REAL, " + grossSalary + " REAL, " + isFirstTimeBuyerPartner + "BOOLEAN, " + isSingaporeanPartner + " BOOLEAN, " + agePartner + " REAL, " + grossSalaryPartner + " REAL, "
+            + isFirstTimeBuyer + " BOOLEAN, " + isSingaporean + " BOOLEAN, " + age + " REAL, " + grossSalary + " REAL, " + isFirstTimeBuyerPartner + " BOOLEAN, " + isSingaporeanPartner + " BOOLEAN, " + agePartner + " REAL, " + grossSalaryPartner + " REAL, "
             + carLoan + " REAL, " + creditLoan + " REAL, " + studyLoan + " REAL, " + otherCommitments + " REAL, " + buyer1CPF + " REAL, " + buyer2CPF + " REAL, "
             + numberOfAdditionalHouseholdMembers + " REAL " + ")";
 
@@ -340,7 +339,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         // How you want the results sorted in the resulting Cursor
         //Potential problem, potential solution query by ID.
 
-        String rawQuery = "SELECT * FROM " + TABLE_NAME + "as D, " + TABLE_NAME2 + "as FT WHERE D.HDBDevelopmentName = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT * FROM " + TABLE_NAME + " as D, " + TABLE_NAME2 + " as FT WHERE D.HDBDevelopmentName = FT.HDBDevelopmentName";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
@@ -361,16 +360,16 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
             index = cursor.getColumnIndexOrThrow("HDBDevelopmentName");
             DevelopmentName = cursor.getString(index);
 
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentDescription");
+            index = cursor.getColumnIndexOrThrow("HDBdevelopmentDescription");
             DevelopmentDescription = cursor.getString(index);
 
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentLongitude");
+            index = cursor.getColumnIndexOrThrow("Longitude");
             Double DevelopmentLongitude = cursor.getDouble(index);
 
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentLatitude");
+            index = cursor.getColumnIndexOrThrow("Latitude");
             Double DevelopmentLatitude = cursor.getDouble(index);
 
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentImgURL");
+            index = cursor.getColumnIndexOrThrow("ImgURL");
             DevelopmentImgURL = cursor.getString(index);
 
             coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
@@ -414,18 +413,18 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
             index = cursor.getColumnIndexOrThrow("HDBDevelopmentName");
             DevelopmentName = cursor.getString(index);
 
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentDescription");
+            index = cursor.getColumnIndexOrThrow("HDBdevelopmentDescription");
             DevelopmentDescription = cursor.getString(index);
 
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentLongitude");
+            index = cursor.getColumnIndexOrThrow("Longitude");
             Double DevelopmentLongitude = cursor.getDouble(index);
 
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentLatitude");
+            index = cursor.getColumnIndexOrThrow("Latitude");
             Double DevelopmentLatitude = cursor.getDouble(index);
 
             coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
 
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentImgURL");
+            index = cursor.getColumnIndexOrThrow("ImgURL");
             DevelopmentImgURL = cursor.getString(index);
 
             mdList = readMapData(DevelopmentName);
@@ -449,7 +448,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     public ArrayList<MapData> readMapData(String name) {
         SQLiteDatabase db = getReadableDatabase();
 
-        String rawQuery = "SELECT AmenitiesName, AmenitiesType, AmenitiesLongitude, AmenitiesLatitude FROM " + TABLE_NAME + " as D, " + HDBFlatType + " as FT WHERE name = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT AmenitiesName, AmenitiesType, AmenitiesLongitude, AmenitiesLatitude FROM " + TABLE_NAME + " as D, " + TABLE_NAME2 + " as FT WHERE name = FT.HDBDevelopmentName";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 

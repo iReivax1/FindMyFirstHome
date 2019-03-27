@@ -55,6 +55,4 @@ public class CalculateProfileControl{
     public void setDownpayment() {
         cpSaved.setDownpayment(0.1 * cpSaved.getMaxPropertyPrice());
     }
-
-
 }

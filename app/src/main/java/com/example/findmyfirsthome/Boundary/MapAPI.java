@@ -7,19 +7,13 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import com.example.findmyfirsthome.Controller.MapsController;
-import com.example.findmyfirsthome.Entity.HDBDevelopment;
 import com.example.findmyfirsthome.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -78,13 +72,9 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
             assert addresses != null; //make sure that addresss is not null
             Address location = addresses.get(0);
             point = new LatLng(location.getLatitude(), location.getLongitude() );
-            for ( Address a : addresses )
-                mMap.addMarker( new MarkerOptions().position( new LatLng( a.getLatitude(), a.getLongitude() ) ).title( "HDB" ) );
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return point;
     }
 
@@ -98,13 +88,9 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
             assert addresses != null; //make sure that addresss is not null
             Address location = addresses.get(0);
             point = new LatLng(location.getLatitude(), location.getLongitude() );
-            for ( Address a : addresses )
-                mMap.addMarker( new MarkerOptions().position( new LatLng( a.getLatitude(), a.getLongitude() ) ).title( "Amenities" ) );
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return point;
     }
 }
