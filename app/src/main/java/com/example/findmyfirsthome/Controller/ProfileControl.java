@@ -3,6 +3,7 @@ package com.example.findmyfirsthome.Controller;
 import android.app.Activity;
 import android.content.Context;
 import android.provider.ContactsContract;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -183,8 +184,7 @@ public class ProfileControl {
         }
     }
 
-    public void writeProfile(){
-        ProfileUI ui = new ProfileUI();
+    public void writeProfile(AppCompatActivity ui){
         DatabaseController db = new DatabaseController(ui.getApplicationContext());
         db.writeProfileData(ud);
     }
