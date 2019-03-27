@@ -2,6 +2,8 @@ package com.example.findmyfirsthome.Controller;
 
 import com.example.findmyfirsthome.Entity.UserData;
 
+import java.util.HashMap;
+
 public class CalculateProfileControl{
     UserData udSaved = new UserData();              //retrieved from database NOT NEW
     private final double annualIR = 0.026;
@@ -40,6 +42,9 @@ public class CalculateProfileControl{
     /* public double calculateMonthlyInstallment_Cash() {
          return DBSCalc.calculateMonthlyInstallment() - 0.23*(owner1_salary+owner2_salary);
      }*/
+
+
+
     public double calculateDownpayment() {
         return 0.1 * getMaxPropertyPrice();
     }

@@ -1,7 +1,9 @@
 package com.example.findmyfirsthome.Boundary;
 
-import android.support.v7.app.AppCompatActivity;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -9,31 +11,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.findmyfirsthome.Controller.DataAccessInterfaceClass;
 import com.example.findmyfirsthome.Controller.DatabaseController;
 import com.example.findmyfirsthome.R;
 
-
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.json.JSONException;
-
-import com.android.volley.RequestQueue;
-import com.android.volley.VolleyError;
-import com.android.volley.Response;
-import com.android.volley.Request;
-import com.android.volley.toolbox.Volley;
-
+import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class DataGovAPI extends AppCompatActivity {
@@ -178,7 +173,20 @@ public class DataGovAPI extends AppCompatActivity {
                     // adding each child node to HashMap key => value
                     info.put("AmenitiesType", "ChildCare");
                     info.put("AmenitiesName", centre_name);
-                    info.put("AmenitiesAddress", centre_address);
+                    Geocoder gc = new Geocoder(this);
+                    double latitude = 0;
+                    double longitude = 0;
+                    try{
+                        List<Address> addresses = gc.getFromLocationName(centre_address,3);
+                        if(addresses.size()>0){
+                            latitude= addresses.get(0).getLatitude();
+                            longitude= addresses.get(0).getLongitude();
+                        }
+                    }catch(IOException e){
+                        e.printStackTrace();
+                    }
+                    info.put("AmenitiesLatitude", Double.toString(latitude));
+                    info.put("AmenitiesLongitude", Double.toString(longitude));
                     addToList("Childcare : ", centre_name, centre_address);
                     // adding contact to contact list
                     infoList.add(info);

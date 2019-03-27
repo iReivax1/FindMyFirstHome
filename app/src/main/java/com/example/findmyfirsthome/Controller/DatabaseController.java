@@ -27,7 +27,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
 
 
     //Change version if schema changed;
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 1;
 
     //----------- TABLE COLUMNS for ALL -----------//
     public static final String ID = "ID";
@@ -46,7 +46,8 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     //----------- TABLE COLUMNS for Amenities -----------//
     public static final String AmenitiesName = "AmenitiesName";
     public static final String AmenitiesType = "AmenitiesType";
-    public static final String AmenitiesAddress = "AmenitiesAddress";
+    public static final String AmenitiesLongitude = "AmenitiesLongitude";
+    public static final String AmenitiesLatitude = "AmenitiesLatitude";
 
     //----------- TABLE COLUMNS for Grants -----------//
     public static final String IncomeRequired = "IncomeRequired";
@@ -101,7 +102,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
 
     public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + HDBFlatAffordability + " BOOLEAN, " + " FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
 
-    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + " (" +  AmenitiesName + " TEXT PRIMARY KEY, " +  AmenitiesType + " TEXT, " + AmenitiesAddress + " TEXT " + ");";
+    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + " (" +  AmenitiesName + " TEXT PRIMARY KEY, " +  AmenitiesType + " TEXT, " + AmenitiesLongitude + " TEXT, " + AmenitiesLatitude + " TEXT " + ");";
 
     public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + IncomeRequired + " TEXT, " + GrantType + " TEXT, " + GrantAmount + " REAL " + ");";
 
