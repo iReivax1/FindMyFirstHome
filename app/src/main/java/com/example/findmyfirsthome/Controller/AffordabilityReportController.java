@@ -1,5 +1,7 @@
 package com.example.findmyfirsthome.Controller;
 
+import android.content.Context;
+
 import com.example.findmyfirsthome.Entity.AffordabilityReport;
 import com.example.findmyfirsthome.Entity.CalculatedProfile;
 
@@ -8,12 +10,13 @@ import java.util.HashMap;
 import static java.lang.Math.*;
 
 public class AffordabilityReportController {
-    DatabaseController dbc = new DatabaseController();
+    DatabaseController dbc;
     AffordabilityReport report;
     ArrayList<String> hdbFlatInfo;
     String hdbName, flatType;
 
-    public AffordabilityReportController(String hdbName, String flatType){
+    public AffordabilityReportController(Context context, String hdbName, String flatType){
+        dbc = new DatabaseController(context);
         this.report = dbc.getAffordabilityReport();
         this.hdbFlatInfo = dbc.getHdbFlatInfo(hdbName, flatType);
     }
@@ -38,7 +41,7 @@ public class AffordabilityReportController {
         return temp;
     }
 
-    public ArrayList<String> getHDBDependentInfo(String hdbName, String flatType){
+    public ArrayList<String> getHDBDependentInfo(){
         final double monthIR = 0.026/12;
         CalculatedProfile cp = report.getCalcProfile();
         ArrayList<String> temp = new ArrayList<>();

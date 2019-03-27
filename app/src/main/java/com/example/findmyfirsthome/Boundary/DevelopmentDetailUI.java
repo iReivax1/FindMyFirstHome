@@ -85,6 +85,7 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
         HDBFlatTypeDetailsList = ddc.getTableContent();
 
         Object temp;
+        int rowID = 0;
 
         for(HashMap<String, Object> HDBFlatTypeDetails : HDBFlatTypeDetailsList)
         {
@@ -115,9 +116,9 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
 
 
             //create generation button in table last column
-            Button generateReportButton = new Button(this);
+            final Button generateReportButton = new Button(this);
             generateReportButton.setGravity(Gravity.CENTER);
-            generateReportButton.setId(((String) HDBFlatTypeDetails.get("flatType")).charAt(0));    //use room type number as id
+            generateReportButton.setId(rowID);    //row ID starts from 0 which follows the index of list of HDBFlatTypeDetailsList
             generateReportButton.setText("Generate");
             generateReportButton.setTextSize(5*(this.getResources().getDisplayMetrics().density));  //size of text
             generateReportButton.setLayoutParams(new FrameLayout.LayoutParams(200, 75));    //size for button
@@ -129,7 +130,7 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
                 public void onClick(View v) {
                     Intent generateAfReportIntent = new Intent(getApplicationContext(), AffordabilityReportUI.class);
                     generateAfReportIntent.putExtra("estateName", estateName);  //send the estate/development name
-                    generateAfReportIntent.putExtra("FlatType", String.valueOf(v.getId())); //send the FlatType
+                    generateAfReportIntent.putExtra("FlatType", (String) HDBFlatTypeDetailsList.get(v.getId()).get("flatType")); //send the FlatType
                     startActivity(generateAfReportIntent);
                 }
             });
@@ -160,6 +161,9 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
             //set row into table
             TableLayout tableLayout = findViewById(R.id.table_developmentTable);
             tableLayOut.addView(tr);
+
+            //increment row ID which will be used to identify which generate report button is pressed
+            ++rowID;
         }
 
 
