@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
-import android.util.Log;
 
 import com.example.findmyfirsthome.Boundary.MapAPI;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
@@ -16,7 +15,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.lang.*;
 
 //Basically this is our DAO;
 //Need to refactor this class to an interface class.
@@ -340,7 +338,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         // How you want the results sorted in the resulting Cursor
         //Potential problem, potential solution query by ID.
 
-        String rawQuery = "SELECT * FROM " + TABLE_NAME + "as D, " + TABLE_NAME2 + "as FT WHERE D.HDBDevelopmentName = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT * FROM " + TABLE_NAME + " as D, " + TABLE_NAME2 + " as FT WHERE D.HDBDevelopmentName = FT.HDBDevelopmentName";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
@@ -361,16 +359,16 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
             index = cursor.getColumnIndexOrThrow("HDBDevelopmentName");
             DevelopmentName = cursor.getString(index);
 
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentDescription");
+            index = cursor.getColumnIndexOrThrow("HDBdevelopmentDescription");
             DevelopmentDescription = cursor.getString(index);
 
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentLongitude");
+            index = cursor.getColumnIndexOrThrow("Longitude");
             Double DevelopmentLongitude = cursor.getDouble(index);
 
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentLatitude");
+            index = cursor.getColumnIndexOrThrow("Latitude");
             Double DevelopmentLatitude = cursor.getDouble(index);
 
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentImgURL");
+            index = cursor.getColumnIndexOrThrow("ImgURL");
             DevelopmentImgURL = cursor.getString(index);
 
             coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
@@ -414,18 +412,18 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
             index = cursor.getColumnIndexOrThrow("HDBDevelopmentName");
             DevelopmentName = cursor.getString(index);
 
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentDescription");
+            index = cursor.getColumnIndexOrThrow("HDBdevelopmentDescription");
             DevelopmentDescription = cursor.getString(index);
 
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentLongitude");
+            index = cursor.getColumnIndexOrThrow("Longitude");
             Double DevelopmentLongitude = cursor.getDouble(index);
 
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentLatitude");
+            index = cursor.getColumnIndexOrThrow("Latitude");
             Double DevelopmentLatitude = cursor.getDouble(index);
 
             coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
 
-            index = cursor.getColumnIndexOrThrow("HDBDevelopmentImgURL");
+            index = cursor.getColumnIndexOrThrow("ImgURL");
             DevelopmentImgURL = cursor.getString(index);
 
             mdList = readMapData(DevelopmentName);

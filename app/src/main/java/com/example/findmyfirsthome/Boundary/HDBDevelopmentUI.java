@@ -47,7 +47,7 @@ public class HDBDevelopmentUI extends AppCompatActivity implements View.OnClickL
     public void onClick(View view){
         switch (view.getId()) {
             case R.id.footer_button:
-                Intent intent = new Intent(this, HDBDevelopmentUI.class); //replace HDBDevelopmentUI w Form
+                Intent intent = new Intent(this, ProfileUI.class); //replace HDBDevelopmentUI w Form
                 startActivity(intent);
         }
     }
