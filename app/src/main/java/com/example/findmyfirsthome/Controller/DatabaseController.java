@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 import com.example.findmyfirsthome.Boundary.MapAPI;
+import com.example.findmyfirsthome.Entity.AffordabilityReport;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
 import com.example.findmyfirsthome.Entity.MapData;
 import com.example.findmyfirsthome.Entity.UserData;
