@@ -185,6 +185,7 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
             for(ArrayList amemity : amenitiesDetailsList) {
                 mMap.addMarker(new MarkerOptions().position((LatLng) amemity.get(MapData.COORDINATES))
                         .title((String) amemity.get(MapData.AMENITIESNAME)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+
             }
 
             //move map focus to the location of the main marker

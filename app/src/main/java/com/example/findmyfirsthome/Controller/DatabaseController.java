@@ -88,6 +88,15 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     public static final String taxRate = "taxRate";
     public static final String annualValue = "annualValue";
 
+    //----------- TABLE COLUMNS for taxRate -----------//
+    public static final String maxMortgage = "maxMortgage";
+    public static final String monthlyInstallment = "monthlyInstallment";
+    public static final String maxMortgagePeriod = "maxMortgagePeriod";
+    public static final String maxPropertyPrice = "maxPropertyPrice";
+    public static final String downpayment = "downpayment";
+    public static final String AHG = "AHG";
+    public static final String SHG = "SHG";
+
     //----------- TABLE NAMES & DATABASE NAME -----------//
     public static final String DATABASE_NAME = "FindMyFirstHome.db";
     private static final String TABLE_NAME = "HDBDevelopment";
@@ -97,6 +106,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     private static final String TABLE_NAME5 = "UserData";
     private static final String TABLE_NAME6 = "membersSalaryList";
     private static final String TABLE_NAME7 = "TaxList";
+    private static final String TABLE_NAME8 = "CalculatedProfile";
 
     //Draw the table
     private static final String SQL_HDBDevelopment = "CREATE TABLE " + TABLE_NAME + " (" + HDBDevelopmentName + " TEXT PRIMARY KEY, " + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude + " REAL, " + HDBDevelopmentImgURL + " TEXT " + ");";
@@ -116,6 +126,8 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
 
     public static final String SQL_TaxList = "CREATE TABLE " + TABLE_NAME7 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + typeOfProperty + " TEXT, " + annualValue + " REAL, "  + taxRate + " REAL " + ");";
 
+    public static final String SQL_CalculatedProfile = "CREATE TABLE " + TABLE_NAME8 + " (" +  ID + " TEXT PRIMARY KEY AUTOINCREMENT, " +  maxMortgage + " REAL, " + monthlyInstallment + " REAL, " + maxMortgagePeriod + " REAL, " + maxPropertyPrice + " REAL, " + downpayment + " REAL, " + AHG + " REAL, " + SHG + " REAL " + ");";
+
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
     private static final String SQL_DELETE_ENTRIES2 = "DROP TABLE IF EXISTS " + TABLE_NAME2;
     private static final String SQL_DELETE_ENTRIES3 = "DROP TABLE IF EXISTS " + TABLE_NAME3;
@@ -123,6 +135,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     private static final String SQL_DELETE_ENTRIES5 = "DROP TABLE IF EXISTS " + TABLE_NAME5;
     private static final String SQL_DELETE_ENTRIES6 = "DROP TABLE IF EXISTS " + TABLE_NAME6;
     private static final String SQL_DELETE_ENTRIES7 = "DROP TABLE IF EXISTS " + TABLE_NAME7;
+    private static final String SQL_DELETE_ENTRIES8 = "DROP TABLE IF EXISTS " + TABLE_NAME8;
 
     //getContext() - Returns the context view only current running activity.
     public DatabaseController(Context context) {
@@ -140,6 +153,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         sqLiteDatabase.execSQL(SQL_UserData);
         sqLiteDatabase.execSQL(SQL_membersSalaryList_);
         sqLiteDatabase.execSQL(SQL_TaxList);
+        sqLiteDatabase.execSQL(SQL_CalculatedProfile);
     }
 
     //If Database version is difference, delete all current entries and re-create new DBs
@@ -154,6 +168,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES5);
         sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES6);
         sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES7);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES8);
         onCreate(sqLiteDatabase);
     }
 
@@ -330,6 +345,10 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         long newRowId = db.insert(TABLE_NAME7, null, values);
         db.close();
         return true;
+    }
+
+    public boolean writeCalculatedProfile(){
+
     }
 
 //////////////////////////////////////Read functions///////////////////////////////////////////////////////////////////////
