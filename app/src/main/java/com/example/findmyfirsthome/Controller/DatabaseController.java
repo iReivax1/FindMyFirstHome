@@ -9,6 +9,7 @@ import android.provider.BaseColumns;
 
 import com.example.findmyfirsthome.Boundary.MapAPI;
 import com.example.findmyfirsthome.Entity.AffordabilityReport;
+import com.example.findmyfirsthome.Entity.CalculatedProfile;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
 import com.example.findmyfirsthome.Entity.MapData;
 import com.example.findmyfirsthome.Entity.UserData;
@@ -347,8 +348,8 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         return true;
     }
 
-    public boolean writeCalculatedProfile(){
-
+    public boolean writeCalculatedProfile(CalculatedProfile cp){
+        
     }
 
 //////////////////////////////////////Read functions///////////////////////////////////////////////////////////////////////
