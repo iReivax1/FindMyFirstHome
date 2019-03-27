@@ -16,7 +16,7 @@ public interface DataAccessInterfaceClass {
 
     boolean writeHDBGrantData(String incomeReq, HashMap<String, Double> grantList);
 
-    boolean writeAmenitiesData(ArrayList<HashMap<String, String>> infoList);
+    boolean writeAmenitiesData( HashMap<String, Object> infoList);
 
     //boolean writeAmenitiesData(String name);
     /////////////////////////////////////////////////////read/////////////////////////////////////////////////////////////////

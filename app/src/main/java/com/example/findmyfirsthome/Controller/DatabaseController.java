@@ -63,7 +63,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     public static final String age = "age";
     public static final String grossSalary = "grossSalary";
 
-    public static final String isFirstTimeBuyerPartner = " isFirstTimeBuyerPartner";
+    public static final String isFirstTimeBuyerPartner = "isFirstTimeBuyerPartner";
     public static final String isSingaporeanPartner = "isSingaporeanPartner"; //if true is singaporean
     public static final String agePartner = "agePartner";
     public static final String grossSalaryPartner = "grossSalaryPartner";
@@ -117,7 +117,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + IncomeRequired + " TEXT, " + GrantType + " TEXT, " + GrantAmount + " REAL " + ");";
 
     public static final String SQL_UserData = "CREATE TABLE " + TABLE_NAME5 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + isMarried + " BOOLEAN, "
-            + isFirstTimeBuyer + " BOOLEAN, " + isSingaporean + " BOOLEAN, " + age + " REAL, " + grossSalary + " REAL, " + isFirstTimeBuyerPartner + "BOOLEAN, " + isSingaporeanPartner + " BOOLEAN, " + agePartner + " REAL, " + grossSalaryPartner + " REAL, "
+            + isFirstTimeBuyer + " BOOLEAN, " + isSingaporean + " BOOLEAN, " + age + " REAL, " + grossSalary + " REAL, " + isFirstTimeBuyerPartner + " BOOLEAN, " + isSingaporeanPartner + " BOOLEAN, " + agePartner + " REAL, " + grossSalaryPartner + " REAL, "
             + carLoan + " REAL, " + creditLoan + " REAL, " + studyLoan + " REAL, " + otherCommitments + " REAL, " + buyer1CPF + " REAL, " + buyer2CPF + " REAL, "
             + numberOfAdditionalHouseholdMembers + " REAL " + ")";
 
