@@ -1,5 +1,6 @@
 package com.example.findmyfirsthome.Controller;
 
+import com.example.findmyfirsthome.Entity.CalculatedProfile;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
 import com.example.findmyfirsthome.Entity.MapData;
 import com.google.android.gms.maps.model.LatLng;
@@ -18,8 +19,12 @@ public interface DataAccessInterfaceClass {
 
     boolean writeAmenitiesData( HashMap<String, Object> infoList);
 
+    boolean writeCalculatedProfile(CalculatedProfile cp);
+
     //boolean writeAmenitiesData(String name);
     /////////////////////////////////////////////////////read/////////////////////////////////////////////////////////////////
+    CalculatedProfile readCalculatedProfile();
+
     ArrayList<HDBDevelopment> readHDBData();
 
     HDBDevelopment readHDBData(String developmentName);
