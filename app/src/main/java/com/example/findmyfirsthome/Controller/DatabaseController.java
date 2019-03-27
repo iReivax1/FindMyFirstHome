@@ -22,7 +22,6 @@ import java.util.HashMap;
 //have all controllers implement this class
 
 
-//TODO: Redesign database, each enitity = 1 table
 //TODO: add writeGrants, and getGrants
 public class DatabaseController extends SQLiteOpenHelper implements DataAccessInterfaceClass, BaseColumns {
 
@@ -199,9 +198,9 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         values.put(HDBDevelopmentLongitude, 0.0);
         values.put(HDBDevelopmentImgURL, ImgUrl);
 
-        System.out.println(values);
+        //System.out.println(values);
         long newRowId = db.insert(TABLE_NAME, null, values);
-        System.out.println(newRowId);
+        //System.out.println(newRowId);
         db.close();
 
         return true;
@@ -233,9 +232,9 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
                 values.put(HDBFlatAffordability, false);
             }
         }
-        System.out.println(values);
+       // System.out.println(values);
         newRowId = db.insert(TABLE_NAME2, null, values);
-        System.out.println(newRowId);
+        //System.out.println(newRowId);
         db.close();
     }
 

@@ -49,11 +49,6 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     private String ImgURL3;
     private Context mContext;
 
-    public static final int incomeRequired = 0;
-    public static final int AHG = 1;
-    public static final int SHG = 2;
-
-
 
     public HDBDetailsManager (Context mContext){
         this.mContext=mContext;
@@ -71,30 +66,30 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         ///////////////////////////////////Jurong///////////////////////////////////
         //Scrap development name : BoonLay & Jurong west
         HDBDevelopmentNames1 = (scrapDevelopmentName(urlALL, 0, 3, 1)); //scrap from table 0, 4th row 2nd data;
-        System.out.println(HDBDevelopmentNames1);
+        //System.out.println(HDBDevelopmentNames1);
         //Scrap List of flat type for Boonlay's HDB
         ListFlatTypePrice1 = (scrapFlatType(urlALL, 0, 3, 4, 8));
-        System.out.println(ListFlatTypePrice1);
+        //System.out.println(ListFlatTypePrice1);
         //Scrap description text for this development
         for(int index = 0; index < HDBDevelopmentNames1.size(); index++){
             //"jurong west jewel", Boon Lay Glade
             descriptionText1.add(scrapDescription(urlMain1, HDBDevelopmentNames1.get(0)));
         }
-        System.out.println(descriptionText1);
+       // System.out.println(descriptionText1);
         ImgURL1 = scrapImage(urlMain1);
 
         ///////////////////////////////////SK///////////////////////////////////
         //Scrap development name : SK
         HDBDevelopmentNames2 = (scrapDevelopmentName(urlALL, 0, 8, 1));
-        System.out.println(HDBDevelopmentNames2);
+        //System.out.println(HDBDevelopmentNames2);
         //Scrap List of flat type for SK's HDB
         ListFlatTypePrice2 = (scrapFlatType(urlALL, 0, 8, 9, 13));
-        System.out.println(ListFlatTypePrice2);
+        //System.out.println(ListFlatTypePrice2);
         //Scrap description text for this development
         for(int index = 0; index < HDBDevelopmentNames2.size(); index++){
             descriptionText2.add(scrapDescription(urlMain2, HDBDevelopmentNames2.get(index)));//"Fernvale"
         }
-        System.out.println(descriptionText2);
+        //System.out.println(descriptionText2);
         ImgURL2 = scrapImage(urlMain2);
 
         ///////////////////////////////////Kallang///////////////////////////////////
@@ -103,18 +98,18 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         System.out.println(HDBDevelopmentNames3);
         //Scrap List of flat type for Kallang's HDB
         ListFlatTypePrice3 = (scrapFlatType(urlALL, 0, 14, 15, 16));
-        System.out.println(ListFlatTypePrice3);
+        //System.out.println(ListFlatTypePrice3);
         //Scrap description text for this development
         for(int index = 0; index < HDBDevelopmentNames3.size(); index++){
             descriptionText3.add(scrapDescription(urlMain3, HDBDevelopmentNames3.get(index))); //"Kallang" , "Tower crest"
         }
-        System.out.println(descriptionText3);
+        //System.out.println(descriptionText3);
         ImgURL3 = scrapImage(urlMain3);
         //scrap grants
-        firstTimerGrantList = scrapGrants(urlGrants1); //ERROR HERE ALSO hashmap is unordered collection , change to orderedSet TODO;
-        printGrants(firstTimerGrantList);
+        firstTimerGrantList = scrapGrants(urlGrants1);
+        //printGrants(firstTimerGrantList);
         fsTimerGrantList = scrapGrants(urlGrants2);
-        printGrants(fsTimerGrantList);
+        //printGrants(fsTimerGrantList);
         //HDBDevelopmentName => HDBDevelopmentName
         //Flat type for that hdb name => ListFlatTypePrice
         return null;
@@ -127,7 +122,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         adaptHDBD(HDBDevelopmentNames2, ListFlatTypePrice2, descriptionText2, ImgURL2);
         adaptHDBD(HDBDevelopmentNames3, ListFlatTypePrice3, descriptionText3, ImgURL3);
         adaptGrants(firstTimerGrantList);
-        //adaptGrants(fsTimerGrantList);
+        adaptGrants(fsTimerGrantList);
     }
 
 //    ----------------------------------------Open up all the convoluted data structure and store it in simple form--------------------------------------------
@@ -157,9 +152,9 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
             String incomeReq = key;
             HashMap<String, Double> grant = list.get(key);
             writeHDBGrantData(incomeReq, grant);
-           String temp = "from adapt " + incomeReq;
-           Log.d("adapt",temp);
-           System.out.println("grant: " + list.get(key).toString()); //error is here TODO
+           //String temp = "from adapt " + incomeReq;
+           //Log.d("adapt",temp);
+            //System.out.println("grant: " + list.get(key).toString());
         }
     }
 
@@ -236,7 +231,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
                 allDesc +=description;
             }
             allDesc = developmentName +": "+ allDesc;
-            System.out.println(allDesc);
+            //System.out.println(allDesc);
             return allDesc;
         } catch (IOException e) {
             e.printStackTrace();
@@ -390,7 +385,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
             Document document = Jsoup.connect(url).get();
             Element image = document.select("img").get(1);
             imgUrl = image.absUrl("src");
-            System.out.println(imgUrl);
+            //System.out.println(imgUrl);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -446,7 +441,5 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
 }
 
 
-//TODO:
-///Need to scrap this and put in HashMap<String(for area i.e Ang Mo Kio), HashMap<String (For flat type), Double(Price)>>;
 //https://www.hdb.gov.sg/cs/infoweb/residential/renting-a-flat/renting-from-the-open-market/rental-statistics
 //This is to find the Annual value, rental of latest quarter * 12;

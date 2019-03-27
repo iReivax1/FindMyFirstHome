@@ -5,9 +5,11 @@ import com.example.findmyfirsthome.Boundary.MapAPI;
 
 public class StartupControl {
     public void run(){
-        //MapsController mapsController = new MapsController();
-        //HDBSplashscreenController SScontrol = new HDBSplashscreenController();
-        //DataGovAPI dataGovAPI = new DataGovAPI();
+//        MapsController mapsController = new MapsController();
+//        HDBSplashscreenController SScontrol = new HDBSplashscreenController();
+//        DataGovAPI dataGovAPI = new DataGovAPI();
+
+        //dataGovAPI.start();
 
     }
 }
