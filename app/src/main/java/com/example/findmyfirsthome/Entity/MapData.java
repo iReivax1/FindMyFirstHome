@@ -12,9 +12,9 @@ public class MapData {
     //TODO: get coordinates from mapAPI;
     private LatLng Coordinates;
 
-    public static int AMENITIESNAME = 0;
-    public static int AMENITYTYPE = 1;
-    public static int COORDINATES = 2;
+    public static final int AMENITIESNAME = 0;
+    public static final int AMENITYTYPE = 1;
+    public static final int COORDINATES = 2;
 
     private ArrayList mapdataDetails;
 
