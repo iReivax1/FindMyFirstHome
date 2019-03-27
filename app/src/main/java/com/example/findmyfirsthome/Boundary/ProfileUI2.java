@@ -16,7 +16,7 @@ public class ProfileUI2 extends AppCompatActivity implements View.OnFocusChangeL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_ui2);
-
+        final AppCompatActivity activity = ProfileUI2.this;
         final Intent intent = getIntent();
         final int radioGroupMSId = getIntent().getIntExtra("radioGroupMSId", 0);
         final int radioGroupFTBId = getIntent().getIntExtra("radioGroupFTBId", 0);
@@ -70,9 +70,7 @@ public class ProfileUI2 extends AppCompatActivity implements View.OnFocusChangeL
                 pc.setMainOA(mainOA.getText().toString());
                 pc.setCoOA(coOA.getText().toString());
                 pc.setNoOfhMembers(hMembers.getText().toString());
-
-
-
+                pc.writeProfile(activity);
                 Intent skip = new Intent( ProfileUI2.this, HDBDevelopmentUI.class);
                 startActivity(skip);
             }
@@ -106,6 +104,7 @@ public class ProfileUI2 extends AppCompatActivity implements View.OnFocusChangeL
                     i.putExtra("hMembersValueStr", hMembers.getText().toString());
                     startActivity(i);
                 }
+
             }
         });
 

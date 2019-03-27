@@ -448,7 +448,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     public ArrayList<MapData> readMapData(String name) {
         SQLiteDatabase db = getReadableDatabase();
 
-        String rawQuery = "SELECT AmenitiesName, AmenitiesType, AmenitiesLongitude, AmenitiesLatitude FROM " + TABLE_NAME + " as D, " + HDBFlatType + " as FT WHERE name = FT.HDBDevelopmentName";
+        String rawQuery = "SELECT AmenitiesName, AmenitiesType, AmenitiesLongitude, AmenitiesLatitude FROM " + TABLE_NAME + " as D, " + TABLE_NAME2 + " as FT WHERE name = FT.HDBDevelopmentName";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 

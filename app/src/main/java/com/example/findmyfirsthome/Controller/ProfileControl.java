@@ -1,6 +1,7 @@
 package com.example.findmyfirsthome.Controller;
 
 import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -176,8 +177,7 @@ public class ProfileControl {
         }
     }
 
-    public void writeProfile(){ //XAVIER FUCK YOU
-        ProfileUI ui = new ProfileUI();
+    public void writeProfile(AppCompatActivity ui){ //XAVIER FUCK YOU
         DatabaseController db = new DatabaseController(ui.getApplicationContext());
         db.writeProfileData(ud);
     }
