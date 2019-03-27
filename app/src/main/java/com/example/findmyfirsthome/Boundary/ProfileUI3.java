@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -115,9 +116,11 @@ public class ProfileUI3 extends AppCompatActivity implements View.OnFocusChangeL
 
                 pc.setAllhMembers(hMembersValue,activity);
                 pc.printSalaries();
-
+                Log.d("test", "come here");
+                pc.writeProfile();
                 Intent submitting = new Intent( ProfileUI3.this, HDBDevelopmentUI.class);
                 startActivity(submitting);
+
             }
         });
 

@@ -1,31 +1,47 @@
 package com.example.findmyfirsthome.Controller;
 
-import com.example.findmyfirsthome.Boundary.DBS_API;
+import com.example.findmyfirsthome.Entity.UserData;
+import static java.lang.Math.*;
 
 public class CalculateProfileControl{
-    DBS_API DBSCalc;
+    UserData udSaved = new UserData();              //retrieved from database NOT NEW
+    private final double annualIR = 0.026;
+    private final double monthIR = annualIR/12;
 
-    private double owner1_salary, owner2_salary; //values should be retrieved from database
-    private int owner1_age, owner2_age;
-
-    public CalculateProfileControl(double owner1_salary, double owner2_salary, int owner1_age, int owner2_age) {
-        this.owner1_salary = owner1_salary;
-        this.owner2_salary = owner2_salary;
-        this.owner1_age = owner1_age;
-        this.owner2_age= owner2_age;
-        DBSCalc = new DBS_API(owner1_salary, owner2_salary, owner1_age, owner2_age);
+    public double getMaxLoan(){
+        int loanPeriod = getMaxMortgagePeriod();
+        return (getMonthlyInstallment()) * (Math.pow((1+monthIR),(loanPeriod*12)) -1)/(monthIR * (Math.pow((1+monthIR),(loanPeriod*12))));
     }
 
-    public double calculateMaxPropertyPrice() {
-        return DBSCalc.calculateMaxLoan() * 100/90 ;
+    public double getMonthlyInstallment() {
+        private double financial_commitment = udSaved.getCarLoan() + udSaved.getCreditLoan() + udSaved.getStudyLoan() +  udSaved.getOtherCommitments();
+        private double total_income = udSaved.getGrossSalary()+udSaved.getGrossSalaryPartner();
+        if (financial_commitment < 0.7 * total_income)
+            return 0.30 * (udSaved.getGrossSalary() + udSaved.getGrossSalaryPartner());
+        else
+            return (total_income-financial_commitment);
     }
 
-    public double calculateMonthlyInstallment_Cash() {
-        return DBSCalc.calculateMonthlyInstallment() - 0.23*(owner1_salary+owner2_salary);
+    public int getMaxMortgagePeriod() {
+        int age_mean;
+        if(udSaved.getAgePartner() != 0)
+            age_mean = (int)Math.ceil(((float)(udSaved.getAge() + udSaved.getAgePartner()))/2);
+        else
+            age_mean = udSaved.getAge();
+        if (age_mean >= 21 && age_mean <= 54)
+            return (55 - age_mean);
+        else
+            return (65 - age_mean);
     }
+
+    public double getMaxPropertyPrice() {
+        return getMaxLoan() * 100/90 ;
+    }
+
+    /* public double calculateMonthlyInstallment_Cash() {
+         return DBSCalc.calculateMonthlyInstallment() - 0.23*(owner1_salary+owner2_salary);
+     }*/
     public double calculateDownpayment() {
-        return 0.1 * calculateMaxPropertyPrice();
+        return 0.1 * getMaxPropertyPrice();
     }
-
-    //return values to database controller
 }

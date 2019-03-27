@@ -183,7 +183,6 @@ public class ProfileControl {
         }
     }
 
-    //TODO: Write to database
     public void writeProfile(){
         ProfileUI ui = new ProfileUI();
         DatabaseController db = new DatabaseController(ui.getApplicationContext());
