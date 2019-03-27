@@ -82,7 +82,7 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
         //for Table of FlatType info
         final TableLayout tableLayOut = findViewById(R.id.table_developmentTable);
 
-        HDBFlatTypeDetailsList = ddc.getTableContent();
+        HDBFlatTypeDetailsList = ddc.getHDBFlatTypeDetailsList();
 
         Object temp;
         int rowID = 0;
