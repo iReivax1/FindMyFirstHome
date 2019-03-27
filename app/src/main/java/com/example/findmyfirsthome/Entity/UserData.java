@@ -9,8 +9,8 @@ public class UserData {
     private int age =-1;
     private double grossSalary = 0;
 
-    private boolean isFirstTimeBuyerPartner;
-    private boolean isSingaporeanPartner; //if true is singaporean
+    private boolean isFirstTimeBuyerPartner = true;
+    private boolean isSingaporeanPartner = true; //if true is singaporean
     private int agePartner = -1;
     private double grossSalaryPartner = 0;
 
@@ -25,6 +25,93 @@ public class UserData {
     public int numberOfAdditionalHouseholdMembers;
     ArrayList<Double> membersSalaryList = new ArrayList<Double>();
 
+    //empty constructor
+    public UserData(){
+
+    }
+
+    //userdata constructor for couples, all filled
+    public UserData(boolean isMarried, boolean isFirstTimeBuyer, boolean isSingaporean, int age, double grossSalary, boolean isFirstTimeBuyerPartner, boolean isSingaporeanPartner, int agePartner, double grossSalaryPartner,
+                    double carLoan, double creditLoan, double studyLoan, double otherCommitments, double buyer1CPF, double buyer2CPF, int numberOfAdditionalHouseholdMembers, ArrayList<Double> membersSalaryList){
+        //Compulsory
+        this.isMarried = isMarried;
+        this.isFirstTimeBuyer = isFirstTimeBuyer;
+        this.isSingaporean = isSingaporean; //if true is singaporean
+        this.age = age;
+        this.grossSalary = grossSalary;
+        this.buyer1CPF = buyer1CPF;
+
+        //If isMarried = true
+       this.isFirstTimeBuyerPartner = isFirstTimeBuyerPartner;
+       this.isSingaporeanPartner = isSingaporeanPartner; //if true is singaporean
+       this.agePartner = agePartner;
+       this.grossSalaryPartner = grossSalaryPartner;
+       this.buyer2CPF = buyer2CPF;
+
+       //optional
+       this.carLoan = carLoan;
+       this.creditLoan = creditLoan;
+       this.studyLoan = studyLoan;
+       this.otherCommitments = otherCommitments;
+
+       this.numberOfAdditionalHouseholdMembers = numberOfAdditionalHouseholdMembers;
+       this.membersSalaryList = membersSalaryList;
+    }
+    /*
+    //userdata constructor for couples, no optional filled
+    public UserData(boolean isMarried, boolean isFirstTimeBuyer, boolean isSingaporean, int age, double grossSalary, boolean isFirstTimeBuyerPartner, boolean isSingaporeanPartner, int agePartner, double grossSalaryPartner)
+    {
+        //Compulsory
+        this.isMarried = isMarried;
+        this.isFirstTimeBuyer = isFirstTimeBuyer;
+        this.isSingaporean = isSingaporean; //if true is singaporean
+        this.age = age;
+        this.grossSalary = grossSalary;
+        this.buyer1CPF = buyer1CPF;
+
+        //If isMarried = true
+        this.isFirstTimeBuyerPartner = isFirstTimeBuyerPartner;
+        this.isSingaporeanPartner = isSingaporeanPartner; //if true is singaporean
+        this.agePartner = agePartner;
+        this.grossSalaryPartner = grossSalaryPartner;
+        this.buyer2CPF = buyer2CPF;
+    }
+
+    //userdata constructor for singles, all optional completed
+    public UserData(boolean isMarried, boolean isFirstTimeBuyer, boolean isSingaporean, int age, double grossSalary,
+                    double carLoan, double creditLoan, double studyLoan, double otherCommitments, double buyer1CPF, int numberOfAdditionalHouseholdMembers, ArrayList<Double> membersSalaryList){
+
+        this.isMarried = isMarried;
+        this.isFirstTimeBuyer = isFirstTimeBuyer;
+        this.isSingaporean = isSingaporean; //if true is singaporean
+        this.age = age;
+        this.grossSalary = grossSalary;
+        this.buyer1CPF = buyer1CPF;
+
+        this.carLoan = carLoan;
+        this.creditLoan = creditLoan;
+        this.studyLoan = studyLoan;
+        this.otherCommitments = otherCommitments;
+
+        this.numberOfAdditionalHouseholdMembers = numberOfAdditionalHouseholdMembers;
+        this.membersSalaryList = membersSalaryList;
+    }
+
+    //userdata constructor for singles, no optional
+    public UserData(boolean isMarried, boolean isFirstTimeBuyer, boolean isSingaporean, int age, double grossSalary, boolean isFirstTimeBuyerPartner, boolean isSingaporeanPartner,
+                    double carLoan, double creditLoan, double studyLoan, double otherCommitments, double buyer1CPF, int numberOfAdditionalHouseholdMembers, ArrayList<Double> membersSalaryList){
+
+        this.isMarried = isMarried;
+        this.isFirstTimeBuyer = isFirstTimeBuyer;
+        this.isSingaporean = isSingaporean; //if true is singaporean
+        this.age = age;
+        this.grossSalary = grossSalary;
+        this.buyer1CPF = buyer1CPF;
+
+        this.numberOfAdditionalHouseholdMembers = numberOfAdditionalHouseholdMembers;
+        this.membersSalaryList = membersSalaryList;
+    }
+*/
     //get Set functions
 
     public boolean isMarried() {

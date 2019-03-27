@@ -172,7 +172,7 @@ public class DataGovAPI extends AppCompatActivity {
                     info.put("AmenitiesName", centre_name);
 
                     //Using GEOCODING
-                    coordinates = maps.getAmeneitiesCoordinates(centre_address);
+                    coordinates = maps.getAmenitiesCoordinates(centre_address);
                     info.put("AmenitiesLat", coordinates.latitude);
                     info.put("AmenitiesLng", coordinates.longitude);
 
@@ -213,7 +213,7 @@ public class DataGovAPI extends AppCompatActivity {
                     info.put("AmenitiesName", name_of_centre);
 
                     //Using GEOCODING
-                    coordinates = maps.getAmeneitiesCoordinates(location_of_centre);
+                    coordinates = maps.getAmenitiesCoordinates(location_of_centre);
                     info.put("AmenitiesLat", coordinates.latitude);
                     info.put("AmenitiesLng", coordinates.longitude);
 
@@ -257,7 +257,7 @@ public class DataGovAPI extends AppCompatActivity {
                     info.put("AmenitiesName", schoolName);
 
                     //Using GEOCODING
-                    coordinates = maps.getAmeneitiesCoordinates(postalCode);
+                    coordinates = maps.getAmenitiesCoordinates(postalCode);
                     info.put("AmenitiesLat", coordinates.latitude);
                     info.put("AmenitiesLng", coordinates.longitude);
                     // adding contact to contact list

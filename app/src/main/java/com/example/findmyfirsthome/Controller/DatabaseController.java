@@ -2,6 +2,7 @@ package com.example.findmyfirsthome.Controller;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -87,7 +88,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     public static final String taxRate = "taxRate";
     public static final String annualValue = "annualValue";
 
-    //----------- TABLE COLUMNS for taxRate -----------//
+    //----------- TABLE COLUMNS for calulatedProfile -----------//
     public static final String maxMortgage = "maxMortgage";
     public static final String monthlyInstallment = "monthlyInstallment";
     public static final String maxMortgagePeriod = "maxMortgagePeriod";
@@ -597,6 +598,101 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         return grants;
     }
 
+    public UserData readUserData(){
+
+        UserData ud = null;
+
+        assert getReadableDatabase() != null;
+        SQLiteDatabase db = getReadableDatabase();
+        ArrayList<Double> memList = new ArrayList<>();
+
+        String rawQuery = "SELECT * FROM " + TABLE_NAME5;
+
+        Cursor cursor = db.rawQuery(rawQuery, null);
+
+        while (cursor.moveToNext() && cursor != null) {
+
+            int index;
+            index = cursor.getColumnIndexOrThrow("isMarried");
+            Boolean married = Boolean.parseBoolean(cursor.getString(index));
+
+            index = cursor.getColumnIndexOrThrow("isFirstTimeBuyer");
+            Boolean firstTimeBuyer = Boolean.parseBoolean(cursor.getString(index));
+
+            index = cursor.getColumnIndexOrThrow("isSingapore");
+            Boolean isSG = Boolean.parseBoolean(cursor.getString(index));
+
+            index = cursor.getColumnIndexOrThrow("age");
+            Integer age = Integer.parseInt(cursor.getString(index));
+
+            index = cursor.getColumnIndexOrThrow("grossSalary");
+            Double grossSalary = Double.parseDouble(cursor.getString(index));
+
+            index = cursor.getColumnIndexOrThrow("isFirstTimeBuyerPartner");
+            Boolean partnerFirstTimeBuyer = Boolean.parseBoolean(cursor.getString(index));
+
+            index = cursor.getColumnIndexOrThrow("isSingaporeanPartner");
+            Boolean partnerSG = Boolean.parseBoolean(cursor.getString(index));
+
+            index = cursor.getColumnIndexOrThrow("agePartner");
+            Integer partnerAge = Integer.parseInt(cursor.getString(index));
+
+            index = cursor.getColumnIndexOrThrow("grossSalaryPartner");
+            Double partnerGrossSalary = Double.parseDouble(cursor.getString(index));
+
+            index = cursor.getColumnIndexOrThrow("carLoan");
+            Double carLoan = Double.parseDouble(cursor.getString(index));
+
+            index = cursor.getColumnIndexOrThrow("creditLoan");
+            Double creditLoan = Double.parseDouble(cursor.getString(index));
+
+            index = cursor.getColumnIndexOrThrow("studyLoan");
+            Double studyLoan = Double.parseDouble(cursor.getString(index));
+
+            index = cursor.getColumnIndexOrThrow("otherCommitments");
+            Double otherCommit = Double.parseDouble(cursor.getString(index));
+
+            index = cursor.getColumnIndexOrThrow("buyer1CPF");
+            Double buyer1CPF = Double.parseDouble(cursor.getString(index));
+
+            index = cursor.getColumnIndexOrThrow("buyer2CPF");
+            Double buyer2CPF = Double.parseDouble(cursor.getString(index));
+
+            index = cursor.getColumnIndexOrThrow("numberOfAdditionalHouseholdMembers");
+            Integer numberOfAdditionalHouseholdMembers = Integer.parseInt(cursor.getString(index));
+
+            memList = readMembersSalaryList();
+
+            ud = new UserData(married,firstTimeBuyer,isSG,age,grossSalary,partnerFirstTimeBuyer,partnerSG,partnerAge,partnerGrossSalary,carLoan,creditLoan,studyLoan,otherCommit,buyer1CPF,buyer2CPF,numberOfAdditionalHouseholdMembers,memList);
+
+        }
+
+        return ud;
+
+
+    }
+
+    public ArrayList<Double> readMembersSalaryList(){
+
+        ArrayList<Double> memList = new ArrayList<>();
+        int index;
+
+        assert getReadableDatabase() != null;
+        SQLiteDatabase db = getReadableDatabase();
+        HashMap<String, Double> grants = new HashMap<String, Double>();
+
+        String rawQuery = "SELECT * FROM " + TABLE_NAME6;
+
+        Cursor cursor = db.rawQuery(rawQuery, null);
+
+        while (cursor.moveToNext() && cursor != null) {
+            index = cursor.getColumnIndexOrThrow("membersSalaryList");
+            String membersSalary = cursor.getString(index);
+            Double salary = Double.parseDouble(membersSalary);
+            memList.add(salary);
+        }
+            return memList;
+    }
 
     private HDBDevelopment createHDBDevelopmentObject(ArrayList<HashMap<String, Object>> HDBFTList, String HDBDevelopmentName, String HDBDevelopmentDescription, boolean affordable, LatLng coordinates, ArrayList<MapData> amenities, String ImgURL) {
         HDBDevelopment HDBD = new HDBDevelopment(HDBFTList, HDBDevelopmentName, HDBDevelopmentDescription, false, coordinates, amenities, ImgURL);
