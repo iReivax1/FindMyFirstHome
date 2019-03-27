@@ -14,6 +14,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -38,8 +39,8 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     private ArrayList<HashMap<String, Object>> ListFlatTypePrice1 = new ArrayList<HashMap<String, Object>>();
     private ArrayList<HashMap<String, Object>> ListFlatTypePrice2 = new ArrayList<HashMap<String, Object>>();
     private ArrayList<HashMap<String, Object>> ListFlatTypePrice3 = new ArrayList<HashMap<String, Object>>();
-    private HashMap<String, HashMap<String, Double>> firstTimerGrantList = new HashMap<String, HashMap<String, Double>>();
-    private HashMap<String, HashMap<String, Double>> fsTimerGrantList = new HashMap<String, HashMap<String, Double>>();
+    private LinkedHashMap<String, LinkedHashMap<String, Double>> firstTimerGrantList = new LinkedHashMap<String, LinkedHashMap<String, Double>>();
+    private LinkedHashMap<String, LinkedHashMap<String, Double>> fsTimerGrantList = new LinkedHashMap<String, LinkedHashMap<String, Double>>();
     private ArrayList<String> descriptionText1 = new ArrayList<>();
     private ArrayList<String> descriptionText2 = new ArrayList<>();
     private ArrayList<String> descriptionText3 = new ArrayList<>();
@@ -107,7 +108,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         //scrap grants
         firstTimerGrantList = scrapGrants(urlGrants1); //ERROR HERE ALSO hashmap is unordered collection , change to orderedSet TODO;
         printGrants(firstTimerGrantList);
-        //fsTimerGrantList = scrapGrants(urlGrants2);
+        fsTimerGrantList = scrapGrants(urlGrants2);
 
         //HDBDevelopmentName => HDBDevelopmentName
         //Flat type for that hdb name => ListFlatTypePrice
@@ -145,7 +146,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         return true;
     }
 
-    public void adaptGrants(HashMap<String, HashMap<String, Double>> list) {
+    public void adaptGrants(LinkedHashMap<String, LinkedHashMap<String, Double>> list) {
 
         for (String key : list.keySet()) {
             String incomeReq = key;
@@ -295,13 +296,13 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
 
 //    ----------------------------------------Scrap Grants--------------------------------------------
 //    FYI if both second timer : $15,000 straight
-    public HashMap<String, HashMap<String, Double>> scrapGrants(String url) {
+    public LinkedHashMap<String, LinkedHashMap<String, Double>> scrapGrants(String url) {
         String grant = "0";
         Elements cols = null;
         Element col = null;
         Element row = null;
-        HashMap<String, HashMap<String, Double>> grantList = new HashMap<String, HashMap<String, Double>>();  //HM<IncomeRequired, HM<GrantType, GrantAmt>>
-        HashMap<String, Double> tempHM = new HashMap<String, Double>();
+        LinkedHashMap<String, LinkedHashMap<String, Double>> grantList = new LinkedHashMap<String, LinkedHashMap<String, Double>>();  //HM<IncomeRequired, HM<GrantType, GrantAmt>>
+        LinkedHashMap<String, Double> tempHM = new LinkedHashMap<String, Double>();
         ArrayList<String> incomeReq = new ArrayList<String>();
         List<Double> AHG = new ArrayList<Double>();
         List<Double> SHG = new ArrayList<Double>();
@@ -368,7 +369,6 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
                 //Log.i("scrapGrans", incomeReq.get(i)); //scraping is fine
                 grantList.put(incomeReq.get(i), tempHM); // this got problem TODO: PROBLEM IS HERE, hasmap is unordered MOFO
             }
-            printGrants(grantList);
             return grantList;
         } catch (IOException e) {
             e.printStackTrace();
@@ -423,7 +423,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         System.out.println("index: " + i + string[i]);
     }
 
-    public static void printGrants(HashMap<String, HashMap<String, Double>> list) {
+    public static void printGrants(LinkedHashMap<String, LinkedHashMap<String, Double>> list) {
         for (String key : list.keySet()) {
             String incomeReq = key;
             System.out.println("-----------------Inside the printGrants-----------------");
