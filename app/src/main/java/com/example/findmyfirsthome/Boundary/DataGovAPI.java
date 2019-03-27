@@ -45,8 +45,6 @@ public class DataGovAPI extends AppCompatActivity {
     String schoolURL = "https://data.gov.sg/api/action/datastore_search?resource_id=ede26d32-01af-4228-b1ed-f05c45a1d8ee&limit=";
     String taxURL = "https://data.gov.sg/api/action/datastore_search?resource_id=bb6f5bf8-7d0b-4526-b020-b812ea7d7d89&limit=10";
     String url;  // This will hold the full URL which will include the username entered in the etGitHubUser.
-    ArrayList<HashMap<String, String>> infoList = new ArrayList<>();
-    ArrayList<HashMap<String, String>> taxList = new ArrayList<>();
     MapAPI maps = new MapAPI();
 
     @Override
@@ -63,7 +61,7 @@ public class DataGovAPI extends AppCompatActivity {
     }
 
     private void clearRepoList() {
-        // This will clear the repo list (set it as a blank string).
+        // This will clear the list (set it as a blank string).
         this.dataList.setText("");
     }
 
@@ -82,7 +80,6 @@ public class DataGovAPI extends AppCompatActivity {
 
     //limit is the limit number for the number of search queries > 1 please.
     private void getList(String type, String limit) {
-        // The repo url is defined in GitHubs API docs (https://developer.github.com/v3/repos/).
         //this is the datagov limit
         this.typeData = type;
 
@@ -176,11 +173,17 @@ public class DataGovAPI extends AppCompatActivity {
                     // adding each child node to HashMap key => value
                     info.put("AmenitiesType", "ChildCare");
                     info.put("AmenitiesName", centre_name);
+
                     //Using GEOCODING
                     coordinates = maps.getAmeneitiesCoordinates(centre_address);
                     info.put("AmenitiesLat", coordinates.latitude);
                     info.put("AmenitiesLng", coordinates.longitude);
                     writeAmenitiesToDB(info);
+
+
+                    //For UI purpose, just for testing
+                    addToList("childCare", centre_name, centre_address);
+
                 }
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
@@ -221,6 +224,10 @@ public class DataGovAPI extends AppCompatActivity {
                     info.put("AmenitiesLng", coordinates.longitude);
                     // adding contact to contact list
                     writeAmenitiesToDB(info);
+
+                    //For UI purpose, just for testing
+                    addToList("market", name_of_centre, location_of_centre);
+
                 }
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
@@ -256,8 +263,6 @@ public class DataGovAPI extends AppCompatActivity {
                     // adding each child node to HashMap key => value
                     info.put("AmenitiesType", "School");
                     info.put("AmenitiesName", schoolName);
-                    info.put("AmenitiesAddress", postalCode);
-
 
                     //Using GEOCODING
                     coordinates = maps.getAmeneitiesCoordinates(postalCode);
@@ -266,6 +271,10 @@ public class DataGovAPI extends AppCompatActivity {
                     // adding contact to contact list
                     //infoList.add(info);
                     writeAmenitiesToDB(info);
+
+                    //For UI purpose, just for testing
+                    addToList("school", schoolName, postalCode);
+
                 }
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
