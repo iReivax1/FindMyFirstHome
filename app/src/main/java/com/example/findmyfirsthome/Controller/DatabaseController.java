@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 import com.example.findmyfirsthome.Boundary.MapAPI;
+import com.example.findmyfirsthome.Entity.CalculatedProfile;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
 import com.example.findmyfirsthome.Entity.MapData;
 import com.example.findmyfirsthome.Entity.UserData;
@@ -113,7 +114,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
 
     public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + HDBFlatAffordability + " BOOLEAN, " + " FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
 
-    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + " (" +  AmenitiesName + " TEXT PRIMARY KEY, " +  AmenitiesType + " TEXT, " + AmenitiesLongitude + " TEXT, " + AmenitiesLatitude + " TEXT " + ");";
+    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + " (" +  AmenitiesName + " TEXT PRIMARY KEY, " +  AmenitiesType + " TEXT, " + AmenitiesLongitude + " REAL, " + AmenitiesLatitude + " REAL " + ");";
 
     public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + IncomeRequired + " TEXT, " + GrantType + " TEXT, " + GrantAmount + " REAL " + ");";
 
@@ -126,7 +127,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
 
     public static final String SQL_TaxList = "CREATE TABLE " + TABLE_NAME7 + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + typeOfProperty + " TEXT, " + annualValue + " REAL, "  + taxRate + " REAL " + ");";
 
-    public static final String SQL_CalculatedProfile = "CREATE TABLE " + TABLE_NAME8 + " (" +  ID + " TEXT PRIMARY KEY AUTOINCREMENT, " +  maxMortgage + " REAL, " + monthlyInstallment + " REAL, " + maxMortgagePeriod + " REAL, " + maxPropertyPrice + " REAL, " + downpayment + " REAL, " + AHG + " REAL, " + SHG + " REAL " + ");";
+    public static final String SQL_CalculatedProfile = "CREATE TABLE " + TABLE_NAME8 + " (" +  ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +  maxMortgage + " REAL, " + monthlyInstallment + " REAL, " + maxMortgagePeriod + " REAL, " + maxPropertyPrice + " REAL, " + downpayment + " REAL, " + AHG + " REAL, " + SHG + " REAL " + ");";
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
     private static final String SQL_DELETE_ENTRIES2 = "DROP TABLE IF EXISTS " + TABLE_NAME2;
@@ -239,23 +240,23 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         db.close();
     }
 
-    public boolean writeAmenitiesData(ArrayList<HashMap<String, String>> infoList) {
+    public boolean writeAmenitiesData(HashMap<String, Object> infoList) {
 
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
 
-        for (HashMap<String, String> i : infoList) {
-            for (String key : i.keySet()) {
+        for (String key : infoList.keySet()) {
                 if (key.equals("AmenitiesType")) {
-                    values.put(AmenitiesType, i.get(key));
+                    values.put(AmenitiesType, infoList.get(key).toString());
                 } else if (key.equals("AmenitiesName")) {
-                    values.put(AmenitiesName, i.get(key));
-                } else {
-                    values.put(AmenitiesAddress, i.get(key));
+                    values.put(AmenitiesName, infoList.get(key).toString());
+                } else if(key.equals("AmenitiesLng")){
+                    values.put(AmenitiesLongitude, (Double)infoList.get(key));
+                } else if(key.equals("AmenitiesLat")){
+                    values.put(AmenitiesLatitude, (Double)infoList.get(key));
                 }
-            }
         }
 
         long newRowId = db.insert(TABLE_NAME3, null, values);
@@ -347,11 +348,57 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         return true;
     }
 
-    public boolean writeCalculatedProfile(){
+    public boolean writeCalculatedProfile(CalculatedProfile cp){
 
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(maxMortgage,cp.getMaxMortgage());
+        values.put(monthlyInstallment,cp.getMonthlyInstallment());
+        values.put(maxMortgagePeriod,cp.getMaxMortgagePeriod());
+        values.put(maxPropertyPrice,cp.getMaxPropertyPrice());
+        values.put(downpayment,cp.getDownpayment());
+        values.put(AHG,cp.getAHG());
+        values.put(SHG,cp.getSHG());
+        long newRowId = db.insert(TABLE_NAME8, null, values);
+        db.close();
+        return true;
     }
 
 //////////////////////////////////////Read functions///////////////////////////////////////////////////////////////////////
+
+    public CalculatedProfile readCalculatedProfile() {
+
+        SQLiteDatabase db = getReadableDatabase();
+        String rawQuery = "SELECT * FROM " + TABLE_NAME8;
+        Cursor cursor = db.rawQuery(rawQuery,null);
+        double AHG=0.0;
+        double SHG=0.0;
+        double maxMortgage=0.0;
+        double monthlyInstallment=0.0;
+        double maxMortgagePeriod=0.0;
+        double maxPropertyPrice=0.0;
+        double downpayment=0.0;
+
+        while (cursor.moveToNext() && cursor != null){
+            int index;
+            index = cursor.getColumnIndexOrThrow("maxMortgage");
+            maxMortgage = cursor.getDouble(index);
+            index = cursor.getColumnIndexOrThrow("monthlyInstallment");
+            monthlyInstallment = cursor.getDouble(index);
+            index = cursor.getColumnIndexOrThrow("maxMortgagePeriod");
+            maxMortgagePeriod = cursor.getDouble(index);
+            index = cursor.getColumnIndexOrThrow("downpayment");
+            downpayment = cursor.getDouble(index);
+            index = cursor.getColumnIndexOrThrow("AHG");
+            AHG = cursor.getDouble(index);
+            index = cursor.getColumnIndexOrThrow("SHG");
+            SHG = cursor.getDouble(index);
+        }
+        cursor.close();
+        CalculatedProfile cp = new CalculatedProfile(AHG,SHG,maxMortgage,monthlyInstallment,maxMortgagePeriod,maxPropertyPrice,downpayment);
+
+        return cp;
+    }
 
     public ArrayList<HDBDevelopment> readHDBData() {
         SQLiteDatabase db = getReadableDatabase();

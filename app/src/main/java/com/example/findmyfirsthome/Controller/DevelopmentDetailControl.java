@@ -66,7 +66,7 @@ public class DevelopmentDetailControl {
     //public String getDevelopmentName() { return "Eton Pre-School"; }
 
     //return ArrayList of FlatType contents to the boundary
-    public ArrayList<HashMap<String, Object>> getTableContent()
+    public ArrayList<HashMap<String, Object>> getHDBFlatTypeDetailsList()
     {
         //get from development entity the ArrayList of FlatType details of that estate/development
         flatTypeListDetails = hdbd.getHDBFlatTypeDetailsList();
