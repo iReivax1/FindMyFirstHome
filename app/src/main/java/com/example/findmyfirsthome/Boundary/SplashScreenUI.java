@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.findmyfirsthome.Controller.DownloadFileManager;
 import com.example.findmyfirsthome.Controller.StartupControl;
 import com.example.findmyfirsthome.R;
 
