@@ -10,7 +10,7 @@ import java.util.HashMap;
 import static java.lang.Math.*;
 
 public class AffordabilityReportController {
-    private DatabaseController dbc;
+    private DataAccessInterfaceClass dbc;
     private CalculatedProfile cp;
     private HDBDevelopment hdbd;
     private String hdbName, flatType;
