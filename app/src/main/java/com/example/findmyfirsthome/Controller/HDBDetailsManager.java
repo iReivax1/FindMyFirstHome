@@ -49,6 +49,11 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     private String ImgURL3;
     private Context mContext;
 
+    public static final int incomeRequired = 0;
+    public static final int AHG = 1;
+    public static final int SHG = 2;
+
+
 
     public HDBDetailsManager (Context mContext){
         this.mContext=mContext;
@@ -109,7 +114,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         firstTimerGrantList = scrapGrants(urlGrants1); //ERROR HERE ALSO hashmap is unordered collection , change to orderedSet TODO;
         printGrants(firstTimerGrantList);
         fsTimerGrantList = scrapGrants(urlGrants2);
-
+        printGrants(fsTimerGrantList);
         //HDBDevelopmentName => HDBDevelopmentName
         //Flat type for that hdb name => ListFlatTypePrice
         return null;
@@ -302,7 +307,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         Element col = null;
         Element row = null;
         LinkedHashMap<String, LinkedHashMap<String, Double>> grantList = new LinkedHashMap<String, LinkedHashMap<String, Double>>();  //HM<IncomeRequired, HM<GrantType, GrantAmt>>
-        LinkedHashMap<String, Double> tempHM = new LinkedHashMap<String, Double>();
+        LinkedHashMap<String, Double> tempHM;
         ArrayList<String> incomeReq = new ArrayList<String>();
         List<Double> AHG = new ArrayList<Double>();
         List<Double> SHG = new ArrayList<Double>();
@@ -360,14 +365,14 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
             }
 
             for (int i = 0; i < rows.size(); i++) {
-
-                //Log.i("AHG grant: ",  SHG.get(i).toString());
+                tempHM = new LinkedHashMap<String, Double>();
+                //Log.i("SHG grant: ",  SHG.get(i).toString());
                 tempHM.put("SHG", SHG.get(i));
                 //Log.i("AHG grant: ",  AHG.get(i).toString());
                 tempHM.put("AHG", AHG.get(i));
-                //print(tempHM); //HM got no problem
+               // print(tempHM); //HM got no problem
                 //Log.i("scrapGrans", incomeReq.get(i)); //scraping is fine
-                grantList.put(incomeReq.get(i), tempHM); // this got problem TODO: PROBLEM IS HERE, hasmap is unordered MOFO
+                grantList.put(incomeReq.get(i), tempHM); // this got problem TODO: PROBLEM IS HERE
             }
             return grantList;
         } catch (IOException e) {
