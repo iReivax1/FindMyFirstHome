@@ -22,8 +22,8 @@ import java.util.List;
 public class HDBAdapter extends RecyclerView.Adapter<HDBAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<String> hdbList = new ArrayList<>();
-    private List<String> hdbUrl = new ArrayList<>();
+    private static List<String> hdbList = new ArrayList<>();
+    private static List<String> hdbUrl = new ArrayList<>();
 
     public HDBAdapter(Context mContext, List<String> hdbList, List<String> hdbUrl) {
         this.mContext = mContext;
