@@ -2,6 +2,7 @@ package com.example.findmyfirsthome.Boundary;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -18,7 +19,19 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -243,6 +256,7 @@ public class DataGovAPI extends AppCompatActivity {
     public void JSONParserTax(JSONObject obj) {
         if (obj != null) {
             HashMap<String, String> info = new HashMap<>();
+            ArrayList<HashMap<String, String>> infoList = new ArrayList<>();
             try {
                 JSONObject jsonObj = obj;
                 //Log.d("test", obj.toString());
@@ -264,9 +278,10 @@ public class DataGovAPI extends AppCompatActivity {
                     info.put("typeOfProperty", typeOfProperty);
                     info.put("taxRate", taxRate);
                     info.put("annualValue", annualValue);
+                    infoList.add(info);
 
                 }
-                writeTaxToDB(info);
+                writeTaxToDB(infoList);
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
             }
@@ -277,13 +292,45 @@ public class DataGovAPI extends AppCompatActivity {
 
     }
 
-    public void writeAmenitiesToDB( HashMap<String, Object> list){
+    public void writeAmenitiesToDB(HashMap<String, Object> list){
         DatabaseController db = DatabaseController.getInstance(context);
         db.writeAmenitiesData(list);
     }
 
-    public void writeTaxToDB(HashMap<String, String> info){
-        // TODO: write tax list to DB
+    public void writeTaxToDB(ArrayList<HashMap<String, String>> infoList){
+        DatabaseController db = DatabaseController.getInstance(context);
+        db.writeTax(infoList);
+    }
+
+
+    private String readFile()
+    {
+        String myData = "";
+        File myExternalFile = new File("assets/","market-food-centre.kml"); //find where to save the files
+
+        String xmlContent = "";
+        //DocumentsContract.Document doc = Jsoup.parse(xmlContent, "", Parser.xmlParser());
+
+        /*for(Element e : doc.select("LineString").select("coordinates")) {
+            // the contents
+            System.out.println(e.text());
+        }*/
+        try {
+            FileInputStream fis = new FileInputStream(myExternalFile);
+            DataInputStream in = new DataInputStream(fis);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
+            String strLine;
+            while ((strLine = br.readLine()) != null) {
+                myData = myData + strLine + "\n";
+            }
+            br.close();
+            in.close();
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return myData;
     }
 
 
@@ -292,7 +339,6 @@ public class DataGovAPI extends AppCompatActivity {
 
 //////////////////////////////////////////////
 // TODO:KML  to parse:
-// https://data.gov.sg/dataset/pre-schools-location
 // https://data.gov.sg/dataset/chas-clinics?resource_id=21dace06-c4d1-4128-9424-aba7668050dc
 // https://geo.data.gov.sg/market-food-centre/2014/12/26/kml/market-food-centre.kml
 // https://geo.data.gov.sg/g-mp08-act-mrt-stn-pt/2011/03/29/kml/g-mp08-act-mrt-stn-pt.zip

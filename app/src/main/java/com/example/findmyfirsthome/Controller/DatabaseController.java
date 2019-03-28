@@ -27,7 +27,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
 
 
     //Change version if schema changed;
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     //----------- TABLE COLUMNS for ALL -----------//
     public static final String ID = "ID";
@@ -142,15 +142,12 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    private static volatile DatabaseController instance;
+    private static volatile DatabaseController instance = null;
 
     public static DatabaseController getInstance(Context cont) {
         if (instance == null) {
-            synchronized (DatabaseController.class) {
-                if (instance == null) {
-                    instance = new DatabaseController(cont);
-                }
-            }
+            instance = new DatabaseController(cont);
+            instance.deleteTables();
         }
         return instance;
     }
@@ -194,6 +191,13 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
 
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
+    }
+
+    private void deleteTables()
+    {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        onCreate(sqLiteDatabase);
+        sqLiteDatabase.close();
     }
 
     /////////////////////////////////////////////////////////////////////Write Functions/////////////////////////////////////////////////////////////////////
@@ -243,10 +247,10 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         ContentValues values = new ContentValues();
         values.put(HDBDevelopmentName, name);
         for (String key : ListFlatType.keySet()) {
-            String obj;
+            String obj = ListFlatType.get(key).toString();
             if (key.contains("price")) {
-                obj = (ListFlatType.get(key).toString()).replace(",", "").substring(6);
                 values.put(HDBFlatPrice, Double.valueOf(obj));
+                //System.out.println("Write" + Double.valueOf(obj)); write is coorect
             } else if (key.contains("flatType")) {
                 values.put(HDBFlatType, ListFlatType.get(key).toString());
             } else if (key.contains("affordability")) {
@@ -415,6 +419,8 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
             AHG = cursor.getDouble(index);
             index = cursor.getColumnIndexOrThrow("SHG");
             SHG = cursor.getDouble(index);
+            index = cursor.getColumnIndexOrThrow("maxPropertyPrice");
+            maxPropertyPrice = cursor.getDouble(index);
         }
         cursor.close();
         CalculatedProfile cp = new CalculatedProfile(AHG,SHG,maxMortgage,monthlyInstallment,maxMortgagePeriod,maxPropertyPrice,downpayment);
@@ -444,17 +450,17 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         if (cursor.moveToFirst()){
             while (cursor != null) {
                 DevelopmentName = cursor.getString(cursor.getColumnIndexOrThrow("HDBDevelopmentName"));
-                System.out.println("1.1 "+DevelopmentName);
+                //System.out.println("1.1 "+DevelopmentName);
                 DevelopmentDescription = cursor.getString(cursor.getColumnIndexOrThrow("HDBdevelopmentDescription"));
-                System.out.println("1.2 "+DevelopmentDescription);
+                //System.out.println("1.2 "+DevelopmentDescription);
                 Double DevelopmentLongitude = cursor.getDouble(cursor.getColumnIndexOrThrow("Longitude"));
-                System.out.println("1.3 "+DevelopmentLongitude);
+                //System.out.println("1.3 "+DevelopmentLongitude);
                 Double DevelopmentLatitude = cursor.getDouble(cursor.getColumnIndexOrThrow("Latitude"));
-                System.out.println("1.4 "+DevelopmentLatitude);
+                //System.out.println("1.4 "+DevelopmentLatitude);
                 DevelopmentImgURL = cursor.getString(cursor.getColumnIndexOrThrow("ImgURL"));
-                System.out.println("1.5 "+DevelopmentImgURL);
+                //System.out.println("1.5 "+DevelopmentImgURL);
                 coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
-                System.out.println("1.6 "+coord);
+                //System.out.println("1.6 "+coord);
                 mdList = readMapData(DevelopmentName);
                 HDBFTList = readHDBFlatType(DevelopmentName);
 
@@ -569,14 +575,16 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
 
         if(cursor.moveToFirst()) {
             while (cursor != null) {
-                Double HDBFlatPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("HDBFlatPrice"));
 
                 String HDBFlatType = cursor.getString(cursor.getColumnIndexOrThrow("HDBFlatType"));
+                Double HDBFlatPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("HDBFlatPrice"));
+                //System.out.println(HDBFlatType + " " +HDBFlatPrice);
+
 
                 //add data to flatType
                 flatTypeDetails = new HashMap<String, Object>();
-                flatTypeDetails.put("price", HDBFlatPrice);
                 flatTypeDetails.put("flatType", HDBFlatType);
+                flatTypeDetails.put("price", HDBFlatPrice);
                 flatTypeDetails.put("affordability", false);
                 HDBFlatTypedetailsList.add(flatTypeDetails);
                 if(cursor.isLast()) break;
@@ -626,7 +634,8 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         HashMap<String, Double> grants = new HashMap<String, Double>();
 
 
-        String rawQuery = "SELECT GrantType, GrantAmount FROM " + TABLE_NAME4 + " as D" + " WHERE incomeReq = D.incomeReq";
+
+        String rawQuery = "SELECT GrantType, GrantAmount FROM " + TABLE_NAME4 + " as D" + " WHERE D.IncomeRequired = '" + incomeReq +"'";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 

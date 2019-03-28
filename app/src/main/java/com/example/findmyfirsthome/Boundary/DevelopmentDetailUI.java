@@ -2,6 +2,8 @@ package com.example.findmyfirsthome.Boundary;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
@@ -124,7 +126,10 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
             generateReportButton.setLayoutParams(new FrameLayout.LayoutParams(200, 75));    //size for button
             generateReportButton.setPadding(0, 0, 0, 0);    //to not crop the words because default have some padding
             generateReportButton.setTextColor(Color.parseColor("#FFFFFF")); //set text to white color
-            generateReportButton.setBackground(getDrawable(R.drawable.generate_report_btn));    //set round corner button
+            Drawable genButtonBackGround = getDrawable(R.drawable.generate_report_btn);
+            genButtonBackGround.setColorFilter((Boolean) HDBFlatTypeDetails.get("affordability") ? Color.parseColor("#0000FF") : Color.parseColor("#696969"), PorterDuff.Mode.SRC_ATOP);
+            generateReportButton.setBackground(genButtonBackGround);    //set round corner button
+            generateReportButton.setEnabled((Boolean) HDBFlatTypeDetails.get("affordability") ? true : false);  //enable button only if can afford that flat type
             generateReportButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

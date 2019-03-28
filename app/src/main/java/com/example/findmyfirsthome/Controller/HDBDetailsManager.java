@@ -50,6 +50,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     ArrayList<String> centralImg = new ArrayList<>();
     ArrayList<String> northEastImg = new ArrayList<>();
     ArrayList<String> imageWest = new ArrayList<>();
+    private DatabaseController db;
 
     private Context mContext;
 
@@ -162,30 +163,32 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     public void adaptGrants(LinkedHashMap<String, LinkedHashMap<String, Double>> list) {
 
         for (String key : list.keySet()) {
-            String incomeReq = key;
-            HashMap<String, Double> grant = list.get(key);
-            writeHDBGrantData(incomeReq, grant);
-           //String temp = "from adapt " + incomeReq;
-           //Log.d("adapt",temp);
-            //System.out.println("grant: " + list.get(key).toString());
+            HashMap<String, Double> sub = list.get(key);
+            for(String subKey: sub.keySet()){
+                String tempKey = subKey;
+                Double tempValue = sub.get(subKey);
+                LinkedHashMap<String, Double> temp = new LinkedHashMap<String, Double>();
+                temp.put(tempKey,tempValue);
+                writeHDBGrantData(key,temp);
+            }
         }
     }
 
 //  ----------------------------------------Write functions to database object--------------------------------------------
 
     public void writeHDBData(String HDBDevelopmentNames, String descriptionText, String ImgURL, Boolean affordable){
-        DatabaseController db = DatabaseController.getInstance(mContext);
+        db = DatabaseController.getInstance(mContext);
         db.writeHDBData(HDBDevelopmentNames,descriptionText,ImgURL, affordable);
 
     }
 
     public void writeHDBFlatData(String HDBDevelopmentNames, HashMap<String, Object> ListFlatType){
-        DatabaseController db = DatabaseController.getInstance(mContext);
+        db = DatabaseController.getInstance(mContext);
         db.writeHDBFlatTypeData(HDBDevelopmentNames,ListFlatType);
     }
 
     public void writeHDBGrantData(String incomeReq, HashMap<String, Double> grant){
-        DatabaseController db = DatabaseController.getInstance(mContext);
+        db = DatabaseController.getInstance(mContext);
         db.writeHDBGrantData(incomeReq, grant);
 //        String temp = "from writeHDBData " + incomeReq;
 //        Log.d("manager",temp);
@@ -271,7 +274,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
 
             String rooms = cols.get(2).text();
             String price = cols.get(3).text();
-
+            price = price.replace(",", "").substring(6);
             ///////////1 hashMap/////////////////////
             flatType = new HashMap<String, Object>();
             flatType.put("price", price);
@@ -288,7 +291,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
                 cols = row.select("td");
                 rooms = cols.get(0).text();
                 price = cols.get(1).text();
-
+                price = price.replace(",", "").substring(6);
                 ///////////1 hashMap/////////////////////
                 flatType = new HashMap<String, Object>();
                 flatType.put("price", price);
