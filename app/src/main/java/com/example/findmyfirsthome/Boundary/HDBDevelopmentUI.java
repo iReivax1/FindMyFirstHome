@@ -8,8 +8,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.example.findmyfirsthome.Controller.HDBDevelopmentController;
 import com.example.findmyfirsthome.R;
+
+import java.util.List;
 
 public class HDBDevelopmentUI extends AppCompatActivity implements View.OnClickListener {
 
@@ -17,6 +21,8 @@ public class HDBDevelopmentUI extends AppCompatActivity implements View.OnClickL
     private ViewPager viewPager;
     private HDBViewPagerAdapter adapter;
     private Button recalculate;
+    private TextView footerText;
+    HDBDevelopmentController hdbc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +33,14 @@ public class HDBDevelopmentUI extends AppCompatActivity implements View.OnClickL
         viewPager = (ViewPager) findViewById(R.id.viewpager_id);
         adapter = new HDBViewPagerAdapter(getSupportFragmentManager());
         recalculate = (Button) findViewById(R.id.footer_button);
+        footerText = (TextView) findViewById(R.id.footer_text);
+
+        //display footerText
+        hdbc = new HDBDevelopmentController(this);
+        List<String> footerDetails = hdbc.getFooterDetails();
+        footerText.setText("Maximum Property Purchase Price: $" + footerDetails.get(0) +
+                "\nMaximum Mortgage Amount: $" + footerDetails.get(1) +
+                "\nMaximum Mortgage Term: " + footerDetails.get(2) + " years");
 
         // Add Fragment here
         adapter.AddFragment(new HDBFragment_Rec(), "Recommended");
