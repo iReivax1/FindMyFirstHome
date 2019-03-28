@@ -27,7 +27,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
 
 
     //Change version if schema changed;
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
 
     //----------- TABLE COLUMNS for ALL -----------//
     public static final String ID = "ID";
@@ -154,6 +154,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         sqLiteDatabase.execSQL(SQL_membersSalaryList_);
         sqLiteDatabase.execSQL(SQL_TaxList);
         sqLiteDatabase.execSQL(SQL_CalculatedProfile);
+        
     }
 
     //If Database version is difference, delete all current entries and re-create new DBs

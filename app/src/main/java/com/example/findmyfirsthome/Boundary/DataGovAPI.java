@@ -149,9 +149,11 @@ public class DataGovAPI extends AppCompatActivity {
                     info.put("AmenitiesName", centre_name);
 
                     //Using GEOCODING
-//                    coordinates = maps.getAmenitiesCoordinates(centre_address);
-//                    info.put("AmenitiesLat", coordinates.latitude);
-//                    info.put("AmenitiesLng", coordinates.longitude);
+                    coordinates = maps.getAmenitiesCoordinates(centre_address);
+                    info.put("AmenitiesLat", coordinates.latitude);
+                    System.out.println(Double.toString(coordinates.latitude));
+                    info.put("AmenitiesLng", coordinates.longitude);
+                    System.out.println(Double.toString(coordinates.longitude));
 
                 }
                 writeAmenitiesToDB(info);
