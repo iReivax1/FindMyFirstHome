@@ -142,11 +142,12 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    private static DatabaseController instance = null;
+    private static volatile DatabaseController instance = null;
 
-    public static synchronized DatabaseController getInstance(Context cont) {
+    public static DatabaseController getInstance(Context cont) {
         if (instance == null) {
             instance = new DatabaseController(cont);
+            instance.deleteTables();
         }
         return instance;
     }
@@ -154,14 +155,14 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         //On creation of DBC the table SQL_HDB will be created
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES2);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES3);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES4);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES5);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES6);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES7);
         sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES8);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES7);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES6);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES5);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES4);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES3);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES2);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
         sqLiteDatabase.execSQL(SQL_HDBDevelopment);
         sqLiteDatabase.execSQL(SQL_FlatType);
         sqLiteDatabase.execSQL(SQL_Amenities);
@@ -177,19 +178,26 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES2);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES3);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES4);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES5);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES6);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES7);
         sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES8);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES7);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES6);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES5);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES4);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES3);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES2);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
         onCreate(sqLiteDatabase);
     }
 
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
+    }
+
+    private void deleteTables()
+    {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        onCreate(sqLiteDatabase);
+        sqLiteDatabase.close();
     }
 
     /////////////////////////////////////////////////////////////////////Write Functions/////////////////////////////////////////////////////////////////////
@@ -243,7 +251,6 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
             if (key.contains("price")) {
                 obj = (ListFlatType.get(key).toString()).replace(",", "").substring(6);
                 values.put(HDBFlatPrice, Double.valueOf(obj));
-                System.out.print(HDBFlatPrice);
             } else if (key.contains("flatType")) {
                 values.put(HDBFlatType, ListFlatType.get(key).toString());
             } else if (key.contains("affordability")) {
@@ -441,17 +448,17 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         if (cursor.moveToFirst()){
             while (cursor != null) {
                 DevelopmentName = cursor.getString(cursor.getColumnIndexOrThrow("HDBDevelopmentName"));
-                //System.out.println("1.1 "+DevelopmentName);
+                System.out.println("1.1 "+DevelopmentName);
                 DevelopmentDescription = cursor.getString(cursor.getColumnIndexOrThrow("HDBdevelopmentDescription"));
-                //System.out.println("1.2 "+DevelopmentDescription);
+                System.out.println("1.2 "+DevelopmentDescription);
                 Double DevelopmentLongitude = cursor.getDouble(cursor.getColumnIndexOrThrow("Longitude"));
-                //System.out.println("1.3 "+DevelopmentLongitude);
+                System.out.println("1.3 "+DevelopmentLongitude);
                 Double DevelopmentLatitude = cursor.getDouble(cursor.getColumnIndexOrThrow("Latitude"));
-                //System.out.println("1.4 "+DevelopmentLatitude);
+                System.out.println("1.4 "+DevelopmentLatitude);
                 DevelopmentImgURL = cursor.getString(cursor.getColumnIndexOrThrow("ImgURL"));
-                //System.out.println("1.5 "+DevelopmentImgURL);
+                System.out.println("1.5 "+DevelopmentImgURL);
                 coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
-                //System.out.println("1.6 "+coord);
+                System.out.println("1.6 "+coord);
                 mdList = readMapData(DevelopmentName);
                 HDBFTList = readHDBFlatType(DevelopmentName);
 
@@ -623,7 +630,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         HashMap<String, Double> grants = new HashMap<String, Double>();
 
 
-        String rawQuery = "SELECT GrantType, GrantAmount FROM " + TABLE_NAME4 + " as D" + " WHERE " + "'" + incomeReq + "'" + " = D.IncomeRequired";
+        String rawQuery = "SELECT GrantType, GrantAmount FROM " + TABLE_NAME4 + " as D" + " WHERE incomeReq = D.incomeReq";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
