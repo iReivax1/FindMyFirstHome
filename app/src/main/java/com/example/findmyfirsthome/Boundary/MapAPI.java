@@ -20,7 +20,7 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
 
 
     private GoogleMap mMap;
-    Context context = getApplicationContext();
+    Context context = this;
 
 
     public void onPause() {
@@ -36,7 +36,6 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        this.context = getApplicationContext();
     }
 
     @Override
