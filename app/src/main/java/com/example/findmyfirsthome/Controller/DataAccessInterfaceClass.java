@@ -11,7 +11,7 @@ import java.util.HashMap;
 public interface DataAccessInterfaceClass {
 
     /////////////////////////////////////////////////////write/////////////////////////////////////////////////////////////////
-    void writeHDBFlatTypeData(String name, HashMap<String, Object> ListFlatType, Boolean Affordable);
+    void writeHDBFlatTypeData(String name, HashMap<String, Object> ListFlatType);
 
     boolean writeHDBData(String name, String descriptionText, String ImgUrl, Boolean affordable);
 
