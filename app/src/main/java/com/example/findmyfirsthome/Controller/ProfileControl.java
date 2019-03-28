@@ -177,8 +177,8 @@ public class ProfileControl {
         }
     }
 
-    public void writeProfile(AppCompatActivity ui){ //XAVIER FUCK YOU
-        DatabaseController db = new DatabaseController(ui.getApplicationContext());
+    public void writeProfile(AppCompatActivity activity){
+        DatabaseController db = new DatabaseController(activity.getApplicationContext());
         db.writeProfileData(ud);
     }
 
