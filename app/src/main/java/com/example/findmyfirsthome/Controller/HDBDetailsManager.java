@@ -274,7 +274,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
 
             String rooms = cols.get(2).text();
             String price = cols.get(3).text();
-
+            price = price.replace(",", "").substring(6);
             ///////////1 hashMap/////////////////////
             flatType = new HashMap<String, Object>();
             flatType.put("price", price);
@@ -291,7 +291,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
                 cols = row.select("td");
                 rooms = cols.get(0).text();
                 price = cols.get(1).text();
-
+                price = price.replace(",", "").substring(6);
                 ///////////1 hashMap/////////////////////
                 flatType = new HashMap<String, Object>();
                 flatType.put("price", price);

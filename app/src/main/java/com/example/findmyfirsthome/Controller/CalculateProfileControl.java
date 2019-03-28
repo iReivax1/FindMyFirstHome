@@ -23,7 +23,7 @@ public class CalculateProfileControl{
     public CalculateProfileControl(Activity activity) {
         dbControl = DatabaseController.getInstance(activity.getApplicationContext());
         udSaved = dbControl.readUserData();              //retrieved from database NOT NEW
-        hdbDevelopments = dbControl.readHDBData();
+        hdbDevelopments = dbControl.readHDBData();        //returns ArrayList<HDBDevelopment>
         cp = new CalculatedProfile();     //new
 
 

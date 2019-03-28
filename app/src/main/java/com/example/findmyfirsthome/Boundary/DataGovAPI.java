@@ -2,6 +2,7 @@ package com.example.findmyfirsthome.Boundary;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -18,8 +19,15 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -284,7 +292,7 @@ public class DataGovAPI extends AppCompatActivity {
 
     }
 
-    public void writeAmenitiesToDB( HashMap<String, Object> list){
+    public void writeAmenitiesToDB(HashMap<String, Object> list){
         DatabaseController db = DatabaseController.getInstance(context);
         db.writeAmenitiesData(list);
     }
@@ -294,57 +302,35 @@ public class DataGovAPI extends AppCompatActivity {
         db.writeTax(infoList);
     }
 
-    private static void readKML(InputStream fileKML, String nameCoordinates) {
-        String column = null;
-        Boolean folder = Boolean.TRUE;
-        Boolean placemark = Boolean.FALSE;
-        Boolean placeCorrect = Boolean.FALSE;
-        BufferedReader br = new BufferedReader(new InputStreamReader(fileKML));
-        try {
-            while ((column = br.readLine()) != null) {
-                if (folder) {
-                    int ifolder = column.indexOf("");
-                    if (ifolder != -1) {
-                        folder = Boolean.FALSE;
-                        placemark = Boolean.TRUE;
-                        continue;
-                    }
-                }
-                if (placemark) {
-                    String tmpLine = nameCoordinates;
-                    tmpLine = tmpLine.replaceAll("\t", "");
-                    tmpLine = tmpLine.replaceAll(" ", "");
-                    String tmpColumn = column;
-                    tmpColumn = tmpColumn.replaceAll("\t", "");
-                    tmpColumn = tmpColumn.replaceAll(" ", "");
-                    int name = tmpColumn.indexOf(tmpLine);
-                    if (name != -1) {
-                        placemark = Boolean.FALSE;
-                        placeCorrect = Boolean.TRUE;
-                        continue;
-                    }
-                }
-                if (placeCorrect) {
-                    int coordin = column.indexOf("<coordinates>");
-                    if (coordin != -1) {
-                        String tmpCoordin = column;
-                        tmpCoordin = tmpCoordin.replaceAll(" ", "");
-                        tmpCoordin = tmpCoordin.replaceAll("\t", "");
-                        tmpCoordin = tmpCoordin.replaceAll("<coordinates>", "");
-                        tmpCoordin = tmpCoordin
-                                .replaceAll("</coordinates>", "");
-                        String[] coo = tmpCoordin.split(",");
-                        System.out.println("LONG: "+coo[0]);
-                        System.out.println("LATI: "+coo[1]);
-                        break;
-                    }
-                }
 
+    private String readFile()
+    {
+        String myData = "";
+        File myExternalFile = new File("assets/","market-food-centre.kml"); //find where to save the files
+
+        String xmlContent = "";
+        //DocumentsContract.Document doc = Jsoup.parse(xmlContent, "", Parser.xmlParser());
+
+        /*for(Element e : doc.select("LineString").select("coordinates")) {
+            // the contents
+            System.out.println(e.text());
+        }*/
+        try {
+            FileInputStream fis = new FileInputStream(myExternalFile);
+            DataInputStream in = new DataInputStream(fis);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
+            String strLine;
+            while ((strLine = br.readLine()) != null) {
+                myData = myData + strLine + "\n";
             }
             br.close();
+            in.close();
+            fis.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return myData;
     }
 
 
