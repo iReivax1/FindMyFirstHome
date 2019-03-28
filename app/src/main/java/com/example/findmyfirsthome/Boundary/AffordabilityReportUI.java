@@ -14,10 +14,10 @@ import java.util.Arrays;
 
 public class AffordabilityReportUI extends AppCompatActivity {
 
-    TextView tvMaxpropertyprice, tvMaxmortgage, tvMaxtenure, tvShg, tvAhg,
+    private TextView tvMaxpropertyprice, tvMaxmortgage, tvMaxtenure, tvShg, tvAhg,
             tvPropertyname, tvPropertyprice, tvFlattype, tvDownpaymentreq, tvLoanreq, tvRepaymentsum;
 
-    AffordabilityReportController arc;
+    private AffordabilityReportController arc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +25,9 @@ public class AffordabilityReportUI extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.aff_rep_ui);
         Intent intent = getIntent();
-        String hdbName = intent.getStringExtra("hdbName");
-        String flatType = intent.getStringExtra("flatType");
+        Bundle extras = intent.getExtras();
+        String hdbName = extras.getString("estateName");
+        String flatType = extras.getString("FlatType");
 
         arc = new AffordabilityReportController(this, hdbName, flatType);
 

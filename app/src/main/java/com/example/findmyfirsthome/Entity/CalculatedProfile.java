@@ -24,6 +24,7 @@ public class CalculatedProfile {
         downpayment=0;
     }
 
+
     public CalculatedProfile(double AHG, double SHG, double maxMortgage, double monthlyInstallment, double maxMortgagePeriod, double maxPropertyPrice, double downpayment){
         this.AHG=AHG;
         this.SHG=SHG;
