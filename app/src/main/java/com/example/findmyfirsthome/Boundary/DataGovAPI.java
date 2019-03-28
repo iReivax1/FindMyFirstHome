@@ -303,7 +303,7 @@ public class DataGovAPI extends AppCompatActivity {
         try {
             while ((column = br.readLine()) != null) {
                 if (folder) {
-                    int ifolder = column.indexOf("<Folder>");
+                    int ifolder = column.indexOf("");
                     if (ifolder != -1) {
                         folder = Boolean.FALSE;
                         placemark = Boolean.TRUE;
