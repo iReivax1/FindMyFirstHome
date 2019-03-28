@@ -9,12 +9,13 @@
     android:layout_alignParentBottom="true">
         <TextView
             android:id="@+id/footer_text"
-            android:text="Add summary here"
-            android:textSize="7dp"
+            android:textSize="12dp"
             android:textColor="#FFFFFF"
             android:layout_width="280dp"
             android:layout_height="80dp"
-            android:layout_marginStart="0dp"/>
+            android:layout_marginStart="0dp"
+            android:gravity="center"/>
+
         <Button
             android:id="@+id/footer_button"
             android:text="Recalculate"

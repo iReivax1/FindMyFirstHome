@@ -1,7 +1,9 @@
 package com.example.findmyfirsthome.Controller;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.example.findmyfirsthome.Entity.CalculatedProfile;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
 
 import java.util.ArrayList;
@@ -51,5 +53,16 @@ public class HDBDevelopmentController {
                 listHDBurl.add(i.getImgUrl());
         }
         return listHDBurl;
+    }
+
+    public List<String> getFooterDetails(){
+        CalculatedProfile cp = db.readCalculatedProfile();
+        List<String> footerDetails = new ArrayList<>();
+        if (cp == null)
+            return footerDetails;
+        footerDetails.add(Double.toString(cp.getMaxPropertyPrice()));
+        footerDetails.add(Double.toString(cp.getMaxMortgage()));
+        footerDetails.add(Double.toString(cp.getMaxMortgagePeriod()));
+        return footerDetails;
     }
 }
