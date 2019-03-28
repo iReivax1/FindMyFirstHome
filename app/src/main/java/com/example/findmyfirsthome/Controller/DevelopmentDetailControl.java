@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DevelopmentDetailControl {
-    private DataAccessInterfaceClass databaseController;
+    private DatabaseController databaseController;
     private HDBDevelopment hdbd;
     private Context context;
     private ArrayList<HashMap<String, Object>> flatTypeListDetails;
@@ -19,7 +19,7 @@ public class DevelopmentDetailControl {
     public DevelopmentDetailControl(String estateName, Context context)
     {
         this.context = context;
-        databaseController = new DatabaseController(context);
+        databaseController = DatabaseController.getInstance(context);
 
         //get data from Database Controller as entity object
         hdbd = databaseController.readHDBData(estateName);
