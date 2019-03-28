@@ -50,14 +50,11 @@ public class CalculateProfileControl{
                 }
 
             }
+            //true if at least one affordable flat type then set hdb development to true too
             if(numOfTrue>0) dbControl.writeHDBData(hdbDevelopments.get(i).getDevelopmentName(),hdbDevelopments.get(i).getDevelopmentDescription(),hdbDevelopments.get(i).getImgUrl(),true);
             else dbControl.writeHDBData(hdbDevelopments.get(i).getDevelopmentName(),hdbDevelopments.get(i).getDevelopmentDescription(),hdbDevelopments.get(i).getImgUrl(),false);
             for(int m=0;m<readHDBFlatType.size();m++) {
-                HashMap<String, Object> ftNew = new HashMap<String, Object>();
-                for(String ft : readHDBFlatType.get(m).keySet()) {
-                    ftNew.put(ft,readHDBFlatType.get(m).get(ft));
-                }
-                dbControl.writeHDBFlatTypeData(hdbDevelopments.get(i).getDevelopmentName(), ftNew);
+                dbControl.writeHDBFlatTypeData(hdbDevelopments.get(i).getDevelopmentName(), readHDBFlatType.get(m));
             }
         }
 
