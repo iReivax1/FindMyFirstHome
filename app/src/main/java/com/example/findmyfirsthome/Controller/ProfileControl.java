@@ -178,8 +178,8 @@ public class ProfileControl {
     }
 
     public void writeProfile(Context context){
-        DatabaseController db = new DatabaseController(context);
-        db.writeProfileData(ud);
+        DatabaseController db = DatabaseController.getInstance(context);
+        db.writeUserData(ud);
     }
 
 }

@@ -180,7 +180,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     }
 
     public void writeHDBFlatData(String HDBDevelopmentNames, HashMap<String, Object> ListFlatType){
-        DatabaseController db = new DatabaseController(mContext);
+        DatabaseController db = DatabaseController.getInstance(mContext);
         db.writeHDBFlatTypeData(HDBDevelopmentNames,ListFlatType);
 
     }

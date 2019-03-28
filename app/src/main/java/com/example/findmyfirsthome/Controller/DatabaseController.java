@@ -23,11 +23,11 @@ import java.util.HashMap;
 //Database controller is a singleton object
 
 //TODO: add writeGrants, and getGrants
-public class DatabaseController extends SQLiteOpenHelper implements DataAccessInterfaceClass, BaseColumns {
+public class DatabaseController extends SQLiteOpenHelper implements BaseColumns {
 
 
     //Change version if schema changed;
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
 
     //----------- TABLE COLUMNS for ALL -----------//
     public static final String ID = "ID";
@@ -333,6 +333,8 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
 
         values.put(buyer1CPF, ud.getBuyer1CPF());
         values.put(buyer2CPF, ud.getBuyer2CPF());
+
+        values.put(numberOfAdditionalHouseholdMembers, ud.getNumberOfAdditionalHouseholdMembers());
 
         long newRowId = db.insert(TABLE_NAME5, null, values);
         for (Double salary : ud.getMembersSalaryList()) {

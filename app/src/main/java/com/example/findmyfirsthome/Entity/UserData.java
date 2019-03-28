@@ -22,7 +22,7 @@ public class UserData {
     private double buyer1CPF = 0;
     private double buyer2CPF = 0;
 
-    public int numberOfAdditionalHouseholdMembers;
+    public int numberOfAdditionalHouseholdMembers = 0;
     ArrayList<Double> membersSalaryList = new ArrayList<Double>();
 
     //empty constructor
