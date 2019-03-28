@@ -182,7 +182,6 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     public void writeHDBFlatData(String HDBDevelopmentNames, HashMap<String, Object> ListFlatType){
         DatabaseController db = DatabaseController.getInstance(mContext);
         db.writeHDBFlatTypeData(HDBDevelopmentNames,ListFlatType);
-
     }
 
     public void writeHDBGrantData(String incomeReq, HashMap<String, Double> grant){
