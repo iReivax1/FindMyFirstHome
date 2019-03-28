@@ -163,12 +163,14 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     public void adaptGrants(LinkedHashMap<String, LinkedHashMap<String, Double>> list) {
 
         for (String key : list.keySet()) {
-            String incomeReq = key;
-            HashMap<String, Double> grant = list.get(key);
-            writeHDBGrantData(incomeReq, grant);
-           //String temp = "from adapt " + incomeReq;
-           //Log.d("adapt",temp);
-            //System.out.println("grant: " + list.get(key).toString());
+            HashMap<String, Double> sub = list.get(key);
+            for(String subKey: sub.keySet()){
+                String tempKey = subKey;
+                Double tempValue = sub.get(subKey);
+                LinkedHashMap<String, Double> temp = new LinkedHashMap<String, Double>();
+                temp.put(tempKey,tempValue);
+                writeHDBGrantData(key,temp);
+            }
         }
     }
 

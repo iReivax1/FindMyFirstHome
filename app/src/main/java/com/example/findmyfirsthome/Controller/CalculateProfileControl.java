@@ -179,8 +179,8 @@ public class CalculateProfileControl{
 
     }
 
-    public void writeCalculatedProfile(Context ui){
-        DatabaseController db = DatabaseController.getInstance(ui);
+    public void writeCalculatedProfile(Activity activity){
+        DatabaseController db = DatabaseController.getInstance(activity.getApplicationContext());
         db.writeCalculatedProfile(cp);
     }
 
