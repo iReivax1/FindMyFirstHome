@@ -19,14 +19,16 @@ public class ProfileUI2 extends AppCompatActivity implements View.OnFocusChangeL
         setContentView(R.layout.activity_profile_ui2);
         final AppCompatActivity activity = ProfileUI2.this;
         final Intent intent = getIntent();
-        final int radioGroupMSId = getIntent().getIntExtra("radioGroupMSId", 0);
-        final int radioGroupFTBId = getIntent().getIntExtra("radioGroupFTBId", 0);
-        final int radioGroupCitiId = getIntent().getIntExtra("radioGroupCitiId", 0);
+
+
+        final int radioGroupMScheckedID = getIntent().getIntExtra("radioGroupMScheckedID", 0);
+        final int radioGroupFTBcheckedID = getIntent().getIntExtra("radioGroupFTBcheckedID", 0);
+        final int radioGroupCiticheckedID = getIntent().getIntExtra("radioGroupCiticheckedID", 0);
         final String ageInputStr = getIntent().getStringExtra("ageInputStr");
         final String grossMSalaryStr = getIntent().getStringExtra("grossMSalaryStr");
 
-        final int radioGroupFTB2Id = getIntent().getIntExtra("radioGroupFTB2Id", 0);
-        final int radioGroupCiti2Id = getIntent().getIntExtra("radioGroupCiti2Id", 0);
+        final int radioGroupFTB2checkedID = getIntent().getIntExtra("radioGroupFTB2checkedID", 0);
+        final int radioGroupCiti2checkedID = getIntent().getIntExtra("radioGroupCiti2checkedID", 0);
         final String ageInputStr2 = getIntent().getStringExtra("ageInputStr2");
         final String grossMSalaryStr2 = getIntent().getStringExtra("grossMSalaryStr2");
 
@@ -53,14 +55,14 @@ public class ProfileUI2 extends AppCompatActivity implements View.OnFocusChangeL
             public void onClick(View v){
                 //save all values into database
                 final ProfileControl pc = new ProfileControl();
-                pc.setMaritalStatus(radioGroupMSId);
-                pc.setFirstTimeBuyer(radioGroupFTBId);
-                pc.setCitizenship(radioGroupCitiId);
+                pc.setMaritalStatus(radioGroupMScheckedID);
+                pc.setFirstTimeBuyer(radioGroupFTBcheckedID);
+                pc.setCitizenship(radioGroupCiticheckedID);
                 pc.setAge(ageInputStr);
                 pc.setGrossMonthlySalary(grossMSalaryStr);
 
-                pc.setFirstTimeBuyerPartner(radioGroupFTB2Id);
-                pc.setCitizenshipPartner(radioGroupCiti2Id);
+                pc.setFirstTimeBuyerPartner(radioGroupFTB2checkedID);
+                pc.setCitizenshipPartner(radioGroupCiti2checkedID);
                 pc.setAgePartner(ageInputStr2);
                 pc.setGrossMonthlySalaryPartner(grossMSalaryStr2);
 
@@ -93,14 +95,14 @@ public class ProfileUI2 extends AppCompatActivity implements View.OnFocusChangeL
                 else {
                     Intent i = new Intent(ProfileUI2.this, ProfileUI3.class);
                     //putExtra all values
-                    i.putExtra("radioGroupMSId", radioGroupMSId);
-                    i.putExtra("radioGroupFTBId", radioGroupFTBId);
-                    i.putExtra("radioGroupCitiId", radioGroupCitiId);
+                    i.putExtra("radioGroupMScheckedID", radioGroupMScheckedID);
+                    i.putExtra("radioGroupFTBcheckedID", radioGroupFTBcheckedID);
+                    i.putExtra("radioGroupCiticheckedID", radioGroupCiticheckedID);
                     i.putExtra("ageInputStr", ageInputStr);
                     i.putExtra("grossMSalaryStr", grossMSalaryStr);
 
-                    i.putExtra("radioGroupFTB2Id", radioGroupFTB2Id);
-                    i.putExtra("radioGroupCiti2Id", radioGroupCiti2Id);
+                    i.putExtra("radioGroupFTB2checkedID", radioGroupFTB2checkedID);
+                    i.putExtra("radioGroupCiti2checkedID", radioGroupCiti2checkedID);
                     i.putExtra("ageInputStr2", ageInputStr2);
                     i.putExtra("grossMSalaryStr2", grossMSalaryStr2);
 
