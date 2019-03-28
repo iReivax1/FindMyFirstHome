@@ -21,7 +21,7 @@ public class CalculateProfileControl{
     ArrayList<HDBDevelopment> hdbDevelopments;
 
     public CalculateProfileControl(Activity activity) {
-        dbControl = DatabaseController.getInstance(activity);
+        dbControl = DatabaseController.getInstance(activity.getApplicationContext());
         udSaved = dbControl.readUserData();              //retrieved from database NOT NEW
         hdbDevelopments = dbControl.readHDBData();
         cp = new CalculatedProfile();     //new
