@@ -6,7 +6,6 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import com.example.findmyfirsthome.Controller.MapsController;
 import com.example.findmyfirsthome.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -14,7 +13,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -22,7 +20,7 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
 
 
     private GoogleMap mMap;
-    Context context = this;
+    Context context = getApplicationContext();
 
 
     public void onPause() {

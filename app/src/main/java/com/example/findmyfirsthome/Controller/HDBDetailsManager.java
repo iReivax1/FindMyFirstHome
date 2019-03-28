@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.findmyfirsthome.Entity.HDBDevelopment;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -133,13 +131,13 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         //For each of the HDBDevelopmenet
         int index = 0;
         for (String name : HDBDevelopmentNames) {
-            writeHDBData(name, descriptionText.get(index), ImgURL);
+            writeHDBData(name, descriptionText.get(index), ImgURL, false);
             for(int i=0;i<ListFlatType.size();i++) {
                 HashMap<String, Object> ftNew = new HashMap<String, Object>();
                 for(String ft : ListFlatType.get(i).keySet()) {
                     ftNew.put(ft,ListFlatType.get(i).get(ft));
                 }
-                writeHDBFlatData(name, ftNew);
+                writeHDBFlatData(name, ftNew, false);
             }
             index++;
         }
@@ -161,19 +159,19 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
 
 //  ----------------------------------------Write functions to database object--------------------------------------------
 
-    public void writeHDBData(String HDBDevelopmentNames, String descriptionText, String ImgURL){
+    public void writeHDBData(String HDBDevelopmentNames, String descriptionText, String ImgURL, Boolean affordable){
         //if(getStatus() == AsyncTask.Status.FINISHED){
             DatabaseController db = new DatabaseController(mContext);
-            db.writeHDBData(HDBDevelopmentNames,descriptionText,ImgURL);
+            db.writeHDBData(HDBDevelopmentNames,descriptionText,ImgURL, affordable);
         /*}
         else{
             System.out.println("SplashScreenController write HDB, Fail to write "+HDBDevelopmentNames);
         }*/
     }
 
-    public void writeHDBFlatData(String HDBDevelopmentNames, HashMap<String, Object> ListFlatType){
+    public void writeHDBFlatData(String HDBDevelopmentNames, HashMap<String, Object> ListFlatType, Boolean affordable){
         DatabaseController db = new DatabaseController(mContext);
-        db.writeHDBFlatTypeData(HDBDevelopmentNames,ListFlatType);
+        db.writeHDBFlatTypeData(HDBDevelopmentNames,ListFlatType, affordable);
     }
 
     public void writeHDBGrantData(String incomeReq, HashMap<String, Double> grant){
