@@ -1,5 +1,6 @@
 package com.example.findmyfirsthome.Boundary;
 
+import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -35,7 +36,6 @@ import java.util.List;
 
 public class DataGovAPI extends AppCompatActivity {
 
-
     RequestQueue requestQueue;  // This is our requests queue to process our HTTP requests.
     String typeData;
     String childCareURL = "https://data.gov.sg/api/action/datastore_search?resource_id=4fc3fd79-64f2-4027-8d5b-ce0d7c279646&limit=";  // This is the API base URL (GitHub API)
@@ -43,7 +43,9 @@ public class DataGovAPI extends AppCompatActivity {
     String schoolURL = "https://data.gov.sg/api/action/datastore_search?resource_id=ede26d32-01af-4228-b1ed-f05c45a1d8ee&limit=";
     String taxURL = "https://data.gov.sg/api/action/datastore_search?resource_id=bb6f5bf8-7d0b-4526-b020-b812ea7d7d89&limit=10";
     String url;  // This will hold the full URL which will include the username entered in the etGitHubUser.
-    MapAPI maps = new MapAPI();
+    Context context = this;
+
+    MapAPI maps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ public class DataGovAPI extends AppCompatActivity {
         getDataFromDataGov("childCare", 10);
         getDataFromDataGov("market", 10);
         getDataFromDataGov("school", 10);
+        maps = new MapAPI(context);
     }
 
 
@@ -146,9 +149,9 @@ public class DataGovAPI extends AppCompatActivity {
                     info.put("AmenitiesName", centre_name);
 
                     //Using GEOCODING
-                    coordinates = maps.getAmenitiesCoordinates(centre_address);
-                    info.put("AmenitiesLat", coordinates.latitude);
-                    info.put("AmenitiesLng", coordinates.longitude);
+//                    coordinates = maps.getAmenitiesCoordinates(centre_address);
+//                    info.put("AmenitiesLat", coordinates.latitude);
+//                    info.put("AmenitiesLng", coordinates.longitude);
 
                 }
                 writeAmenitiesToDB(info);
@@ -185,9 +188,9 @@ public class DataGovAPI extends AppCompatActivity {
                     info.put("AmenitiesName", name_of_centre);
 
                     //Using GEOCODING
-                    coordinates = maps.getAmenitiesCoordinates(location_of_centre);
-                    info.put("AmenitiesLat", coordinates.latitude);
-                    info.put("AmenitiesLng", coordinates.longitude);
+//                    coordinates = maps.getAmenitiesCoordinates(location_of_centre);
+//                    info.put("AmenitiesLat", coordinates.latitude);
+//                    info.put("AmenitiesLng", coordinates.longitude);
 
                 }
                 // adding contact to contact list
@@ -220,16 +223,17 @@ public class DataGovAPI extends AppCompatActivity {
                     JSONObject c = records.getJSONObject(i);
 
                     String schoolName = c.getString("school_name");
+                    System.out.println(schoolName);
                     String postalCode = c.getString("postal_code");
-
+                    System.out.println(postalCode);
                     // adding each child node to HashMap key => value
                     info.put("AmenitiesType", "School");
                     info.put("AmenitiesName", schoolName);
 
                     //Using GEOCODING
-                    coordinates = maps.getAmenitiesCoordinates(postalCode);
-                    info.put("AmenitiesLat", coordinates.latitude);
-                    info.put("AmenitiesLng", coordinates.longitude);
+//                    coordinates = maps.getAmenitiesCoordinates(postalCode);
+//                    info.put("AmenitiesLat", coordinates.latitude);
+//                    info.put("AmenitiesLng", coordinates.longitude);
                     // adding contact to contact list
                     //infoList.add(info);
                 }
