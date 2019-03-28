@@ -142,7 +142,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    private static volatile DatabaseController instance;
+    private static volatile DatabaseController instance = null;
 
     public static DatabaseController getInstance(Context cont) {
         if (instance == null) {
