@@ -31,7 +31,7 @@ public class SplashScreenUI extends AppCompatActivity {
             public void run() {
                 // This method will be executed once the timer is over
                 // Start profileUI activity
-                Intent i = new Intent( SplashScreenUI.this, ProfileUI.class);
+                Intent i = new Intent( SplashScreenUI.this, DataGovAPI.class);
                 startActivity(i);
                 // close this activity
                 finish();
