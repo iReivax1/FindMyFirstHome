@@ -37,6 +37,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     public static final String HDBDevelopmentLongitude = "Longitude";
     public static final String HDBDevelopmentLatitude = "Latitude";
     public static final String HDBDevelopmentImgURL = "ImgURL";
+    public static final String HDBDevelopmentAffordability = "HDBAffordability";
 
     //----------- TABLE COLUMNS for FlatType -----------//
     public static final String HDBFlatType = "HDBFlatType";
@@ -108,7 +109,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     private static final String TABLE_NAME8 = "CalculatedProfile";
 
     //Draw the table
-    private static final String SQL_HDBDevelopment = "CREATE TABLE " + TABLE_NAME + " (" + HDBDevelopmentName + " TEXT PRIMARY KEY, " + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude + " REAL, " + HDBDevelopmentImgURL + " TEXT " + ");";
+    private static final String SQL_HDBDevelopment = "CREATE TABLE " + TABLE_NAME + " (" + HDBDevelopmentName + " TEXT PRIMARY KEY, " + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude + " REAL, " + HDBDevelopmentImgURL + " TEXT, " + HDBDevelopmentAffordability + " BOOLEAN " +");";
 
     public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + HDBFlatAffordability + " BOOLEAN, " + " FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
 
@@ -184,7 +185,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
      such as with AsyncTask or IntentService. */
 
 
-    public boolean writeHDBData(String name, String descriptionText, String ImgUrl) {
+    public boolean writeHDBData(String name, String descriptionText, String ImgUrl, Boolean affordable) {
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
@@ -197,6 +198,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         values.put(HDBDevelopmentLatitude, 0.0);
         values.put(HDBDevelopmentLongitude, 0.0);
         values.put(HDBDevelopmentImgURL, ImgUrl);
+        values.put(HDBDevelopmentAffordability, affordable);
 
         //System.out.println(values);
         long newRowId = db.insert(TABLE_NAME, null, values);
@@ -213,7 +215,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         //assert checkWriteFlatData == true;
     }
 
-    public void writeHDBFlatTypeData(String name, HashMap<String, Object> ListFlatType) {
+    public void writeHDBFlatTypeData(String name, HashMap<String, Object> ListFlatType, Boolean affordable) {
         long newRowId;
 
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
@@ -229,7 +231,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
             } else if (key.contains("flatType")) {
                 values.put(HDBFlatType, ListFlatType.get(key).toString());
             } else if (key.contains("affordability")) {
-                values.put(HDBFlatAffordability, false);
+                values.put(HDBFlatAffordability, affordable);
             }
         }
        // System.out.println(values);
