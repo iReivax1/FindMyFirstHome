@@ -6,9 +6,12 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".Controller.HDBSplashscreenController"
@@ -17,17 +20,17 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".Controller.DownloadFileManager"/>
         <activity android:name=".Boundary.DataGovAPI" />
-        <activity android:name=".Boundary.test"/>
-        <activity android:name=".Boundary.ProfileUI3"
-            android:parentActivityName=".Boundary.ProfileUI2"/>
+        <activity
+            android:name=".Boundary.ProfileUI3"
+            android:parentActivityName=".Boundary.ProfileUI2" />
         <activity
             android:name=".Boundary.ProfileUI2"
             android:parentActivityName=".Boundary.ProfileUI" />
         <activity android:name=".Boundary.ProfileUI" />
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -39,7 +42,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -47,7 +49,6 @@
         <activity
             android:name=".Boundary.MapAPI"
             android:label="@string/title_activity_maps" /> <!-- Splashscreen UI -->
-
         <activity
             android:name=".Boundary.SplashScreenUI"
             android:label="@string/app_name"
@@ -57,22 +58,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".Boundary.DevelopmentDetailUI"
-            android:label="DevelopmentDetailUI">
-        </activity>
-
+            android:label="DevelopmentDetailUI"></activity>
         <activity
             android:name=".Boundary.AffordabilityReportUI"
-            android:label="AffordabilityReportUI">
-        </activity>
-
+            android:label="AffordabilityReportUI"></activity>
         <activity android:name=".Boundary.HDBDevelopmentUI" />
-
         <activity
             android:name=".Controller.MapsController"
-            android:usesCleartextTraffic="true"/>
+            android:usesCleartextTraffic="true" />
     </application>
 
 </manifest>

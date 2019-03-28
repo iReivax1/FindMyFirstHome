@@ -22,8 +22,8 @@ public class HDBFragment_Rec extends Fragment {
 
     View v;
     private RecyclerView myRecyclerView;
-    private List<String> hdbNameList;
-    private List<String> hdbUrl;
+    private List<String> hdbNameList = new ArrayList<>();
+    private List<String> hdbUrl = new ArrayList<>();
 
     public HDBFragment_Rec() {
 

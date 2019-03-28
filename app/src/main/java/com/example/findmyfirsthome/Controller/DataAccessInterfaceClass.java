@@ -1,5 +1,6 @@
 package com.example.findmyfirsthome.Controller;
 
+import com.example.findmyfirsthome.Entity.CalculatedProfile;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
 import com.example.findmyfirsthome.Entity.MapData;
 import com.google.android.gms.maps.model.LatLng;
@@ -10,16 +11,20 @@ import java.util.HashMap;
 public interface DataAccessInterfaceClass {
 
     /////////////////////////////////////////////////////write/////////////////////////////////////////////////////////////////
-    void writeHDBFlatTypeData(String name, HashMap<String, Object> ListFlatType);
+    void writeHDBFlatTypeData(String name, HashMap<String, Object> ListFlatType, Boolean Affordable);
 
-    boolean writeHDBData(String name, String descriptionText, String ImgUrl);
+    boolean writeHDBData(String name, String descriptionText, String ImgUrl, Boolean affordable);
 
     boolean writeHDBGrantData(String incomeReq, HashMap<String, Double> grantList);
 
-    boolean writeAmenitiesData(ArrayList<HashMap<String, String>> infoList);
+    boolean writeAmenitiesData(HashMap<String, Object> infoList);
+
+    boolean writeCalculatedProfile(CalculatedProfile cp);
 
     //boolean writeAmenitiesData(String name);
     /////////////////////////////////////////////////////read/////////////////////////////////////////////////////////////////
+    CalculatedProfile readCalculatedProfile();
+
     ArrayList<HDBDevelopment> readHDBData();
 
     HDBDevelopment readHDBData(String developmentName);
@@ -30,5 +35,6 @@ public interface DataAccessInterfaceClass {
 
     LatLng readHDBDevelopmentCoordinates(String name);
 
-
+    ////////////////////////////////////////////////////delete/////////////////////////////////////////////////////////////////
+    void deleteHDBData();
 }

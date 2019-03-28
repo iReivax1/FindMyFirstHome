@@ -4,8 +4,6 @@
 */
 package com.example.findmyfirsthome.Entity;
 
-import java.util.HashMap;
-
 public class CalculatedProfile {
     //Get from database the exact grant amount
     private double AHG;
@@ -24,6 +22,17 @@ public class CalculatedProfile {
         maxMortgagePeriod=0;
         maxPropertyPrice=0;
         downpayment=0;
+    }
+
+
+    public CalculatedProfile(double AHG, double SHG, double maxMortgage, double monthlyInstallment, double maxMortgagePeriod, double maxPropertyPrice, double downpayment){
+        this.AHG=AHG;
+        this.SHG=SHG;
+        this.maxMortgage=maxMortgage;
+        this.monthlyInstallment=monthlyInstallment;
+        this.maxMortgagePeriod=maxMortgagePeriod;
+        this.maxPropertyPrice=maxPropertyPrice;
+        this.downpayment=downpayment;
     }
 
     public double getAHG() {

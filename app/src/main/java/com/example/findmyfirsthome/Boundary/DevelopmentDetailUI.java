@@ -1,30 +1,24 @@
 package com.example.findmyfirsthome.Boundary;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.findmyfirsthome.Controller.DevelopmentDetailControl;
-import com.example.findmyfirsthome.Entity.AffordabilityReport;
 import com.example.findmyfirsthome.Entity.MapData;
 import com.example.findmyfirsthome.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -36,7 +30,6 @@ import java.util.HashMap;
 
 public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyCallback{
 
-    private static Context context;
     private DevelopmentDetailControl ddc;
     private GoogleMap mMap;
     private ArrayList<HashMap<String, Object>> HDBFlatTypeDetailsList;
@@ -89,9 +82,10 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
         //for Table of FlatType info
         final TableLayout tableLayOut = findViewById(R.id.table_developmentTable);
 
-        HDBFlatTypeDetailsList = ddc.getTableContent();
+        HDBFlatTypeDetailsList = ddc.getHDBFlatTypeDetailsList();
 
         Object temp;
+        int rowID = 0;
 
         for(HashMap<String, Object> HDBFlatTypeDetails : HDBFlatTypeDetailsList)
         {
@@ -122,9 +116,9 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
 
 
             //create generation button in table last column
-            Button generateReportButton = new Button(this);
+            final Button generateReportButton = new Button(this);
             generateReportButton.setGravity(Gravity.CENTER);
-            generateReportButton.setId(((String) HDBFlatTypeDetails.get("flatType")).charAt(0));    //use room type number as id
+            generateReportButton.setId(rowID);    //row ID starts from 0 which follows the index of list of HDBFlatTypeDetailsList
             generateReportButton.setText("Generate");
             generateReportButton.setTextSize(5*(this.getResources().getDisplayMetrics().density));  //size of text
             generateReportButton.setLayoutParams(new FrameLayout.LayoutParams(200, 75));    //size for button
@@ -136,7 +130,7 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
                 public void onClick(View v) {
                     Intent generateAfReportIntent = new Intent(getApplicationContext(), AffordabilityReportUI.class);
                     generateAfReportIntent.putExtra("estateName", estateName);  //send the estate/development name
-                    generateAfReportIntent.putExtra("FlatType", String.valueOf(v.getId())); //send the FlatType
+                    generateAfReportIntent.putExtra("FlatType", (String) HDBFlatTypeDetailsList.get(v.getId()).get("flatType")); //send the FlatType
                     startActivity(generateAfReportIntent);
                 }
             });
@@ -167,6 +161,9 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
             //set row into table
             TableLayout tableLayout = findViewById(R.id.table_developmentTable);
             tableLayOut.addView(tr);
+
+            //increment row ID which will be used to identify which generate report button is pressed
+            ++rowID;
         }
 
 
@@ -190,9 +187,9 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
             mMap.addMarker(new MarkerOptions().position(developmentLoc).title(ddc.getDevelopmentName()));
 
             for(ArrayList amemity : amenitiesDetailsList) {
-                LatLng nearBy = new LatLng(1.345734, 103.681283);
                 mMap.addMarker(new MarkerOptions().position((LatLng) amemity.get(MapData.COORDINATES))
                         .title((String) amemity.get(MapData.AMENITIESNAME)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+
             }
 
             //move map focus to the location of the main marker

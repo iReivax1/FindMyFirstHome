@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.EditText;
 
-import com.example.findmyfirsthome.Boundary.ProfileUI;
 import com.example.findmyfirsthome.Entity.UserData;
 import com.example.findmyfirsthome.R;
 

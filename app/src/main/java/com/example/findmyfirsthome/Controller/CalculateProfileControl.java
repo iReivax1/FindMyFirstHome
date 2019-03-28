@@ -10,6 +10,7 @@ import com.example.findmyfirsthome.Entity.UserData;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
 public class CalculateProfileControl{
     final double annualIR = 0.026;
     final double monthIR = annualIR / 12;

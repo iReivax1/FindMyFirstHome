@@ -16,13 +16,14 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.findmyfirsthome.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HDBAdapter extends RecyclerView.Adapter<HDBAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<String> hdbList;
-    private List<String> hdbUrl;
+    private static List<String> hdbList = new ArrayList<>();
+    private static List<String> hdbUrl = new ArrayList<>();
 
     public HDBAdapter(Context mContext, List<String> hdbList, List<String> hdbUrl) {
         this.mContext = mContext;
