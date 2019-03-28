@@ -15,7 +15,7 @@ public class HDBDevelopmentController {
     ArrayList<String> listHDBName;
     ArrayList<String> listHDBurl;
     public HDBDevelopmentController(Context currentContext){
-        db = new DatabaseController(currentContext);
+        db = DatabaseController.getInstance(currentContext);
     }
 
     public List<String> getAllHDBnames(){

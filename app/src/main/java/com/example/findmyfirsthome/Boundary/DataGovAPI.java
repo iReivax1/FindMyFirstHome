@@ -290,7 +290,7 @@ public class DataGovAPI extends AppCompatActivity {
     }
 
     public void writeAmenitiesToDB( HashMap<String, Object> list){
-        DataAccessInterfaceClass db = new DatabaseController(this.getApplicationContext());
+        DatabaseController db = DatabaseController.getInstance(context);
         db.writeAmenitiesData(list);
     }
 

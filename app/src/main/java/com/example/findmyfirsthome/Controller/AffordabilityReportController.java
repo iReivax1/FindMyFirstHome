@@ -10,14 +10,14 @@ import java.util.HashMap;
 import static java.lang.Math.*;
 
 public class AffordabilityReportController {
-    private DataAccessInterfaceClass dbc;
+    private DatabaseController dbc;
     private CalculatedProfile cp;
     private HDBDevelopment hdbd;
     private String hdbName, flatType;
     private ArrayList<HashMap<String, Object>> HDBFlatTypeDetailsList;
 
     public AffordabilityReportController(Context context, String hdbName, String flatType){
-        dbc = new DatabaseController(context);
+        dbc = DatabaseController.getInstance(context);
 
         this.cp = dbc.readCalculatedProfile();
         this.hdbd = dbc.readHDBData(hdbName);

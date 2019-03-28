@@ -20,7 +20,7 @@ import java.util.HashMap;
 //Basically this is our DAO;
 //Need to refactor this class to an interface class.
 //have all controllers implement this class
-
+//Database controller is a singleton object
 
 //TODO: add writeGrants, and getGrants
 public class DatabaseController extends SQLiteOpenHelper implements DataAccessInterfaceClass, BaseColumns {
@@ -138,14 +138,34 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     private static final String SQL_DELETE_ENTRIES8 = "DROP TABLE IF EXISTS " + TABLE_NAME8;
 
     //getContext() - Returns the context view only current running activity.
-    public DatabaseController(Context context) {
+    private DatabaseController(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    private static volatile DatabaseController instance;
+
+    public static DatabaseController getInstance(Context cont) {
+        if (instance == null) {
+            synchronized (DatabaseController.class) {
+                if (instance == null) {
+                    instance = new DatabaseController(cont);
+                }
+            }
+        }
+        return instance;
+    }
     //Create all the tables
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         //On creation of DBC the table SQL_HDB will be created
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES2);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES3);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES4);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES5);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES6);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES7);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES8);
         sqLiteDatabase.execSQL(SQL_HDBDevelopment);
         sqLiteDatabase.execSQL(SQL_FlatType);
         sqLiteDatabase.execSQL(SQL_Amenities);
@@ -154,7 +174,6 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         sqLiteDatabase.execSQL(SQL_membersSalaryList_);
         sqLiteDatabase.execSQL(SQL_TaxList);
         sqLiteDatabase.execSQL(SQL_CalculatedProfile);
-        
     }
 
     //If Database version is difference, delete all current entries and re-create new DBs
@@ -176,7 +195,6 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
-
 
     /////////////////////////////////////////////////////////////////////Write Functions/////////////////////////////////////////////////////////////////////
     /*Our Methods Below*/
@@ -289,7 +307,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         return true;
     }
 
-    public boolean writeProfileData(UserData ud) {
+    public boolean writeUserData(UserData ud) {
 
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
