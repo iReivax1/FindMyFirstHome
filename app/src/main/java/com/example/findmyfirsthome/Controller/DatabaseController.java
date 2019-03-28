@@ -27,7 +27,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
 
 
     //Change version if schema changed;
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 2;
 
     //----------- TABLE COLUMNS for ALL -----------//
     public static final String ID = "ID";
@@ -142,15 +142,12 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    private static volatile DatabaseController instance;
+    private static volatile DatabaseController instance = null;
 
     public static DatabaseController getInstance(Context cont) {
         if (instance == null) {
-            synchronized (DatabaseController.class) {
-                if (instance == null) {
-                    instance = new DatabaseController(cont);
-                }
-            }
+            instance = new DatabaseController(cont);
+            instance.deleteTables();
         }
         return instance;
     }
@@ -158,14 +155,14 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         //On creation of DBC the table SQL_HDB will be created
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES2);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES3);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES4);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES5);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES6);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES7);
         sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES8);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES7);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES6);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES5);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES4);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES3);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES2);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
         sqLiteDatabase.execSQL(SQL_HDBDevelopment);
         sqLiteDatabase.execSQL(SQL_FlatType);
         sqLiteDatabase.execSQL(SQL_Amenities);
@@ -181,19 +178,26 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES2);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES3);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES4);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES5);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES6);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES7);
         sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES8);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES7);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES6);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES5);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES4);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES3);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES2);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
         onCreate(sqLiteDatabase);
     }
 
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
+    }
+
+    private void deleteTables()
+    {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        onCreate(sqLiteDatabase);
+        sqLiteDatabase.close();
     }
 
     /////////////////////////////////////////////////////////////////////Write Functions/////////////////////////////////////////////////////////////////////
@@ -626,7 +630,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         HashMap<String, Double> grants = new HashMap<String, Double>();
 
 
-        String rawQuery = "SELECT GrantType, GrantAmount FROM " + TABLE_NAME4 + " as D" + " WHERE D.IncomeRequired = '" + incomeReq + "'";
+        String rawQuery = "SELECT GrantType, GrantAmount FROM " + TABLE_NAME4 + " as D" + " WHERE incomeReq = D.incomeReq";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 

@@ -73,15 +73,20 @@ public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeLi
 
         next.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
+                int radioGroupMScheckedID = radioGroupMS.getCheckedRadioButtonId();
+                int radioGroupFTBcheckedID = radioGroupFTB.getCheckedRadioButtonId();
+                int radioGroupFTB2checkedID = radioGroupFTB2.getCheckedRadioButtonId();
+                int radioGroupCiticheckedID = radioGroupCiti.getCheckedRadioButtonId();
+                int radioGroupCiti2checkedID = radioGroupCiti2.getCheckedRadioButtonId();
                 Intent i = new Intent( ProfileUI.this, ProfileUI2.class);
-                i.putExtra ("radioGroupMSId",radioGroupMS.getId());
-                i.putExtra ("radioGroupFTBId",radioGroupFTB.getId());
-                i.putExtra ("radioGroupCitiId",radioGroupCiti.getId());
+                i.putExtra ("radioGroupMScheckedID",radioGroupMScheckedID);
+                i.putExtra ("radioGroupFTBcheckedID",radioGroupFTBcheckedID);
+                i.putExtra ("radioGroupCiticheckedID",radioGroupCiticheckedID);
                 i.putExtra ("ageInputStr",ageInput.getText().toString());
                 i.putExtra ("grossMSalaryStr",grossMSalary.getText().toString());
 
-                i.putExtra ("radioGroupFTB2Id",radioGroupFTB2.getId());
-                i.putExtra ("radioGroupCiti2Id",radioGroupCiti2.getId());
+                i.putExtra ("radioGroupFTB2checkedID",radioGroupFTB2checkedID);
+                i.putExtra ("radioGroupCiti2checkedID",radioGroupCiti2checkedID);
                 i.putExtra ("ageInputStr2",ageInput2.getText().toString());
                 i.putExtra ("grossMSalaryStr2",grossMSalary2.getText().toString());
                 startActivity(i);
