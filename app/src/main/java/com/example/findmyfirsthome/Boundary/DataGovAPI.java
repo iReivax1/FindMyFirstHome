@@ -1,7 +1,5 @@
 package com.example.findmyfirsthome.Boundary;
 
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
@@ -27,10 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 
 public class DataGovAPI extends AppCompatActivity {
@@ -58,10 +53,11 @@ public class DataGovAPI extends AppCompatActivity {
         this.getData = findViewById(R.id.get_data);  // Link our click button.
         this.dataList = findViewById(R.id.data_list);  // Link our repository list text output box.
         this.dataList.setMovementMethod(new ScrollingMovementMethod());  // This makes our text box scrollable, for those big GitHub contributors with lots of repos :)
-
+        System.out.println("requestQueue next");
         requestQueue = Volley.newRequestQueue(this);  // This setups up a new request queue which we will need to make HTTP requests.
-
+        System.out.println("RequestQueue done");
         DownloadFileManager dfm = new DownloadFileManager();
+        System.out.println("DFM created");
         dfm.download("https://geo.data.gov.sg/market-food-centre/2014/12/26/kml/market-food-centre.kml");
 
     }
