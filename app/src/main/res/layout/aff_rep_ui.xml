@@ -29,7 +29,7 @@
             android:layout_marginBottom="5dp"
             android:background="@drawable/textview_border"
             android:padding="2dp"
-            android:text="Highest Eligibility - DBS Loan" />
+            android:text="Highest Eligibility" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Current Property"
+            android:text="Current Property: "
             android:background="@drawable/textview_border"
             android:padding="2dp"
             android:layout_marginBottom="5dp"
@@ -95,7 +95,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Flat Type"
+            android:text="Flat Type: "
             android:id="@+id/flat_type"/>
         <TextView
             android:layout_width="wrap_content"
@@ -110,7 +110,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Monthly Repayment Sum: "
+            android:text="Monthly Repayment Sum: $"
             android:id="@+id/repayment_sum"/>
 
     </LinearLayout>
