@@ -1,6 +1,7 @@
 package com.example.findmyfirsthome.Controller;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.findmyfirsthome.Entity.CalculatedProfile;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
@@ -59,9 +60,9 @@ public class HDBDevelopmentController {
         List<String> footerDetails = new ArrayList<>();
         if (cp == null)
             return footerDetails;
-        footerDetails.add(String.valueOf(cp.getMaxPropertyPrice()));
-        footerDetails.add(String.valueOf(cp.getMaxMortgage()));
-        footerDetails.add(String.valueOf(cp.getMaxMortgagePeriod()));
+        footerDetails.add(Double.toString(cp.getMaxPropertyPrice()));
+        footerDetails.add(Double.toString(cp.getMaxMortgage()));
+        footerDetails.add(Double.toString(cp.getMaxMortgagePeriod()));
         return footerDetails;
     }
 }
