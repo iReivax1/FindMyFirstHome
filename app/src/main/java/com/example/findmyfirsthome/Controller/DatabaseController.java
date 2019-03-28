@@ -731,4 +731,12 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         LatLng coord = mapi.getHDBCoordinates(HDBDevelopmentName);
         return coord;
     }
+
+    ///////////////////////////////Delete Function////////////////////////////////////
+    public void deleteHDBData() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_NAME,null,null);
+        db.delete(TABLE_NAME2,null,null);
+        db.close();
+    }
 }
