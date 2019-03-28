@@ -2,7 +2,6 @@ package com.example.findmyfirsthome.Controller;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -154,8 +153,11 @@ public class ProfileControl {
     }
 
     public void setNoOfhMembers(String hMembersStr) {
-        Integer hMembersInt = Integer.parseInt(hMembersStr);
-        ud.setNumberOfAdditionalHouseholdMembers(hMembersInt);
+        if(hMembersStr.equals(null)) ud.setNumberOfAdditionalHouseholdMembers(0);
+        else {
+            Integer hMembersInt = Integer.parseInt(hMembersStr);
+            ud.setNumberOfAdditionalHouseholdMembers(hMembersInt);
+        }
     }
     public void setAllhMembers(int hMembersValue, Activity a){
         for(int i=0;i<hMembersValue;i++){
