@@ -27,7 +27,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
 
 
     //Change version if schema changed;
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     //----------- TABLE COLUMNS for ALL -----------//
     public static final String ID = "ID";
@@ -142,15 +142,11 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    private static volatile DatabaseController instance;
+    private static DatabaseController instance = null;
 
-    public static DatabaseController getInstance(Context cont) {
+    public static synchronized DatabaseController getInstance(Context cont) {
         if (instance == null) {
-            synchronized (DatabaseController.class) {
-                if (instance == null) {
-                    instance = new DatabaseController(cont);
-                }
-            }
+            instance = new DatabaseController(cont);
         }
         return instance;
     }
@@ -247,6 +243,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
             if (key.contains("price")) {
                 obj = (ListFlatType.get(key).toString()).replace(",", "").substring(6);
                 values.put(HDBFlatPrice, Double.valueOf(obj));
+                System.out.print(HDBFlatPrice);
             } else if (key.contains("flatType")) {
                 values.put(HDBFlatType, ListFlatType.get(key).toString());
             } else if (key.contains("affordability")) {
@@ -444,17 +441,17 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         if (cursor.moveToFirst()){
             while (cursor != null) {
                 DevelopmentName = cursor.getString(cursor.getColumnIndexOrThrow("HDBDevelopmentName"));
-                System.out.println("1.1 "+DevelopmentName);
+                //System.out.println("1.1 "+DevelopmentName);
                 DevelopmentDescription = cursor.getString(cursor.getColumnIndexOrThrow("HDBdevelopmentDescription"));
-                System.out.println("1.2 "+DevelopmentDescription);
+                //System.out.println("1.2 "+DevelopmentDescription);
                 Double DevelopmentLongitude = cursor.getDouble(cursor.getColumnIndexOrThrow("Longitude"));
-                System.out.println("1.3 "+DevelopmentLongitude);
+                //System.out.println("1.3 "+DevelopmentLongitude);
                 Double DevelopmentLatitude = cursor.getDouble(cursor.getColumnIndexOrThrow("Latitude"));
-                System.out.println("1.4 "+DevelopmentLatitude);
+                //System.out.println("1.4 "+DevelopmentLatitude);
                 DevelopmentImgURL = cursor.getString(cursor.getColumnIndexOrThrow("ImgURL"));
-                System.out.println("1.5 "+DevelopmentImgURL);
+                //System.out.println("1.5 "+DevelopmentImgURL);
                 coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
-                System.out.println("1.6 "+coord);
+                //System.out.println("1.6 "+coord);
                 mdList = readMapData(DevelopmentName);
                 HDBFTList = readHDBFlatType(DevelopmentName);
 
@@ -626,7 +623,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         HashMap<String, Double> grants = new HashMap<String, Double>();
 
 
-        String rawQuery = "SELECT GrantType, GrantAmount FROM " + TABLE_NAME4 + " as D" + " WHERE incomeReq = D.incomeReq";
+        String rawQuery = "SELECT GrantType, GrantAmount FROM " + TABLE_NAME4 + " as D" + " WHERE " + "'" + incomeReq + "'" + " = D.IncomeRequired";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
