@@ -27,7 +27,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
 
 
     //Change version if schema changed;
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 1;
 
     //----------- TABLE COLUMNS for ALL -----------//
     public static final String ID = "ID";
@@ -630,7 +630,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         HashMap<String, Double> grants = new HashMap<String, Double>();
 
 
-        String rawQuery = "SELECT GrantType, GrantAmount FROM " + TABLE_NAME4 + " as D" + " WHERE incomeReq = D.incomeReq";
+        String rawQuery = "SELECT GrantType, GrantAmount FROM " + TABLE_NAME4 + " as D" + " WHERE D.IncomeRequired = '" + incomeReq +"'";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
