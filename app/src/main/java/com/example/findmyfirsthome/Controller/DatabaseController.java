@@ -27,7 +27,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
 
 
     //Change version if schema changed;
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 1;
 
     //----------- TABLE COLUMNS for ALL -----------//
     public static final String ID = "ID";
@@ -571,7 +571,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
             while (cursor != null) {
                 Double HDBFlatPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("HDBFlatPrice"));
 
-                Integer HDBFlatType = cursor.getInt(cursor.getColumnIndexOrThrow("HDBFlatType"));
+                String HDBFlatType = cursor.getString(cursor.getColumnIndexOrThrow("HDBFlatType"));
 
                 //add data to flatType
                 flatTypeDetails = new HashMap<String, Object>();
