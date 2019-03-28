@@ -158,14 +158,14 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         //On creation of DBC the table SQL_HDB will be created
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES2);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES3);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES4);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES5);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES6);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES7);
         sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES8);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES7);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES6);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES5);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES4);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES3);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES2);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
         sqLiteDatabase.execSQL(SQL_HDBDevelopment);
         sqLiteDatabase.execSQL(SQL_FlatType);
         sqLiteDatabase.execSQL(SQL_Amenities);
@@ -181,14 +181,14 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES2);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES3);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES4);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES5);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES6);
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES7);
         sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES8);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES7);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES6);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES5);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES4);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES3);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES2);
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
         onCreate(sqLiteDatabase);
     }
 
