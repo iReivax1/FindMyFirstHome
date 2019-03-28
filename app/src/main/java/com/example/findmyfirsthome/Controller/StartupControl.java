@@ -5,7 +5,7 @@ import com.example.findmyfirsthome.Boundary.MapAPI;
 
 public class StartupControl {
     public void runIt(){
-//        MapsController mapsController = new MapsController();
+
 //        HDBSplashscreenController SScontrol = new HDBSplashscreenController();
 
         //dataGovAPI.start();

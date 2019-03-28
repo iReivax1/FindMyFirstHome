@@ -79,6 +79,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         ImgURL1 = scrapImage(urlMain1);
 
         ///////////////////////////////////SK///////////////////////////////////
+
         //Scrap development name : SK
         HDBDevelopmentNames2 = (scrapDevelopmentName(urlALL, 0, 8, 1));
         //System.out.println(HDBDevelopmentNames2);
@@ -202,6 +203,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
                 String[] textArray = text.split("<br>");
                 for (int i = 0; i < textArray.length; i++) {
                     textList.add(textArray[i]);
+                    System.out.println(textArray);
                 }
             }
             if (text.contains("<sup>")) {
@@ -367,7 +369,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
                 tempHM.put("AHG", AHG.get(i));
                // print(tempHM); //HM got no problem
                 //Log.i("scrapGrans", incomeReq.get(i)); //scraping is fine
-                grantList.put(incomeReq.get(i), tempHM); // this got problem TODO: PROBLEM IS HERE
+                grantList.put(incomeReq.get(i), tempHM);
             }
             return grantList;
         } catch (IOException e) {
