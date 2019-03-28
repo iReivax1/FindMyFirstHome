@@ -38,6 +38,7 @@ public class HDBDevelopmentController {
 
     public List<String> getRecHDBnames(){
         ArrayList<HDBDevelopment> temp = db.readHDBData();
+        listHDBName = new ArrayList<>();
         for(HDBDevelopment i : temp){
             if(i.getAffordable())
                 listHDBName.add(i.getDevelopmentName());
