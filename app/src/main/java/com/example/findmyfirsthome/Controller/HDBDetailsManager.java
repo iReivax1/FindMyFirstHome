@@ -151,7 +151,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
                 for(String ft : ListFlatType.get(i).keySet()) {
                     ftNew.put(ft,ListFlatType.get(i).get(ft));
                 }
-                writeHDBFlatData(name, ftNew, false);
+                writeHDBFlatData(name, ftNew);
             }
             index++;
         }
@@ -183,9 +183,9 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         }*/
     }
 
-    public void writeHDBFlatData(String HDBDevelopmentNames, HashMap<String, Object> ListFlatType, Boolean affordable){
+    public void writeHDBFlatData(String HDBDevelopmentNames, HashMap<String, Object> ListFlatType){
         DatabaseController db = new DatabaseController(mContext);
-        db.writeHDBFlatTypeData(HDBDevelopmentNames,ListFlatType, affordable);
+        db.writeHDBFlatTypeData(HDBDevelopmentNames,ListFlatType);
     }
 
     public void writeHDBGrantData(String incomeReq, HashMap<String, Double> grant){

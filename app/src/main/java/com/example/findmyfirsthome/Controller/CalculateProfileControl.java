@@ -1,6 +1,7 @@
 package com.example.findmyfirsthome.Controller;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.findmyfirsthome.Entity.CalculatedProfile;
@@ -28,7 +29,7 @@ public class CalculateProfileControl{
 
     }
     public void setAffordability(){
-        dbControl.deleteHDB(); //clear content in database
+        dbControl.deleteHDBData(); //clear content in database
 
         for(int i=0;i< hdbDevelopments.size();i++){
             ArrayList<HashMap<String, Object>> readHDBFlatType = hdbDevelopments.get(i).getHDBFlatTypeDetailsList(); //get flat types of each development
@@ -47,7 +48,7 @@ public class CalculateProfileControl{
                         }
                     }
                 }
-                dbControl.writeHDBFlatTypeData(hdbDevelopments.get(i).getDevelopmentName(), j); //write back into the database
+
             }
             if(numOfTrue>0) dbControl.writeHDBData(hdbDevelopments.get(i).getDevelopmentName(),hdbDevelopments.get(i).getDevelopmentDescription(),hdbDevelopments.get(i).getImgUrl(),true);
             else dbControl.writeHDBData(hdbDevelopments.get(i).getDevelopmentName(),hdbDevelopments.get(i).getDevelopmentDescription(),hdbDevelopments.get(i).getImgUrl(),false);
@@ -160,27 +161,27 @@ public class CalculateProfileControl{
         }
     }
 
-    public double calculateAvgHouseholdIncome(){
+    public double calculateAvgHouseholdIncome() {
         double sum;
         int nOofmembers;
-        if(udSaved.isMarried()){
-            sum = udSaved.getGrossSalary()+udSaved.getGrossSalaryPartner();
-            nOofmembers =2;
-        }
-        else{
+        if (udSaved.isMarried()) {
+            sum = udSaved.getGrossSalary() + udSaved.getGrossSalaryPartner();
+            nOofmembers = 2;
+        } else {
             sum = udSaved.getGrossSalary();
-            nOofmembers =1;
+            nOofmembers = 1;
         }
-        for(int i=0;i<udSaved.getMembersSalaryList().size();i++){
-            sum+=udSaved.getMembersSalaryList().get(i);
+        for (int i = 0; i < udSaved.getMembersSalaryList().size(); i++) {
+            sum += udSaved.getMembersSalaryList().get(i);
         }
-        nOofmembers+= udSaved.getNumberOfAdditionalHouseholdMembers();
-        return sum/nOofmembers;
+        nOofmembers += udSaved.getNumberOfAdditionalHouseholdMembers();
+        return sum / nOofmembers;
 
+    }
 
-    public void writeCalculatedProfile(AppCompatActivity ui){
-        DatabaseController db = new DatabaseController(ui.getApplicationContext());
-        db.writeCalculatedProfileData(cp);
+    public void writeCalculatedProfile(Context ui){
+        DatabaseController db = new DatabaseController(ui);
+        db.writeCalculatedProfile(cp);
     }
 
 

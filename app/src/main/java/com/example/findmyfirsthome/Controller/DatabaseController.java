@@ -216,7 +216,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         //assert checkWriteFlatData == true;
     }
 
-    public void writeHDBFlatTypeData(String name, HashMap<String, Object> ListFlatType, Boolean affordable) {
+    public void writeHDBFlatTypeData(String name, HashMap<String, Object> ListFlatType) {
         long newRowId;
 
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
@@ -232,7 +232,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
             } else if (key.contains("flatType")) {
                 values.put(HDBFlatType, ListFlatType.get(key).toString());
             } else if (key.contains("affordability")) {
-                values.put(HDBFlatAffordability, affordable);
+                values.put(HDBFlatAffordability, (boolean)ListFlatType.get(key));
             }
         }
        // System.out.println(values);

@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.findmyfirsthome.Controller.CalculateProfileControl;
 import com.example.findmyfirsthome.Controller.ProfileControl;
 import com.example.findmyfirsthome.R;
 
@@ -118,6 +119,16 @@ public class ProfileUI3 extends AppCompatActivity implements View.OnFocusChangeL
                 pc.printSalaries();
                 pc.writeProfile(activity);
                 Log.d("test", "come here");
+
+                CalculateProfileControl cpc = new CalculateProfileControl(activity);
+                cpc.setMaxMortgage();
+                cpc.setDownpayment();
+                cpc.setMaxMortgagePeriod();
+                cpc.setMaxPropertyPrice();
+                cpc.setMonthlyInstallment();
+                cpc.setAffordability();
+                cpc.writeCalculatedProfile(activity);
+
                 Intent submitting = new Intent( ProfileUI3.this, HDBDevelopmentUI.class);
                 startActivity(submitting);
             }
