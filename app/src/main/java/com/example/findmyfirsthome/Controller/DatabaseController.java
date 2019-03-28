@@ -154,6 +154,7 @@ public class DatabaseController extends SQLiteOpenHelper implements DataAccessIn
         sqLiteDatabase.execSQL(SQL_membersSalaryList_);
         sqLiteDatabase.execSQL(SQL_TaxList);
         sqLiteDatabase.execSQL(SQL_CalculatedProfile);
+        
     }
 
     //If Database version is difference, delete all current entries and re-create new DBs

@@ -42,9 +42,15 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     private ArrayList<String> descriptionText1 = new ArrayList<>();
     private ArrayList<String> descriptionText2 = new ArrayList<>();
     private ArrayList<String> descriptionText3 = new ArrayList<>();
-    private String ImgURL1;
-    private String ImgURL2;
-    private String ImgURL3;
+    private String ImgURLBoonLay;
+    private String ImgURLJurong;
+    private String ImgFernvale;
+    private String ImgKallang;
+    private String ImgTowerCrest;
+    ArrayList<String> centralImg = new ArrayList<>();
+    ArrayList<String> northEastImg = new ArrayList<>();
+    ArrayList<String> imageWest = new ArrayList<>();
+
     private Context mContext;
 
 
@@ -74,8 +80,11 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
             descriptionText1.add(scrapDescription(urlMain1, HDBDevelopmentNames1.get(0)));
         }
        // System.out.println(descriptionText1);
-        ImgURL1 = scrapImage(urlMain1);
+        ImgURLBoonLay = scrapImage(urlALL , 1);
+        ImgURLJurong = scrapImage(urlALL , 2);
 
+        imageWest.add(ImgURLBoonLay);
+        imageWest.add(ImgURLJurong);
         ///////////////////////////////////SK///////////////////////////////////
 
         //Scrap development name : SK
@@ -89,7 +98,8 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
             descriptionText2.add(scrapDescription(urlMain2, HDBDevelopmentNames2.get(index)));//"Fernvale"
         }
         //System.out.println(descriptionText2);
-        ImgURL2 = scrapImage(urlMain2);
+        ImgFernvale = scrapImage(urlALL,3);
+        northEastImg.add(ImgFernvale);
 
         ///////////////////////////////////Kallang///////////////////////////////////
         //Scrap development name : Kallang
@@ -102,8 +112,12 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         for(int index = 0; index < HDBDevelopmentNames3.size(); index++){
             descriptionText3.add(scrapDescription(urlMain3, HDBDevelopmentNames3.get(index))); //"Kallang" , "Tower crest"
         }
+
         //System.out.println(descriptionText3);
-        ImgURL3 = scrapImage(urlMain3);
+        ImgKallang = scrapImage(urlALL,4);
+        ImgTowerCrest = scrapImage(urlALL,5);
+        centralImg.add(ImgKallang);
+        centralImg.add(ImgTowerCrest);
         //scrap grants
         firstTimerGrantList = scrapGrants(urlGrants1);
         //printGrants(firstTimerGrantList);
@@ -117,21 +131,21 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
 
-        adaptHDBD(HDBDevelopmentNames1, ListFlatTypePrice1, descriptionText1, ImgURL1);
-        adaptHDBD(HDBDevelopmentNames2, ListFlatTypePrice2, descriptionText2, ImgURL2);
-        adaptHDBD(HDBDevelopmentNames3, ListFlatTypePrice3, descriptionText3, ImgURL3);
+        adaptHDBD(HDBDevelopmentNames1, ListFlatTypePrice1, descriptionText1, imageWest);
+        adaptHDBD(HDBDevelopmentNames2, ListFlatTypePrice2, descriptionText2, northEastImg);
+        adaptHDBD(HDBDevelopmentNames3, ListFlatTypePrice3, descriptionText3, centralImg);
         adaptGrants(firstTimerGrantList);
         adaptGrants(fsTimerGrantList);
     }
 
 //    ----------------------------------------Open up all the convoluted data structure and store it in simple form--------------------------------------------
 
-    public boolean adaptHDBD(ArrayList<String> HDBDevelopmentNames, ArrayList<HashMap<String, Object>> ListFlatType, ArrayList<String> descriptionText, String ImgURL) {
+    public boolean adaptHDBD(ArrayList<String> HDBDevelopmentNames, ArrayList<HashMap<String, Object>> ListFlatType, ArrayList<String> descriptionText, ArrayList<String> ImgURL) {
 
         //For each of the HDBDevelopmenet
         int index = 0;
         for (String name : HDBDevelopmentNames) {
-            writeHDBData(name, descriptionText.get(index), ImgURL, false);
+            writeHDBData(name, descriptionText.get(index), ImgURL.get(index), false);
             for(int i=0;i<ListFlatType.size();i++) {
                 HashMap<String, Object> ftNew = new HashMap<String, Object>();
                 for(String ft : ListFlatType.get(i).keySet()) {
@@ -379,13 +393,18 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
 
 //    ----------------------------------------Scrap Image --------------------------------------------
 
-    public String scrapImage(String url) {
+    public String scrapImage(String url, int index) {
         String imgUrl = "" ;
         try {
             Document document = Jsoup.connect(url).get();
-            Element image = document.select("img").get(1);
-            imgUrl = image.absUrl("src");
-            //System.out.println(imgUrl);
+                Element image = document.select("img").get(index);
+                imgUrl = image.absUrl("src");
+                System.out.println(imgUrl);
+                //FIRST IS boon  lay glade
+                //SECOND IS Jurong west jewel
+                //third fernvale
+                //4th kallang
+                //5th tower crest
         }
         catch (IOException e) {
             e.printStackTrace();

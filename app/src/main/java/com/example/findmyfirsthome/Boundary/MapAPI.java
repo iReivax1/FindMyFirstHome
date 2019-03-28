@@ -20,8 +20,13 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
 
 
     private GoogleMap mMap;
-    Context context = this;
+    Context context;
+    public  MapAPI(){
 
+    }
+    public MapAPI(Context context){
+        this.context = context;
+    }
 
     public void onPause() {
         super.onPause();
