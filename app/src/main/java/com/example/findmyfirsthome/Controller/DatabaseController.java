@@ -419,6 +419,8 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
             AHG = cursor.getDouble(index);
             index = cursor.getColumnIndexOrThrow("SHG");
             SHG = cursor.getDouble(index);
+            index = cursor.getColumnIndexOrThrow("maxPropertyPrice");
+            maxPropertyPrice = cursor.getDouble(index);
         }
         cursor.close();
         CalculatedProfile cp = new CalculatedProfile(AHG,SHG,maxMortgage,monthlyInstallment,maxMortgagePeriod,maxPropertyPrice,downpayment);
@@ -632,7 +634,8 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         HashMap<String, Double> grants = new HashMap<String, Double>();
 
 
-        String rawQuery = "SELECT GrantType, GrantAmount FROM " + TABLE_NAME4 + " as D" + " WHERE " + "'"+incomeReq +"'"+ "= D.incomeReq";
+
+        String rawQuery = "SELECT GrantType, GrantAmount FROM " + TABLE_NAME4 + " as D" + " WHERE D.IncomeRequired = '" + incomeReq +"'";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 

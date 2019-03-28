@@ -3,6 +3,7 @@ package com.example.findmyfirsthome.Controller;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.example.findmyfirsthome.Entity.CalculatedProfile;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
@@ -50,14 +51,11 @@ public class CalculateProfileControl{
                 }
 
             }
+            //true if at least one affordable flat type then set hdb development to true too
             if(numOfTrue>0) dbControl.writeHDBData(hdbDevelopments.get(i).getDevelopmentName(),hdbDevelopments.get(i).getDevelopmentDescription(),hdbDevelopments.get(i).getImgUrl(),true);
             else dbControl.writeHDBData(hdbDevelopments.get(i).getDevelopmentName(),hdbDevelopments.get(i).getDevelopmentDescription(),hdbDevelopments.get(i).getImgUrl(),false);
             for(int m=0;m<readHDBFlatType.size();m++) {
-                HashMap<String, Object> ftNew = new HashMap<String, Object>();
-                for(String ft : readHDBFlatType.get(m).keySet()) {
-                    ftNew.put(ft,readHDBFlatType.get(m).get(ft));
-                }
-                dbControl.writeHDBFlatTypeData(hdbDevelopments.get(i).getDevelopmentName(), ftNew);
+                dbControl.writeHDBFlatTypeData(hdbDevelopments.get(i).getDevelopmentName(), readHDBFlatType.get(m));
             }
         }
 
@@ -66,6 +64,7 @@ public class CalculateProfileControl{
     public void setMaxMortgage(){
         double loanPeriod = cp.getMaxMortgagePeriod();
         double maxMortgage = (cp.getMonthlyInstallment()) * (Math.pow((1+monthIR),(loanPeriod*12)) -1)/(monthIR * (Math.pow((1+monthIR),(loanPeriod*12))));
+        Log.d("WHY", Double.toString(maxMortgage));
         cp.setMaxMortgage(maxMortgage);
     }
 
@@ -156,8 +155,17 @@ public class CalculateProfileControl{
                 HDBGrantData = dbControl.readHDBGrantData("$8,001 to 8,500");
 
             }
-            cp.setAHG(HDBGrantData.get("AHG"));
-            cp.setSHG(HDBGrantData.get("SHG"));
+
+            if(HDBGrantData.size() != 0) {
+                cp.setAHG(HDBGrantData.get("AHG"));
+                cp.setSHG(HDBGrantData.get("SHG"));
+            }
+            else
+            {
+                //when the person cannot afford any grant
+                cp.setAHG(0);
+                cp.setSHG(0);
+            }
         }
     }
 
