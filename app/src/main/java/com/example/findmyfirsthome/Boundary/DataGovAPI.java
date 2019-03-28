@@ -19,6 +19,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -243,6 +248,7 @@ public class DataGovAPI extends AppCompatActivity {
     public void JSONParserTax(JSONObject obj) {
         if (obj != null) {
             HashMap<String, String> info = new HashMap<>();
+            ArrayList<HashMap<String, String>> infoList = new ArrayList<>();
             try {
                 JSONObject jsonObj = obj;
                 //Log.d("test", obj.toString());
@@ -264,9 +270,10 @@ public class DataGovAPI extends AppCompatActivity {
                     info.put("typeOfProperty", typeOfProperty);
                     info.put("taxRate", taxRate);
                     info.put("annualValue", annualValue);
+                    infoList.add(info);
 
                 }
-                writeTaxToDB(info);
+                writeTaxToDB(infoList);
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
             }
@@ -282,8 +289,62 @@ public class DataGovAPI extends AppCompatActivity {
         db.writeAmenitiesData(list);
     }
 
-    public void writeTaxToDB(HashMap<String, String> info){
-        // TODO: write tax list to DB
+    public void writeTaxToDB(ArrayList<HashMap<String, String>> infoList){
+        DatabaseController db = DatabaseController.getInstance(context);
+        db.writeTax(infoList);
+    }
+
+    private static void readKML(InputStream fileKML, String nameCoordinates) {
+        String column = null;
+        Boolean folder = Boolean.TRUE;
+        Boolean placemark = Boolean.FALSE;
+        Boolean placeCorrect = Boolean.FALSE;
+        BufferedReader br = new BufferedReader(new InputStreamReader(fileKML));
+        try {
+            while ((column = br.readLine()) != null) {
+                if (folder) {
+                    int ifolder = column.indexOf("<Folder>");
+                    if (ifolder != -1) {
+                        folder = Boolean.FALSE;
+                        placemark = Boolean.TRUE;
+                        continue;
+                    }
+                }
+                if (placemark) {
+                    String tmpLine = nameCoordinates;
+                    tmpLine = tmpLine.replaceAll("\t", "");
+                    tmpLine = tmpLine.replaceAll(" ", "");
+                    String tmpColumn = column;
+                    tmpColumn = tmpColumn.replaceAll("\t", "");
+                    tmpColumn = tmpColumn.replaceAll(" ", "");
+                    int name = tmpColumn.indexOf(tmpLine);
+                    if (name != -1) {
+                        placemark = Boolean.FALSE;
+                        placeCorrect = Boolean.TRUE;
+                        continue;
+                    }
+                }
+                if (placeCorrect) {
+                    int coordin = column.indexOf("<coordinates>");
+                    if (coordin != -1) {
+                        String tmpCoordin = column;
+                        tmpCoordin = tmpCoordin.replaceAll(" ", "");
+                        tmpCoordin = tmpCoordin.replaceAll("\t", "");
+                        tmpCoordin = tmpCoordin.replaceAll("<coordinates>", "");
+                        tmpCoordin = tmpCoordin
+                                .replaceAll("</coordinates>", "");
+                        String[] coo = tmpCoordin.split(",");
+                        System.out.println("LONG: "+coo[0]);
+                        System.out.println("LATI: "+coo[1]);
+                        break;
+                    }
+                }
+
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -292,7 +353,6 @@ public class DataGovAPI extends AppCompatActivity {
 
 //////////////////////////////////////////////
 // TODO:KML  to parse:
-// https://data.gov.sg/dataset/pre-schools-location
 // https://data.gov.sg/dataset/chas-clinics?resource_id=21dace06-c4d1-4128-9424-aba7668050dc
 // https://geo.data.gov.sg/market-food-centre/2014/12/26/kml/market-food-centre.kml
 // https://geo.data.gov.sg/g-mp08-act-mrt-stn-pt/2011/03/29/kml/g-mp08-act-mrt-stn-pt.zip

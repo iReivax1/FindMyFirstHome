@@ -27,7 +27,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
 
 
     //Change version if schema changed;
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     //----------- TABLE COLUMNS for ALL -----------//
     public static final String ID = "ID";
@@ -142,15 +142,12 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    private static volatile DatabaseController instance;
+    private static volatile DatabaseController instance = null;
 
     public static DatabaseController getInstance(Context cont) {
         if (instance == null) {
-            synchronized (DatabaseController.class) {
-                if (instance == null) {
-                    instance = new DatabaseController(cont);
-                }
-            }
+            instance = new DatabaseController(cont);
+            instance.deleteTables();
         }
         return instance;
     }
@@ -194,6 +191,13 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
 
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
+    }
+
+    private void deleteTables()
+    {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        onCreate(sqLiteDatabase);
+        sqLiteDatabase.close();
     }
 
     /////////////////////////////////////////////////////////////////////Write Functions/////////////////////////////////////////////////////////////////////

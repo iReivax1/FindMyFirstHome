@@ -50,6 +50,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     ArrayList<String> centralImg = new ArrayList<>();
     ArrayList<String> northEastImg = new ArrayList<>();
     ArrayList<String> imageWest = new ArrayList<>();
+    private DatabaseController db;
 
     private Context mContext;
 
@@ -174,18 +175,18 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
 //  ----------------------------------------Write functions to database object--------------------------------------------
 
     public void writeHDBData(String HDBDevelopmentNames, String descriptionText, String ImgURL, Boolean affordable){
-        DatabaseController db = DatabaseController.getInstance(mContext);
+        db = DatabaseController.getInstance(mContext);
         db.writeHDBData(HDBDevelopmentNames,descriptionText,ImgURL, affordable);
 
     }
 
     public void writeHDBFlatData(String HDBDevelopmentNames, HashMap<String, Object> ListFlatType){
-        DatabaseController db = DatabaseController.getInstance(mContext);
+        db = DatabaseController.getInstance(mContext);
         db.writeHDBFlatTypeData(HDBDevelopmentNames,ListFlatType);
     }
 
     public void writeHDBGrantData(String incomeReq, HashMap<String, Double> grant){
-        DatabaseController db = DatabaseController.getInstance(mContext);
+        db = DatabaseController.getInstance(mContext);
         db.writeHDBGrantData(incomeReq, grant);
 //        String temp = "from writeHDBData " + incomeReq;
 //        Log.d("manager",temp);
