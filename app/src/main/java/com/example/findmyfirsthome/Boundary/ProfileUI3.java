@@ -121,11 +121,12 @@ public class ProfileUI3 extends AppCompatActivity implements View.OnFocusChangeL
                 Log.d("test", "come here");
 
                 CalculateProfileControl cpc = new CalculateProfileControl(activity);
-                cpc.setMaxMortgage();
-                cpc.setDownpayment();
+                //Must be set in this order!
                 cpc.setMaxMortgagePeriod();
-                cpc.setMaxPropertyPrice();
                 cpc.setMonthlyInstallment();
+                cpc.setMaxMortgage();
+                cpc.setMaxPropertyPrice();
+                cpc.setDownpayment();
                 cpc.setAffordability();
                 cpc.writeCalculatedProfile(activity);
 

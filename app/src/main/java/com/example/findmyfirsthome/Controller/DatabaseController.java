@@ -27,7 +27,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
 
 
     //Change version if schema changed;
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     //----------- TABLE COLUMNS for ALL -----------//
     public static final String ID = "ID";
@@ -419,6 +419,8 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
             AHG = cursor.getDouble(index);
             index = cursor.getColumnIndexOrThrow("SHG");
             SHG = cursor.getDouble(index);
+            index = cursor.getColumnIndexOrThrow("maxPropertyPrice");
+            maxPropertyPrice = cursor.getDouble(index);
         }
         cursor.close();
         CalculatedProfile cp = new CalculatedProfile(AHG,SHG,maxMortgage,monthlyInstallment,maxMortgagePeriod,maxPropertyPrice,downpayment);

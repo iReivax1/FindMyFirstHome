@@ -75,11 +75,12 @@ public class ProfileUI2 extends AppCompatActivity implements View.OnFocusChangeL
                 pc.setNoOfhMembers(hMembers.getText().toString());
                 pc.writeProfile(activity);
                 CalculateProfileControl cpc = new CalculateProfileControl(activity);
-                cpc.setMaxMortgage();
-                cpc.setDownpayment();
+                //Must be set in this order!
                 cpc.setMaxMortgagePeriod();
-                cpc.setMaxPropertyPrice();
                 cpc.setMonthlyInstallment();
+                cpc.setMaxMortgage();
+                cpc.setMaxPropertyPrice();
+                cpc.setDownpayment();
                 cpc.setAffordability();
                 cpc.writeCalculatedProfile(activity);
                 Intent skip = new Intent( ProfileUI2.this, HDBDevelopmentUI.class);

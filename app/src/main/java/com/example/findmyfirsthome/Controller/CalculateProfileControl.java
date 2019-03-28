@@ -3,6 +3,7 @@ package com.example.findmyfirsthome.Controller;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.example.findmyfirsthome.Entity.CalculatedProfile;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
@@ -66,6 +67,7 @@ public class CalculateProfileControl{
     public void setMaxMortgage(){
         double loanPeriod = cp.getMaxMortgagePeriod();
         double maxMortgage = (cp.getMonthlyInstallment()) * (Math.pow((1+monthIR),(loanPeriod*12)) -1)/(monthIR * (Math.pow((1+monthIR),(loanPeriod*12))));
+        Log.d("WHY", Double.toString(maxMortgage));
         cp.setMaxMortgage(maxMortgage);
     }
 
