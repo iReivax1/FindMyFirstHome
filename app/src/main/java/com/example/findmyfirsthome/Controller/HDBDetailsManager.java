@@ -26,7 +26,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     private String urlMain1 = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTOJW_page_6280/$file/about1.html"; //jurong
     private String urlMain2 = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTOSK_page_6280/$file/about1.html"; //sk
     private String urlMain3 = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTOKWN_page_6280/$file/about1.html"; //kallng
-    private String urlALL = "http://esales.hdb.gov.sg/bp25/launch/19feb/bto/19FEBBTO_page_6280/$file/about0.html";
+    private String urlALL = "http://esales.hdb.gov.sg/bp25/launch/19feb/selection/19FEBBTO_page_6280/$file/about0.html";
     private String urlGrants1 = "https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/first-timer-applicants"; //both first
     private String urlGrants2 = "https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/first-timer-and-second-timer-couple-applicants"; //one first , one second
     //second timer : $15,000 => no need scrap just hardcode make my life easier thanks.
@@ -77,6 +77,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         ImgURL1 = scrapImage(urlMain1);
 
         ///////////////////////////////////SK///////////////////////////////////
+
         //Scrap development name : SK
         HDBDevelopmentNames2 = (scrapDevelopmentName(urlALL, 0, 8, 1));
         //System.out.println(HDBDevelopmentNames2);
@@ -200,6 +201,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
                 String[] textArray = text.split("<br>");
                 for (int i = 0; i < textArray.length; i++) {
                     textList.add(textArray[i]);
+                    System.out.println(textArray);
                 }
             }
             if (text.contains("<sup>")) {
@@ -365,7 +367,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
                 tempHM.put("AHG", AHG.get(i));
                // print(tempHM); //HM got no problem
                 //Log.i("scrapGrans", incomeReq.get(i)); //scraping is fine
-                grantList.put(incomeReq.get(i), tempHM); // this got problem TODO: PROBLEM IS HERE
+                grantList.put(incomeReq.get(i), tempHM);
             }
             return grantList;
         } catch (IOException e) {

@@ -1,5 +1,7 @@
 package com.example.findmyfirsthome.Boundary;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
@@ -25,15 +27,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class DataGovAPI extends AppCompatActivity {
 
-    EditText limit; // This will be a reference to our GitHub username input.
-    EditText dataType;
-    Button getData;  // This is a reference to the "Get Repos" button.
-    TextView dataList;  // This will reference our repo list text box.
+
     RequestQueue requestQueue;  // This is our requests queue to process our HTTP requests.
     String typeData;
     String childCareURL = "https://data.gov.sg/api/action/datastore_search?resource_id=4fc3fd79-64f2-4027-8d5b-ce0d7c279646&limit=";  // This is the API base URL (GitHub API)
@@ -47,37 +49,15 @@ public class DataGovAPI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_gov_api);
-
-        this.dataType = findViewById(R.id.data_type);
-        this.limit = findViewById(R.id.limit);  // Link our github user text box.
-        this.getData = findViewById(R.id.get_data);  // Link our click button.
-        this.dataList = findViewById(R.id.data_list);  // Link our repository list text output box.
-        this.dataList.setMovementMethod(new ScrollingMovementMethod());  // This makes our text box scrollable, for those big GitHub contributors with lots of repos :)
-        System.out.println("requestQueue next");
         requestQueue = Volley.newRequestQueue(this);  // This setups up a new request queue which we will need to make HTTP requests.
-        System.out.println("RequestQueue done");
-        DownloadFileManager dfm = new DownloadFileManager();
-        System.out.println("DFM created");
-        dfm.download("https://geo.data.gov.sg/market-food-centre/2014/12/26/kml/market-food-centre.kml");
-
+        getDataFromDataGov("childCare", 10);
+        getDataFromDataGov("market", 10);
+        getDataFromDataGov("school", 10);
     }
 
-    private void clearRepoList() {
-        // This will clear the list (set it as a blank string).
-        this.dataList.setText("");
-    }
 
-    private void addToList(String type, String name, String address) {
-        // This will add new data to our list.
-        // (\n\n make two new lines).
-        String currentText = dataList.getText().toString();
-        this.dataList.setText(currentText + "\n\n" +type + " " + name + " " + address);
-    }
-
-    private void setRepoListText(String str) {
-        // This is used for setting the text of our repo list box to a specific string.
-        // We will use this to write a "No repos found" message if the user doens't have any.
-        this.dataList.setText(str);
+    public void getDataFromDataGov(String type, int limit) { //type is childcare market all these, limit iss how many toquery from 5 6 7?
+        getList(type,Integer.toString(limit));
     }
 
     //limit is the limit number for the number of search queries > 1 please.
@@ -123,7 +103,6 @@ public class DataGovAPI extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("test", "error");
-                setRepoListText("error");
             }
         });
 
@@ -132,13 +111,6 @@ public class DataGovAPI extends AppCompatActivity {
         requestQueue.add(jsonObjReq);
     }
 
-    public void getReposClicked(View v) {
-        // Clear the repo list (so we have a fresh screen to add to)
-        clearRepoList();
-        // Call our getList() function that is defined above and pass in the
-        // text which has been entered into the etGitHubUser text input field.
-        getList(dataType.getText().toString(),limit.getText().toString());
-    }
 
 
 
@@ -178,8 +150,6 @@ public class DataGovAPI extends AppCompatActivity {
                     info.put("AmenitiesLat", coordinates.latitude);
                     info.put("AmenitiesLng", coordinates.longitude);
 
-                    //For UI purpose, just for testing
-                    addToList("childCare", centre_name, centre_address);
                 }
                 writeAmenitiesToDB(info);
             } catch (final JSONException e) {
@@ -219,8 +189,6 @@ public class DataGovAPI extends AppCompatActivity {
                     info.put("AmenitiesLat", coordinates.latitude);
                     info.put("AmenitiesLng", coordinates.longitude);
 
-                    //For UI purpose, just for testing
-                    addToList("market", name_of_centre, location_of_centre);
                 }
                 // adding contact to contact list
                 writeAmenitiesToDB(info);
@@ -264,9 +232,6 @@ public class DataGovAPI extends AppCompatActivity {
                     info.put("AmenitiesLng", coordinates.longitude);
                     // adding contact to contact list
                     //infoList.add(info);
-
-                    //For UI purpose, just for testing
-                    addToList("school", schoolName, postalCode);
                 }
                 writeAmenitiesToDB(info);
             } catch (final JSONException e) {
@@ -305,8 +270,7 @@ public class DataGovAPI extends AppCompatActivity {
                     info.put("typeOfProperty", typeOfProperty);
                     info.put("taxRate", taxRate);
                     info.put("annualValue", annualValue);
-                    addToList(typeOfProperty, taxRate, annualValue);
-                    // adding contact to contact list
+
                 }
                 writeTaxToDB(info);
             } catch (final JSONException e) {
@@ -329,15 +293,11 @@ public class DataGovAPI extends AppCompatActivity {
     }
 
 
-    public void KMLConnector() {
-
-    }
-
 }
 
 
 //////////////////////////////////////////////
-// KML  to parse:
+// TODO:KML  to parse:
 // https://data.gov.sg/dataset/pre-schools-location
 // https://data.gov.sg/dataset/chas-clinics?resource_id=21dace06-c4d1-4128-9424-aba7668050dc
 // https://geo.data.gov.sg/market-food-centre/2014/12/26/kml/market-food-centre.kml
