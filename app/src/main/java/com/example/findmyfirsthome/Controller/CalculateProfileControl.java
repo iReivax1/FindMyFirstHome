@@ -1,6 +1,7 @@
 package com.example.findmyfirsthome.Controller;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.findmyfirsthome.Entity.CalculatedProfile;
@@ -47,7 +48,7 @@ public class CalculateProfileControl{
                         }
                     }
                 }
-                dbControl.writeHDBFlatTypeData(hdbDevelopments.get(i).getDevelopmentName(), j); //write back into the database
+
             }
             if(numOfTrue>0) dbControl.writeHDBData(hdbDevelopments.get(i).getDevelopmentName(),hdbDevelopments.get(i).getDevelopmentDescription(),hdbDevelopments.get(i).getImgUrl(),true);
             else dbControl.writeHDBData(hdbDevelopments.get(i).getDevelopmentName(),hdbDevelopments.get(i).getDevelopmentDescription(),hdbDevelopments.get(i).getImgUrl(),false);
@@ -177,9 +178,8 @@ public class CalculateProfileControl{
         return sum / nOofmembers;
     }
 
-
-    public void writeCalculatedProfile (AppCompatActivity ui){
-        DatabaseController db = new DatabaseController(ui.getApplicationContext());
+    public void writeCalculatedProfile(Context ui){
+        DatabaseController db = new DatabaseController(ui);
         db.writeCalculatedProfile(cp);
     }
 

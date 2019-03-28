@@ -174,13 +174,9 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
 //  ----------------------------------------Write functions to database object--------------------------------------------
 
     public void writeHDBData(String HDBDevelopmentNames, String descriptionText, String ImgURL, Boolean affordable){
-        //if(getStatus() == AsyncTask.Status.FINISHED){
-            DatabaseController db = new DatabaseController(mContext);
-            db.writeHDBData(HDBDevelopmentNames,descriptionText,ImgURL, affordable);
-        /*}
-        else{
-            System.out.println("SplashScreenController write HDB, Fail to write "+HDBDevelopmentNames);
-        }*/
+        DatabaseController db = DatabaseController.getInstance(mContext);
+        db.writeHDBData(HDBDevelopmentNames,descriptionText,ImgURL, affordable);
+
     }
 
     public void writeHDBFlatData(String HDBDevelopmentNames, HashMap<String, Object> ListFlatType){
@@ -189,7 +185,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     }
 
     public void writeHDBGrantData(String incomeReq, HashMap<String, Double> grant){
-        DatabaseController db = new DatabaseController(mContext);
+        DatabaseController db = DatabaseController.getInstance(mContext);
         db.writeHDBGrantData(incomeReq, grant);
 //        String temp = "from writeHDBData " + incomeReq;
 //        Log.d("manager",temp);
