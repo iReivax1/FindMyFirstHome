@@ -39,7 +39,7 @@ public class ProfileControl {
     }
     public void setAge(String ageInputStr){
         if(ageInputStr.isEmpty()==true){
-            ud.setAge(-1);
+            ud.setAge(0);
         }
         else {
             int age = Integer.parseInt(ageInputStr);
@@ -74,7 +74,7 @@ public class ProfileControl {
     }
     public void setAgePartner(String ageInput2Str){
         if(ageInput2Str.isEmpty()==true){
-            ud.setAgePartner(-1);
+            ud.setAgePartner(0);
         }
         else {
             int agePartner = Integer.parseInt(ageInput2Str);
@@ -179,8 +179,8 @@ public class ProfileControl {
         }
     }
 
-    public void writeProfile(Context context){
-        DatabaseController db = DatabaseController.getInstance(context);
+    public void writeProfile(Activity activity){
+        DatabaseController db = DatabaseController.getInstance(activity.getApplicationContext());
         db.writeUserData(ud);
     }
 
