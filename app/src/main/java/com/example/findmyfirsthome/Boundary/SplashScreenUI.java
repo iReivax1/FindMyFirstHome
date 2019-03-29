@@ -5,11 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.findmyfirsthome.Controller.DownloadFileManager;
-import com.example.findmyfirsthome.Controller.StartupControl;
 import com.example.findmyfirsthome.R;
-
-import static android.support.v4.content.ContextCompat.startActivity;
 
 public class SplashScreenUI extends AppCompatActivity {
 
@@ -21,8 +17,6 @@ public class SplashScreenUI extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
         //Initialize the back-end controller classes, i.e database, hdbmanager, and do all the get data
-        StartupControl sc1 = new StartupControl();
-        sc1.runIt();
         Intent i = new Intent(SplashScreenUI.this , ProfileUI.class);
         startActivity(i);
         new Handler().postDelayed(new Runnable() {
@@ -31,8 +25,6 @@ public class SplashScreenUI extends AppCompatActivity {
             public void run() {
 //                 This method will be executed once the timer is over
 //                 Start profileUI activity
-                Intent j = new Intent( SplashScreenUI.this, DataGovAPI.class);
-                startActivity(j);
             }
         }, SPLASH_TIME_OUT);
     }

@@ -23,7 +23,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".Controller.DownloadFileManager"/>
-        <activity android:name=".Boundary.DataGovAPI" />
         <activity
             android:name=".Boundary.ProfileUI3"
             android:parentActivityName=".Boundary.ProfileUI2" />

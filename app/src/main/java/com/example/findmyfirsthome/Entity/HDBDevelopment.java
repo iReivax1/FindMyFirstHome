@@ -8,7 +8,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class HDBDevelopment {
+public class  HDBDevelopment {
     private String developmentName;
     private String developmentDescription;
     private boolean affordable;

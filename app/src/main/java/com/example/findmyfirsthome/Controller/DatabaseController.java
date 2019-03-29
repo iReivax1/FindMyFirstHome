@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 //Basically this is our DAO;
 //Need to refactor this class to an interface class.
@@ -263,7 +264,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         db.close();
     }
 
-    public boolean writeAmenitiesData(HashMap<String, Object> infoList) {
+    public boolean writeAmenitiesData(LinkedHashMap<String, Object> infoList) {
 
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
@@ -351,7 +352,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         return false;
     }
 
-    public boolean writeTax(HashMap<String, String> info){
+    public boolean writeTax(LinkedHashMap<String, String> info){
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
