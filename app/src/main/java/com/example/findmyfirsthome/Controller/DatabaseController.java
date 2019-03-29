@@ -446,6 +446,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         String DevelopmentName = "";
         String DevelopmentDescription = "";
         String DevelopmentImgURL = "";
+        boolean affordable = false;
         if (cursor.moveToFirst()){
             while (cursor != null) {
                 DevelopmentName = cursor.getString(cursor.getColumnIndexOrThrow("HDBDevelopmentName"));
@@ -460,10 +461,11 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
                 //System.out.println("1.5 "+DevelopmentImgURL);
                 coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
                 //System.out.println("1.6 "+coord);
+                affordable = cursor.getInt(cursor.getColumnIndexOrThrow("HDBAffordability")) == 1;
                 mdList = readMapData(DevelopmentName);
                 HDBFTList = readHDBFlatType(DevelopmentName);
 
-                HDBDList.add(createHDBDevelopmentObject(HDBFTList, DevelopmentName, DevelopmentDescription, false, coord, mdList, DevelopmentImgURL));
+                HDBDList.add(createHDBDevelopmentObject(HDBFTList, DevelopmentName, DevelopmentDescription, affordable, coord, mdList, DevelopmentImgURL));
 
                 if(cursor.isLast()) break;
                 cursor.moveToNext();
@@ -495,6 +497,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         String DevelopmentName = developmentName;
         String DevelopmentDescription = "";
         String DevelopmentImgURL = "";
+        boolean affordable = false;
         if(cursor.moveToFirst()) {
             while (cursor != null) {
                 DevelopmentName = cursor.getString(cursor.getColumnIndexOrThrow("HDBDevelopmentName"));
@@ -509,6 +512,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
 
                 DevelopmentImgURL = cursor.getString(cursor.getColumnIndexOrThrow("ImgURL"));
 
+                affordable = cursor.getInt(cursor.getColumnIndexOrThrow("HDBAffordability")) == 1;
                 mdList = readMapData(DevelopmentName);
                 HDBFTList = readHDBFlatType(DevelopmentName);
                 if(cursor.isLast()) break;
@@ -522,7 +526,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         if (mdList == null) mdList = new ArrayList<>();
 
         //TODO: Return created objects by calling the creation method
-        HDBD = createHDBDevelopmentObject(HDBFTList, DevelopmentName, DevelopmentDescription, false, coord, mdList, DevelopmentImgURL);
+        HDBD = createHDBDevelopmentObject(HDBFTList, DevelopmentName, DevelopmentDescription, affordable, coord, mdList, DevelopmentImgURL);
 
         return HDBD;
 
@@ -564,11 +568,11 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
     public ArrayList<HashMap<String, Object>> readHDBFlatType(String name) {
         assert getReadableDatabase() != null;
         SQLiteDatabase db = getReadableDatabase();
-
+        boolean affordable = false;
         HashMap<String, Object> flatTypeDetails = null;
         ArrayList<HashMap<String, Object>> HDBFlatTypedetailsList = new ArrayList<HashMap<String, Object>>();
 
-        String rawQuery = "SELECT HDBFlatType, HDBFlatPrice FROM " + TABLE_NAME2 + " as FT " + "WHERE FT.HDBDevelopmentName = '" + name +"'";
+        String rawQuery = "SELECT * FROM " + TABLE_NAME2 + " as FT " + "WHERE FT.HDBDevelopmentName = '" + name +"'";
 
         Cursor cursor = db.rawQuery(rawQuery, null);
 
@@ -577,6 +581,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
 
                 String HDBFlatType = cursor.getString(cursor.getColumnIndexOrThrow("HDBFlatType"));
                 Double HDBFlatPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("HDBFlatPrice"));
+                affordable = (cursor.getInt(cursor.getColumnIndexOrThrow("HDBAffordability")) == 1);
                 //System.out.println(HDBFlatType + " " +HDBFlatPrice);
 
 
@@ -584,7 +589,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
                 flatTypeDetails = new HashMap<String, Object>();
                 flatTypeDetails.put("flatType", HDBFlatType);
                 flatTypeDetails.put("price", HDBFlatPrice);
-                flatTypeDetails.put("affordability", false);
+                flatTypeDetails.put("affordability", affordable);
                 HDBFlatTypedetailsList.add(flatTypeDetails);
                 if(cursor.isLast()) break;
                 cursor.moveToNext();
@@ -764,8 +769,9 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
     ///////////////////////////////Delete Function////////////////////////////////////
     public void deleteHDBData() {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_NAME,null,null);
-        db.delete(TABLE_NAME2,null,null);
+        int a = db.delete(TABLE_NAME,null,null);
+        int b = db.delete(TABLE_NAME2,null,null);
+        System.out.println(a + ", " + b);
         db.close();
     }
 }

@@ -38,6 +38,7 @@ public class HDBDevelopmentController {
 
     public List<String> getRecHDBnames(){
         ArrayList<HDBDevelopment> temp = db.readHDBData();
+        listHDBName = new ArrayList<>();
         for(HDBDevelopment i : temp){
             if(i.getAffordable())
                 listHDBName.add(i.getDevelopmentName());
@@ -60,9 +61,9 @@ public class HDBDevelopmentController {
         List<String> footerDetails = new ArrayList<>();
         if (cp == null)
             return footerDetails;
-        footerDetails.add(Double.toString(cp.getMaxPropertyPrice()));
-        footerDetails.add(Double.toString(cp.getMaxMortgage()));
-        footerDetails.add(Double.toString(cp.getMaxMortgagePeriod()));
+        footerDetails.add(Integer.toString((int)Math.ceil(cp.getMaxPropertyPrice())));
+        footerDetails.add(Integer.toString((int)Math.ceil(cp.getMaxMortgage())));
+        footerDetails.add(Integer.toString((int)Math.ceil(cp.getMaxMortgagePeriod())));
         return footerDetails;
     }
 }
