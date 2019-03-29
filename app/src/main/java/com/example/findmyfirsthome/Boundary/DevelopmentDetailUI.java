@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -29,8 +29,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyCallback{
+public class DevelopmentDetailUI extends AppCompatActivity implements OnMapReadyCallback{
 
     private DevelopmentDetailControl ddc;
     private GoogleMap mMap;
@@ -177,6 +178,24 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
                 .findFragmentById(R.id.map_developmentDetails);
 
         mapFragment.getMapAsync(this);
+
+
+        //for footer display for recalculation
+        Button recalculate = (Button) findViewById(R.id.footer_button);
+        TextView footerText = (TextView) findViewById(R.id.footer_text);
+
+        List<String> footerDetails = ddc.getFooterDetails();
+        footerText.setText("Maximum Property Purchase Price: $" + footerDetails.get(0) +
+                "\nMaximum Mortgage Amount: $" + footerDetails.get(1) +
+                "\nMaximum Mortgage Term: " + footerDetails.get(2) + " years");
+
+        recalculate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DevelopmentDetailUI.this, ProfileUI.class); //replace HDBDevelopmentUI w Form
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -186,7 +205,7 @@ public class DevelopmentDetailUI extends FragmentActivity implements OnMapReadyC
         amenitiesDetailsList = ddc.getAmenitiesDetailsList();
 
         //only plot if there is data received
-        if(HDBFlatTypeDetailsList.size() != 0) {
+        if(HDBFlatTypeDetailsList.size() > 0) {
             // get location of development location and add a marker to it
             LatLng developmentLoc = ddc.getDevelopmentLocation();
             mMap.addMarker(new MarkerOptions().position(developmentLoc).title(ddc.getDevelopmentName()));
