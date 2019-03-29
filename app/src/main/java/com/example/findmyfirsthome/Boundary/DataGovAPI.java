@@ -30,91 +30,117 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 
-public class DataGovAPI extends AsyncTask<Void, Void, Void> {
+public class DataGovAPI {
 
-    RequestQueue requestQueue;  // This is our requests queue to process our HTTP requests.
+    // This is our requests queue to process our HTTP requests.
     String typeData;
     String childCareURL = "https://data.gov.sg/api/action/datastore_search?resource_id=4fc3fd79-64f2-4027-8d5b-ce0d7c279646&limit=";
     String marketURL = "https://data.gov.sg/api/action/datastore_search?resource_id=8f6bba57-19fc-4f36-8dcf-c0bda382364d&limit=";
     String schoolURL = "https://data.gov.sg/api/action/datastore_search?resource_id=ede26d32-01af-4228-b1ed-f05c45a1d8ee&limit=";
     String taxURL = "https://data.gov.sg/api/action/datastore_search?resource_id=bb6f5bf8-7d0b-4526-b020-b812ea7d7d89&limit=";
-    String url;  // This will hold the full URL which will include the username entered in the etGitHubUser.
+    String url1;
+    String url2;
+    String url3;
+    String url4;
+    // This will hold the full URL which will include the username entered in the etGitHubUser.
     MapAPI maps = new MapAPI();
     Context context;
     ArrayList<LinkedHashMap<String, Object>> childCareList = new ArrayList<>();
     ArrayList<LinkedHashMap<String, Object>> marketList = new ArrayList<>();
     ArrayList<LinkedHashMap<String, Object>> schoolList = new ArrayList<>();
     ArrayList<LinkedHashMap<String, String>> taxList = new ArrayList<>();
+    RequestQueue requestQueue;
 
     public DataGovAPI(Context cont) {
         this.context = cont;
     }
 
-    @Override
-    protected void onPreExecute() {
-        requestQueue = Volley.newRequestQueue(context);  // This setups up a new request queue which we will need to make HTTP requests
-        super.onPreExecute();
-    }
 
-    @Override
-    protected Void doInBackground(Void... voids) {
-        getDataFromDataGov("childCare", 10);
- //       getDataFromDataGov("market", 10);
- //       getDataFromDataGov("school", 10);
+    public void execute() {
+        // This setups up a new request queue which we will need to make HTTP requests
+        getDataFromDataGov("childCare", 1537);
+        getDataFromDataGov("market", 107);
+        getDataFromDataGov("school", 438);
 //         getDataFromDataGov("tax",5);
 //        parseKML();
 
-        return null;
-    }
 
-    @Override
-    protected void onPostExecute(Void result) {
-        writeAmenitiesToDB(childCareList);
-    //    writeAmenitiesToDB(marketList);
-   //     writeAmenitiesToDB(schoolList);
-  //      writeTaxToDB(taxList);
     }
 
 
     //limit is the limit number for the number of search queries > 1 please.
     private void getDataFromDataGov(String type, int lim) {
-
+        JsonObjectRequest jsonObjReq = null;
         //this is the datagov limit
         this.typeData = type;
         String limit = Integer.toString(lim);
         //Check type to set url
-        if (typeData.equals("childCare")) {
-            this.url = this.childCareURL + limit;
-        } else if (typeData.equals("market")) {
-            this.url = this.marketURL + limit;
-        } else if (typeData.equals("school")) {
-            this.url = this.schoolURL + limit;
-        } else if (typeData.equals("tax")) {
-            this.url = this.taxURL + limit;
-        }
         // Next, we create a new JsonArrayRequest. This will use Volley to make a HTTP request
         // that expects a JSON Array Response.
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, (JSONObject) null, new Response.Listener<JSONObject>() {
+        requestQueue = Volley.newRequestQueue(context);
+        if (typeData.equals("childCare")) {
+            this.url1 = this.childCareURL + limit;
+            jsonObjReq = new JsonObjectRequest(Request.Method.GET, url1, (JSONObject) null, new Response.Listener<JSONObject>() {
 
-            @Override
-            public void onResponse(JSONObject response) {
-                if (typeData.equals("childCare")) {
-                    childCareList = JSONParserChildCare(response);
-                } else if (typeData.equals("market")) {
-                    marketList = JSONParserMarket(response);
-                } else if (typeData.equals("school")) {
-                    schoolList = JSONParserSchool(response);
-                } else if (typeData.equals("tax")) {
-                    taxList = JSONParserTax(response);
+                @Override
+                public void onResponse(JSONObject response) {
+                    childCareList = JSONParserChildCare(response); //here is fine
+                    writeAmenitiesToDB(childCareList);
                 }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("test", "error");
+                }
+            });
+        } else if (typeData.equals("market")) {
+            this.url2 = this.marketURL + limit;
+            jsonObjReq = new JsonObjectRequest(Request.Method.GET, url2, (JSONObject) null, new Response.Listener<JSONObject>() {
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("test", "error");
-            }
-        });
+                @Override
+                public void onResponse(JSONObject response) {
+                    marketList = JSONParserMarket(response);
+                    print(marketList);
+                    writeAmenitiesToDB(marketList);
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("test", "error");
+                }
+            });
+        } else if (typeData.equals("school")) {
+            this.url3 = this.schoolURL + limit;
+            jsonObjReq = new JsonObjectRequest(Request.Method.GET, url3, (JSONObject) null, new Response.Listener<JSONObject>() {
+
+                @Override
+                public void onResponse(JSONObject response) {
+                    schoolList = JSONParserSchool(response);
+                    writeAmenitiesToDB(schoolList);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("test", "error");
+                }
+            });
+        } else if (typeData.equals("tax")) {
+            this.url4 = this.taxURL + limit;
+            jsonObjReq = new JsonObjectRequest(Request.Method.GET, url4, (JSONObject) null, new Response.Listener<JSONObject>() {
+
+                @Override
+                public void onResponse(JSONObject response) {
+                    taxList = JSONParserTax(response);
+                    writeTaxToDB(taxList);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("test", "error");
+                }
+            });
+        }
 
         // Add the request we just defined to our request queue.
         // The request queue will automatically handle the request as soon as it can.
@@ -228,9 +254,7 @@ public class DataGovAPI extends AsyncTask<Void, Void, Void> {
                     JSONObject c = records.getJSONObject(i);
 
                     String schoolName = c.getString("school_name");
-                    System.out.println(schoolName);
                     String postalCode = c.getString("postal_code");
-                    System.out.println(postalCode);
                     // adding each child node to HashMap key => value
                     info = new LinkedHashMap<>();
                     info.put("AmenitiesType", "School");
