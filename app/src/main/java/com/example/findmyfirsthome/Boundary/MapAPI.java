@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 
-public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
+public class MapAPI{
 
 
     private GoogleMap mMap;
@@ -24,30 +24,6 @@ public class MapAPI extends FragmentActivity implements OnMapReadyCallback{
     public  MapAPI(){
 
     }
-    public MapAPI(Context context){
-        this.context = context;
-    }
-
-    public void onPause() {
-        super.onPause();
-    }
-
-    public void onResume() {
-        super.onResume();
-    }
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-    }
-
     //Controller will call this
     //self call GeoCooding
     //To write in database

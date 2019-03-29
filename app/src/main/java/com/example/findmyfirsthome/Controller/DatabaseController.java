@@ -351,23 +351,22 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         return false;
     }
 
-    public boolean writeTax(ArrayList<HashMap<String, String>> infoList){
+    public boolean writeTax(HashMap<String, String> info){
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
 
-        for (HashMap<String, String> i : infoList) {
-            for (String key : i.keySet()) {
+        for (String key : info.keySet()) {
                 if (key.equals("typeOfProperty")) {
-                    values.put(typeOfProperty, i.get(key));
+                    values.put(typeOfProperty, info.get(key));
                 } else if (key.equals("taxRate")) {
-                    values.put(taxRate, i.get(key));
+                    values.put(taxRate, info.get(key));
                 } else {
-                    values.put(annualValue, i.get(key));
+                    values.put(annualValue, info.get(key));
                 }
             }
-        }
+
 
         long newRowId = db.insert(TABLE_NAME7, null, values);
         db.close();

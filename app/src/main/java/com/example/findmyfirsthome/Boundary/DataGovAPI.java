@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -39,24 +40,23 @@ public class DataGovAPI extends AppCompatActivity {
 
     RequestQueue requestQueue;  // This is our requests queue to process our HTTP requests.
     String typeData;
-    String childCareURL = "https://data.gov.sg/api/action/datastore_search?resource_id=4fc3fd79-64f2-4027-8d5b-ce0d7c279646&limit=";  // This is the API base URL (GitHub API)
+    String childCareURL = "https://data.gov.sg/api/action/datastore_search?resource_id=4fc3fd79-64f2-4027-8d5b-ce0d7c279646&limit=";
     String marketURL = "https://data.gov.sg/api/action/datastore_search?resource_id=8f6bba57-19fc-4f36-8dcf-c0bda382364d&limit=";
     String schoolURL = "https://data.gov.sg/api/action/datastore_search?resource_id=ede26d32-01af-4228-b1ed-f05c45a1d8ee&limit=";
-    String taxURL = "https://data.gov.sg/api/action/datastore_search?resource_id=bb6f5bf8-7d0b-4526-b020-b812ea7d7d89&limit=10";
+    String taxURL = "https://data.gov.sg/api/action/datastore_search?resource_id=bb6f5bf8-7d0b-4526-b020-b812ea7d7d89&limit=";
     String url;  // This will hold the full URL which will include the username entered in the etGitHubUser.
     Context context = this;
-
-    MapAPI maps;
+    MapAPI maps = new MapAPI();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_data_gov_api);
         requestQueue = Volley.newRequestQueue(this);  // This setups up a new request queue which we will need to make HTTP requests.
         getDataFromDataGov("childCare", 10);
         getDataFromDataGov("market", 10);
         getDataFromDataGov("school", 10);
-        maps = new MapAPI(context);
+       // getDataFromDataGov("tax",5);
+//        parseKML();
     }
 
 
@@ -80,7 +80,7 @@ public class DataGovAPI extends AppCompatActivity {
             this.url = this.schoolURL + limit;
         }
         else if(typeData.equals("tax")){
-            this.url = this.taxURL;
+            this.url = this.taxURL + limit;
         }
         // Next, we create a new JsonArrayRequest. This will use Volley to make a HTTP request
         // that expects a JSON Array Response.
@@ -103,7 +103,6 @@ public class DataGovAPI extends AppCompatActivity {
 
             }
         }, new Response.ErrorListener() {
-
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("test", "error");
@@ -130,7 +129,8 @@ public class DataGovAPI extends AppCompatActivity {
 
     public void JSONParserChildCare(JSONObject obj) {
         LatLng coordinates;
-        HashMap<String, Object> info = new HashMap<>();
+        HashMap<String, Object> info;
+        ArrayList<HashMap<String, Object>> list = new ArrayList<>();
         if (obj != null) {
             try {
                 JSONObject jsonObj = obj;
@@ -146,18 +146,19 @@ public class DataGovAPI extends AppCompatActivity {
                     String centre_address = c.getString("centre_address");
 
                     // adding each child node to HashMap key => value
+                    info = new HashMap<>();
                     info.put("AmenitiesType", "ChildCare");
                     info.put("AmenitiesName", centre_name);
 
                     //Using GEOCODING
-                    coordinates = maps.getAmenitiesCoordinates(centre_address);
-                    info.put("AmenitiesLat", coordinates.latitude);
-                    System.out.println(Double.toString(coordinates.latitude));
-                    info.put("AmenitiesLng", coordinates.longitude);
-                    System.out.println(Double.toString(coordinates.longitude));
-
+//                    coordinates = maps.getAmenitiesCoordinates(centre_address);
+//                    info.put("AmenitiesLat", 0.0);
+//                    info.put("AmenitiesLng", 0.0);
+//                   // info.put("AmenitiesLat", coordinates.latitude);
+//                    //info.put("AmenitiesLng", coordinates.longitude);
+                    list.add(info);
                 }
-                writeAmenitiesToDB(info);
+                writeAmenitiesToDB(list);
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
             }
@@ -170,7 +171,8 @@ public class DataGovAPI extends AppCompatActivity {
 
     public void JSONParserMarket(JSONObject obj) {
         LatLng coordinates;
-        HashMap<String, Object> info = new HashMap<>();
+        HashMap<String, Object> info;
+        ArrayList<HashMap<String, Object>> list = new ArrayList<>();
         if (obj != null) {
             try {
                 JSONObject jsonObj = obj;
@@ -185,19 +187,19 @@ public class DataGovAPI extends AppCompatActivity {
                     String name_of_centre = c.getString("name_of_centre");
                     String location_of_centre = c.getString("location_of_centre");
                     // tmp hash map for single contact
-
+                    info = new HashMap<>();
                     // adding each child node to HashMap key => value
                     info.put("AmenitiesType", "Market");
                     info.put("AmenitiesName", name_of_centre);
 
-                    //Using GEOCODING
+                    ///Using GEOCODING
 //                    coordinates = maps.getAmenitiesCoordinates(location_of_centre);
 //                    info.put("AmenitiesLat", coordinates.latitude);
 //                    info.put("AmenitiesLng", coordinates.longitude);
-
+                    list.add(info);
                 }
                 // adding contact to contact list
-                writeAmenitiesToDB(info);
+                writeAmenitiesToDB(list);
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
             }
@@ -213,7 +215,8 @@ public class DataGovAPI extends AppCompatActivity {
 
         LatLng coordinates;
         if (obj != null) {
-            HashMap<String, Object> info = new HashMap<>();
+            HashMap<String, Object> info;
+            ArrayList<HashMap<String, Object>> list = new ArrayList<>();
             try {
                 JSONObject jsonObj = obj;
                 //Log.d("test", obj.toString());
@@ -230,6 +233,7 @@ public class DataGovAPI extends AppCompatActivity {
                     String postalCode = c.getString("postal_code");
                     System.out.println(postalCode);
                     // adding each child node to HashMap key => value
+                    info = new HashMap<>();
                     info.put("AmenitiesType", "School");
                     info.put("AmenitiesName", schoolName);
 
@@ -237,10 +241,9 @@ public class DataGovAPI extends AppCompatActivity {
 //                    coordinates = maps.getAmenitiesCoordinates(postalCode);
 //                    info.put("AmenitiesLat", coordinates.latitude);
 //                    info.put("AmenitiesLng", coordinates.longitude);
-                    // adding contact to contact list
-                    //infoList.add(info);
+                    list.add(info);
                 }
-                writeAmenitiesToDB(info);
+                writeAmenitiesToDB(list);
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
             }
@@ -255,7 +258,7 @@ public class DataGovAPI extends AppCompatActivity {
 
     public void JSONParserTax(JSONObject obj) {
         if (obj != null) {
-            HashMap<String, String> info = new HashMap<>();
+            HashMap<String, String> info;
             ArrayList<HashMap<String, String>> infoList = new ArrayList<>();
             try {
                 JSONObject jsonObj = obj;
@@ -272,11 +275,11 @@ public class DataGovAPI extends AppCompatActivity {
                     String taxRate = c.getString("tax_rate");
                     String annualValue = c.getString("annual_value");
                     // tmp hash map for single contact
-
-
                     // adding each child node to HashMap key => value
+                    info = new HashMap<>();
                     info.put("typeOfProperty", typeOfProperty);
                     info.put("taxRate", taxRate);
+                    System.out.println(taxRate);
                     info.put("annualValue", annualValue);
                     infoList.add(info);
 
@@ -292,46 +295,61 @@ public class DataGovAPI extends AppCompatActivity {
 
     }
 
-    public void writeAmenitiesToDB(HashMap<String, Object> list){
+    public void writeAmenitiesToDB(ArrayList<HashMap<String, Object>> list){
         DatabaseController db = DatabaseController.getInstance(context);
-        db.writeAmenitiesData(list);
+        for(HashMap<String,Object> hm : list){
+            db.writeAmenitiesData(hm);
+        }
+
     }
 
     public void writeTaxToDB(ArrayList<HashMap<String, String>> infoList){
         DatabaseController db = DatabaseController.getInstance(context);
-        db.writeTax(infoList);
-    }
-
-
-    private String readFile()
-    {
-        String myData = "";
-        File myExternalFile = new File("assets/","market-food-centre.kml"); //find where to save the files
-
-        String xmlContent = "";
-        //DocumentsContract.Document doc = Jsoup.parse(xmlContent, "", Parser.xmlParser());
-
-        /*for(Element e : doc.select("LineString").select("coordinates")) {
-            // the contents
-            System.out.println(e.text());
-        }*/
-        try {
-            FileInputStream fis = new FileInputStream(myExternalFile);
-            DataInputStream in = new DataInputStream(fis);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-
-            String strLine;
-            while ((strLine = br.readLine()) != null) {
-                myData = myData + strLine + "\n";
-            }
-            br.close();
-            in.close();
-            fis.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        for(HashMap<String, String> hm : infoList){
+            db.writeTax(hm);
         }
-        return myData;
     }
+
+
+    public ArrayList<ArrayList<LatLng>> parseKML() {
+        ArrayList<ArrayList<LatLng>> coOrds = new ArrayList<ArrayList<LatLng>>();
+
+        try {
+            StringBuilder buf = new StringBuilder();
+            InputStream kml = context.getAssets().open("chas-clinics-kml.kml");
+            //read file in buffer from file.
+            BufferedReader in = new BufferedReader(new InputStreamReader(kml));
+            String str;
+            String buffer;
+
+            while ((str = in.readLine()) != null) {
+                buf.append(str);
+            }
+
+            in.close();
+            String html = buf.toString();
+            Document doc = Jsoup.parse(html, "", Parser.xmlParser());
+            ArrayList<String> tracksString = new ArrayList<String>();
+            for (Element e : doc.select("coordinates")) {
+                tracksString.add(e.toString().replace("<coordinates>", "").replace("</coordinates>", "")); //erase front and end
+            }
+
+            for (int i = 0; i < tracksString.size(); i++) {
+                ArrayList<LatLng> oneTrack = new ArrayList<LatLng>();
+                ArrayList<String> oneTrackString = new ArrayList<String>(Arrays.asList(tracksString.get(i).split("\\s+")));
+                for (int k = 1; k < oneTrackString.size(); k++) {
+                    LatLng latLng = new LatLng(Double.parseDouble(oneTrackString.get(k).split(",")[0]),
+                            Double.parseDouble(oneTrackString.get(k).split(",")[1]));
+                    oneTrack.add(latLng);
+                }
+                coOrds.add(oneTrack);
+            }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return coOrds;
+}
 
 
 }
