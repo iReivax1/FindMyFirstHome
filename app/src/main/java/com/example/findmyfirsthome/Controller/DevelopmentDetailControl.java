@@ -3,12 +3,14 @@ package com.example.findmyfirsthome.Controller;
 import android.app.Application;
 import android.content.Context;
 
+import com.example.findmyfirsthome.Entity.CalculatedProfile;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
 import com.example.findmyfirsthome.Entity.MapData;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class DevelopmentDetailControl {
     private DatabaseController databaseController;
@@ -92,4 +94,15 @@ public class DevelopmentDetailControl {
 
         return tableContent;
     }*/
+
+    public List<String> getFooterDetails(){
+        CalculatedProfile cp = databaseController.readCalculatedProfile();
+        List<String> footerDetails = new ArrayList<>();
+        if (cp == null)
+            return footerDetails;
+        footerDetails.add(Integer.toString((int)Math.ceil(cp.getMaxPropertyPrice())));
+        footerDetails.add(Integer.toString((int)Math.ceil(cp.getMaxMortgage())));
+        footerDetails.add(Integer.toString((int)Math.ceil(cp.getMaxMortgagePeriod())));
+        return footerDetails;
+    }
 }
