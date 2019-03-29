@@ -46,7 +46,7 @@ public class DataGovAPI extends AsyncTask<Void, Void, Void> {
     ArrayList<LinkedHashMap<String, Object>> schoolList = new ArrayList<>();
     ArrayList<LinkedHashMap<String, String>> taxList = new ArrayList<>();
 
-    public DataGovAPI(Context cont){
+    public DataGovAPI(Context cont) {
         this.context = cont;
     }
 
@@ -59,8 +59,8 @@ public class DataGovAPI extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         getDataFromDataGov("childCare", 10);
-        getDataFromDataGov("market", 10);
-        getDataFromDataGov("school", 10);
+ //       getDataFromDataGov("market", 10);
+ //       getDataFromDataGov("school", 10);
 //         getDataFromDataGov("tax",5);
 //        parseKML();
 
@@ -70,9 +70,9 @@ public class DataGovAPI extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
         writeAmenitiesToDB(childCareList);
-        writeAmenitiesToDB(marketList);
-        writeAmenitiesToDB(schoolList);
-        writeTaxToDB(taxList);
+    //    writeAmenitiesToDB(marketList);
+   //     writeAmenitiesToDB(schoolList);
+  //      writeTaxToDB(taxList);
     }
 
 
@@ -83,16 +83,13 @@ public class DataGovAPI extends AsyncTask<Void, Void, Void> {
         this.typeData = type;
         String limit = Integer.toString(lim);
         //Check type to set url
-        if(typeData.equals("childCare")){
+        if (typeData.equals("childCare")) {
             this.url = this.childCareURL + limit;
-        }
-        else if(typeData.equals("market")){
+        } else if (typeData.equals("market")) {
             this.url = this.marketURL + limit;
-        }
-        else if(typeData.equals("school")){
+        } else if (typeData.equals("school")) {
             this.url = this.schoolURL + limit;
-        }
-        else if(typeData.equals("tax")){
+        } else if (typeData.equals("tax")) {
             this.url = this.taxURL + limit;
         }
         // Next, we create a new JsonArrayRequest. This will use Volley to make a HTTP request
@@ -101,16 +98,13 @@ public class DataGovAPI extends AsyncTask<Void, Void, Void> {
 
             @Override
             public void onResponse(JSONObject response) {
-                if(typeData.equals("childCare")) {
+                if (typeData.equals("childCare")) {
                     childCareList = JSONParserChildCare(response);
-                }
-                else if(typeData.equals("market")){
+                } else if (typeData.equals("market")) {
                     marketList = JSONParserMarket(response);
-                }
-                else if(typeData.equals("school")){
+                } else if (typeData.equals("school")) {
                     schoolList = JSONParserSchool(response);
-                }
-                else if(typeData.equals("tax")){
+                } else if (typeData.equals("tax")) {
                     taxList = JSONParserTax(response);
                 }
 
@@ -132,7 +126,7 @@ public class DataGovAPI extends AsyncTask<Void, Void, Void> {
     public ArrayList<LinkedHashMap<String, Object>> JSONParserChildCare(JSONObject obj) {
         LatLng coordinates;
         LinkedHashMap<String, Object> info;
-        ArrayList<LinkedHashMap<String , Object>>list = new ArrayList<>();
+        ArrayList<LinkedHashMap<String, Object>> list = new ArrayList<>();
         if (obj != null) {
             try {
                 JSONObject jsonObj = obj;
@@ -154,12 +148,13 @@ public class DataGovAPI extends AsyncTask<Void, Void, Void> {
 
                     //Using GEOCODING
 //                    coordinates = maps.getAmenitiesCoordinates(centre_address);
-                   info.put("AmenitiesLat", 0.0);
-                   info.put("AmenitiesLng", 0.0);
+                    info.put("AmenitiesLat", 0.0);
+                    info.put("AmenitiesLng", 0.0);
 //                   // info.put("AmenitiesLat", coordinates.latitude);
 //                    //info.put("AmenitiesLng", coordinates.longitude);
                     list.add(info);
                 }
+                print(list);
                 return list;
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
@@ -176,7 +171,7 @@ public class DataGovAPI extends AsyncTask<Void, Void, Void> {
     public ArrayList<LinkedHashMap<String, Object>> JSONParserMarket(JSONObject obj) {
         LatLng coordinates;
         LinkedHashMap<String, Object> info;
-        ArrayList<LinkedHashMap<String , Object>>list = new ArrayList<>();
+        ArrayList<LinkedHashMap<String, Object>> list = new ArrayList<>();
         if (obj != null) {
             try {
                 JSONObject jsonObj = obj;
@@ -208,8 +203,7 @@ public class DataGovAPI extends AsyncTask<Void, Void, Void> {
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
             }
-        }
-        else {
+        } else {
             Log.e("ERROR", "Couldn't get json from server.");
         }
         return list;
@@ -218,7 +212,7 @@ public class DataGovAPI extends AsyncTask<Void, Void, Void> {
     /////////////////////////////////School/////////////////////////////////
 
     public ArrayList<LinkedHashMap<String, Object>> JSONParserSchool(JSONObject obj) {
-        ArrayList<LinkedHashMap<String , Object>>list = new ArrayList<>();
+        ArrayList<LinkedHashMap<String, Object>> list = new ArrayList<>();
         LatLng coordinates;
         if (obj != null) {
             LinkedHashMap<String, Object> info;
@@ -253,8 +247,7 @@ public class DataGovAPI extends AsyncTask<Void, Void, Void> {
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
             }
-        }
-        else {
+        } else {
             Log.e("ERROR", "Couldn't get json from server.");
         }
         return list;
@@ -263,7 +256,7 @@ public class DataGovAPI extends AsyncTask<Void, Void, Void> {
     /////////////////////////////////Parse Tax//////////////////////////////////
 
     public ArrayList<LinkedHashMap<String, String>> JSONParserTax(JSONObject obj) {
-        ArrayList<LinkedHashMap<String , String>>list = new ArrayList<>();
+        ArrayList<LinkedHashMap<String, String>> list = new ArrayList<>();
         if (obj != null) {
             LinkedHashMap<String, String> info;
             try {
@@ -293,24 +286,23 @@ public class DataGovAPI extends AsyncTask<Void, Void, Void> {
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
             }
-        }
-        else {
+        } else {
             Log.e("ERROR", "Couldn't get json from server.");
         }
         return list;
     }
 
-    public void writeAmenitiesToDB(ArrayList<LinkedHashMap<String, Object>> list){
+    public void writeAmenitiesToDB(ArrayList<LinkedHashMap<String, Object>> list) {
         DatabaseController db = DatabaseController.getInstance(context);
-        for(LinkedHashMap<String,Object> hm : list){
+        for (LinkedHashMap<String, Object> hm : list) {
             db.writeAmenitiesData(hm);
         }
 
     }
 
-    public void writeTaxToDB(ArrayList<LinkedHashMap<String, String>> infoList){
+    public void writeTaxToDB(ArrayList<LinkedHashMap<String, String>> infoList) {
         DatabaseController db = DatabaseController.getInstance(context);
-        for(LinkedHashMap<String, String> hm : infoList){
+        for (LinkedHashMap<String, String> hm : infoList) {
             db.writeTax(hm);
         }
     }
@@ -343,18 +335,29 @@ public class DataGovAPI extends AsyncTask<Void, Void, Void> {
                 ArrayList<LatLng> oneTrack = new ArrayList<LatLng>();
                 ArrayList<String> oneTrackString = new ArrayList<String>(Arrays.asList(tracksString.get(i).split("\\s+")));
                 for (int k = 1; k < oneTrackString.size(); k++) {
-                    LatLng latLng = new LatLng(Double.parseDouble(oneTrackString.get(k).split(",")[0]),
-                            Double.parseDouble(oneTrackString.get(k).split(",")[1]));
+                    LatLng latLng = new LatLng(Double.parseDouble(oneTrackString.get(k).split(",")[0]), Double.parseDouble(oneTrackString.get(k).split(",")[1]));
                     oneTrack.add(latLng);
                 }
                 coOrds.add(oneTrack);
             }
 
-    } catch (Exception e) {
-        e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return coOrds;
     }
-    return coOrds;
-}
+
+
+    public void print(ArrayList<LinkedHashMap<String, Object>> hashList) {
+        System.out.println("-----------------Inside the hashmap-----------------");
+        for (LinkedHashMap<String, Object> i : hashList) {
+            for (String key : i.keySet()) {
+                Log.d("hello", key);
+                Log.d("hello", i.get(key).toString());
+            }
+        }
+
+    }
 
 
 }
