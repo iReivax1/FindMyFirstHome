@@ -43,7 +43,7 @@ public class DataGovAPI {
     String url3;
     String url4;
     // This will hold the full URL which will include the username entered in the etGitHubUser.
-    MapAPI maps = new MapAPI();
+    MapAPI mapAPI = new MapAPI();
     Context context;
     ArrayList<LinkedHashMap<String, Object>> childCareList = new ArrayList<>();
     ArrayList<LinkedHashMap<String, Object>> marketList = new ArrayList<>();
@@ -58,9 +58,9 @@ public class DataGovAPI {
 
     public void execute() {
         // This setups up a new request queue which we will need to make HTTP requests
-        getDataFromDataGov("childCare", 1537);
-        getDataFromDataGov("market", 107);
-        getDataFromDataGov("school", 438);
+        getDataFromDataGov("childCare", 1);
+        getDataFromDataGov("market", 1);
+        getDataFromDataGov("school", 1);
 //         getDataFromDataGov("tax",5);
 //        parseKML();
 
@@ -70,6 +70,7 @@ public class DataGovAPI {
 
     //limit is the limit number for the number of search queries > 1 please.
     private void getDataFromDataGov(String type, int lim) {
+
         JsonObjectRequest jsonObjReq = null;
         //this is the datagov limit
         this.typeData = type;
@@ -100,7 +101,7 @@ public class DataGovAPI {
                 @Override
                 public void onResponse(JSONObject response) {
                     marketList = JSONParserMarket(response);
-                    print(marketList);
+                    //print(marketList);
                     writeAmenitiesToDB(marketList);
 
                 }
@@ -150,7 +151,7 @@ public class DataGovAPI {
     /////////////////////////////////ChildCare/////////////////////////////////
 
     public ArrayList<LinkedHashMap<String, Object>> JSONParserChildCare(JSONObject obj) {
-        LatLng coordinates;
+        LatLng coordinates = new LatLng(0,0);
         LinkedHashMap<String, Object> info;
         ArrayList<LinkedHashMap<String, Object>> list = new ArrayList<>();
         if (obj != null) {
@@ -173,14 +174,12 @@ public class DataGovAPI {
                     info.put("AmenitiesName", centre_name);
 
                     //Using GEOCODING
-//                    coordinates = maps.getAmenitiesCoordinates(centre_address);
-                    info.put("AmenitiesLat", 0.0);
-                    info.put("AmenitiesLng", 0.0);
-//                   // info.put("AmenitiesLat", coordinates.latitude);
-//                    //info.put("AmenitiesLng", coordinates.longitude);
+                    coordinates = mapAPI.getCoordinates(centre_address);
+                    System.out.println(coordinates.latitude + ", " +coordinates.longitude);
+                    info.put("AmenitiesLat", coordinates.latitude);
+                    info.put("AmenitiesLng", coordinates.longitude);
                     list.add(info);
                 }
-                print(list);
                 return list;
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
