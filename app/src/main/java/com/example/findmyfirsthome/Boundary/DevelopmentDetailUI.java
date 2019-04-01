@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -45,6 +46,22 @@ public class DevelopmentDetailUI extends AppCompatActivity implements OnMapReady
         setContentView(R.layout.development_detail_ui);
 
         setupDevelopmentDetailsUI();
+    }
+
+    //called whenever an item in your options menu is selected
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            //R.id.home is the back button at the action bar which is at the top of the app
+            case android.R.id.home:
+                //make it such that action bar's back button which is actually a Up button acts like back button
+                //Up button works by creating new task of the activity instead of actually back to previous activity
+                //onBackPressed() called 1st so the original method of Up button will not be called
+                onBackPressed();
+                return true;
+        }
+
+        return(super.onOptionsItemSelected(item));
     }
 
     //must be on onCreate() as onStart() will be rerun because startActivity() causes this activity to stop instead of resume
