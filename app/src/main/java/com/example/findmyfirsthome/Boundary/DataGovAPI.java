@@ -49,6 +49,7 @@ public class DataGovAPI {
     ArrayList<LinkedHashMap<String, Object>> marketList = new ArrayList<>();
     ArrayList<LinkedHashMap<String, Object>> schoolList = new ArrayList<>();
     ArrayList<LinkedHashMap<String, String>> taxList = new ArrayList<>();
+    LatLng coordinates = new LatLng(0,0);
     RequestQueue requestQueue;
 
     public DataGovAPI(Context cont) {
@@ -63,9 +64,10 @@ public class DataGovAPI {
         getDataFromDataGov("market", 1);
         getDataFromDataGov("school", 1);
 //         getDataFromDataGov("tax",5);
-//        parseKML();
+    }
 
-
+    public void setCoordinates(LatLng coords){
+        this.coordinates = coords;
     }
 
 
@@ -152,7 +154,7 @@ public class DataGovAPI {
     /////////////////////////////////ChildCare/////////////////////////////////
 
     public ArrayList<LinkedHashMap<String, Object>> JSONParserChildCare(JSONObject obj) {
-        LatLng coordinates = new LatLng(0,0);
+
         LinkedHashMap<String, Object> info;
         ArrayList<LinkedHashMap<String, Object>> list = new ArrayList<>();
         if (obj != null) {
@@ -175,10 +177,11 @@ public class DataGovAPI {
                     info.put("AmenitiesName", centre_name);
 
                     //Using GEOCODING
-                    coordinates = mapAPI.getCoordinates(centre_name);
-                    System.out.println(coordinates.latitude + ", " + coordinates.longitude);
-                    info.put("AmenitiesLat", coordinates.latitude);
-                    info.put("AmenitiesLng", coordinates.longitude);
+                    mapAPI.getMapCoordinates(centre_name);
+
+                    System.out.println(this.coordinates.latitude + ", " + this.coordinates.longitude);
+                    info.put("AmenitiesLat", this.coordinates.latitude);
+                    info.put("AmenitiesLng", this.coordinates.longitude);
                     list.add(info);
                 }
                 return list;

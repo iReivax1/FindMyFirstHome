@@ -14,6 +14,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
 import com.example.findmyfirsthome.R;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,6 +35,9 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -45,47 +49,38 @@ public class MapAPI {
     String url;
     RequestQueue requestQueue;
     LatLng coords = new LatLng(0,0);
+    DataGovAPI dga;
+
+    int REQUEST_TIMEOUT = 1;
 
     public MapAPI(Context context) {
         this.context = context;
     }
 
 
-    public boolean getHTTP(String name){
-        JsonObjectRequest jsonObjReq = null;
+    public void getMapCoordinates(String name) {
+        getJSON(name);
+    }
+
+    public LatLng getCoords(){
+        return this.coords;
+    }
+
+    public void getJSON(String name) {
         requestQueue = Volley.newRequestQueue(context);
-        this.url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + name + "SG&key=AIzaSyDMO5XX-YHL66_9hzc9cF73yfwMrK6lfNE123";
+        this.url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + name + "SG&key=AIzaSyDMO5XX-YHL66_9hzc9cF73yfwMrK6lfNE";
         System.out.print(url);
-        jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, (JSONObject) null, new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-                parseMapJson(response);
-                setCoordinates(coords);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("test", "error");
-            }
-        });
-        requestQueue.add(jsonObjReq);
-        return true;
-    }
-
-
-    public LatLng getCoordinates(String name) {
-        boolean done;
-        LatLng coord = new LatLng(0,0);
-        done = getHTTP(name);
-        if(done) {
-            coord = this.coords;
+        RequestFuture<JSONObject> future = RequestFuture.newFuture();
+        JsonObjectRequest request = new JsonObjectRequest(url, null, future, future);
+        requestQueue.add(request);
+        try {
+            JSONObject response =  future.get();
+            parseMapJson(response);
+        } catch (InterruptedException e) {
+            // exception handling
+        } catch (ExecutionException e) {
+            // exception handling
         }
-        return coord;
-    }
-
-    public void setCoordinates(LatLng coord){
-        this.coords = coord;
     }
 
 
@@ -125,7 +120,6 @@ public class MapAPI {
         }
         return point;
     }
-
 
 }
 
