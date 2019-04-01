@@ -51,10 +51,11 @@ public class MapAPI {
     }
 
 
-    public boolean getHTTP(String name){
+    public void getHTTP(String name){
         JsonObjectRequest jsonObjReq = null;
+
         requestQueue = Volley.newRequestQueue(context);
-        this.url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + name + "SG&key=AIzaSyDMO5XX-YHL66_9hzc9cF73yfwMrK6lfNE123";
+        this.url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + name + "SG&key=AIzaSyDMO5XX-YHL66_9hzc9cF73yfwMrK6lfNE";
         System.out.print(url);
         jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, (JSONObject) null, new Response.Listener<JSONObject>() {
 
@@ -70,17 +71,13 @@ public class MapAPI {
             }
         });
         requestQueue.add(jsonObjReq);
-        return true;
     }
 
 
     public LatLng getCoordinates(String name) {
         boolean done;
         LatLng coord = new LatLng(0,0);
-        done = getHTTP(name);
-        if(done) {
-            coord = this.coords;
-        }
+        getHTTP(name);
         return coord;
     }
 
