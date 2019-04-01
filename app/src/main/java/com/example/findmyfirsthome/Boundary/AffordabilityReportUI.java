@@ -2,7 +2,6 @@ package com.example.findmyfirsthome.Boundary;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -135,8 +134,11 @@ public class AffordabilityReportUI extends AppCompatActivity {
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(directoryPath));
             document.open();
             Image image = Image.getInstance(f.toString());
-            image = cropImage(writer,image,0,0,20,10);
+            float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
+                    - document.rightMargin() +45) / image.getWidth()) * 100; // 0 means you have no indentation. If you have any, change it.
+            image.scalePercent(scaler);
             image.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
+
             document.add(image);
             document.close();
 
@@ -147,14 +149,6 @@ public class AffordabilityReportUI extends AppCompatActivity {
             // Several error may come out with file handling or DOM
             e.printStackTrace();
         }
-    }
-
-    private void openScreenshot(File imageFile) {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        Uri uri = Uri.fromFile(imageFile);
-        intent.setDataAndType(uri, "image/*");
-        startActivity(intent);
     }
 
     public Image cropImage(PdfWriter writer, Image image, float leftReduction, float rightReduction, float topReduction, float bottomReduction) throws DocumentException {
