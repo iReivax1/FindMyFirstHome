@@ -58,12 +58,12 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/textViewCitizenship2"
         app:layout_constraintTop_toTopOf="@+id/textViewCitizenship2"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="1.0">
 
         <RadioButton
             android:id="@+id/radioBtnSG2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_marginStart="28dp"
             android:layout_marginEnd="8dp"
             android:text="SC"
@@ -74,8 +74,8 @@
 
         <RadioButton
             android:id="@+id/radioBtnPR2"
-            android:layout_width="68dp"
-            android:layout_height="31dp"
+            android:layout_width="74dp"
+            android:layout_height="match_parent"
             android:text="SPR"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.68"
@@ -114,7 +114,6 @@
         android:id="@+id/textViewCitizenship2"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="Citizenship:"
         app:layout_constraintEnd_toEndOf="@+id/textViewFirstTimeBuyer6"
@@ -226,7 +225,7 @@
 
         <RadioButton
             android:id="@+id/radioBtnPR"
-            android:layout_width="68dp"
+            android:layout_width="119dp"
             android:layout_height="31dp"
             android:text="SPR"
             app:layout_constraintEnd_toEndOf="parent"
@@ -263,7 +262,7 @@
 
         <RadioButton
             android:id="@+id/radioBtnNo"
-            android:layout_width="103dp"
+            android:layout_width="71dp"
             android:layout_height="31dp"
             android:text="No"
             app:layout_constraintEnd_toEndOf="parent"
