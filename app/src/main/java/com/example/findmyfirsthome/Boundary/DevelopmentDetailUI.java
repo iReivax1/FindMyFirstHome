@@ -43,14 +43,13 @@ public class DevelopmentDetailUI extends AppCompatActivity implements OnMapReady
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.development_detail_ui);
+
+        setupDevelopmentDetailsUI();
     }
 
-    //runs after onCreate()
-    @Override
-    protected void onStart()
+    //must be on onCreate() as onStart() will be rerun because startActivity() causes this activity to stop instead of resume
+    private void setupDevelopmentDetailsUI()
     {
-        super.onStart();
-
         //to get data passed from previous intent/activity/boundary
         Intent intent = getIntent();
 
