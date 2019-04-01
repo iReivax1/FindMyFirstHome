@@ -142,7 +142,7 @@ public class ProfileControl{
         }
     }
 
-    public double setStudyLoan(){return ud.getStudyLoan();}
+    public double getStudyLoan(){return ud.getStudyLoan();}
 
     public void setOtherCommits(String otherCommitsStr) {
         if(otherCommitsStr.isEmpty()==true) {

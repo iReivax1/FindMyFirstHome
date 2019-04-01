@@ -83,7 +83,7 @@ public class ProfileUI3 extends AppCompatActivity implements View.OnFocusChangeL
             horizontalLayout.addView(hMemberSalary); //include into horizontal layout
             mainLayout.addView(horizontalLayout); //include into main layout
             if(pc.getUD()!=null) {
-                if(counter!=pc.getNoofhMembers()){
+                if(counter!=pc.getNoofhMembers()){ //compare to previous number of household member,to put back their previous salary
                     counter += 1;
                     double salaryDisplay = pc.getAllMembers().get(i);
                     hMemberSalary.setText(Double.toString(salaryDisplay));
@@ -110,7 +110,7 @@ public class ProfileUI3 extends AppCompatActivity implements View.OnFocusChangeL
                 pc.setMaritalStatus(radioGroupMScheckedID);
                 pc.setFirstTimeBuyer(radioGroupFTBcheckedID);
                 pc.setCitizenship(radioGroupCiticheckedID);
-                pc.setAge(ageInputStr);
+                            pc.setAge(ageInputStr);
                 pc.setGrossMonthlySalary(grossMSalaryStr);
 
                 pc.setFirstTimeBuyerPartner(radioGroupFTB2checkedID);

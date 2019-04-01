@@ -78,7 +78,7 @@ public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeLi
             ageInput2.setText(Integer.toString(pc.getAgePartner()));
             grossMSalary2.setText(Double.toString(pc.getGrossMonthlySalaryPartner()));
 
-            if(radioGroupMS.getId()==R.id.radioBtnSingle){ //Blur out Partner's input if user is single.
+            if(radioGroupMS.getCheckedRadioButtonId()==R.id.radioBtnSingle){ //Blur out Partner's input if user is single.
                 findViewById(R.id.ageInput2).setEnabled(false); //To disable inputs
                 findViewById(R.id.grossMSalary2).setEnabled(false);
                 for (int i = 0; i < radioGroupCiti2.getChildCount(); i++) {
@@ -91,7 +91,7 @@ public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeLi
                 grossMSalary2.setText(null);
 
             }
-            else if(radioGroupMS.getId()==R.id.radioBtnMarried){
+            else if(radioGroupMS.getCheckedRadioButtonId()==R.id.radioBtnMarried){
                 findViewById(R.id.ageInput2).setEnabled(true); //To enable inputs
                 findViewById(R.id.grossMSalary2).setEnabled(true);
                 for (int i = 0; i < radioGroupCiti2.getChildCount(); i++) {
@@ -102,8 +102,6 @@ public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeLi
                 }
             }
         }
-
-
 
         radioGroupMS.setOnCheckedChangeListener(new OnCheckedChangeListener() //poll for change in radio buttons
         {
