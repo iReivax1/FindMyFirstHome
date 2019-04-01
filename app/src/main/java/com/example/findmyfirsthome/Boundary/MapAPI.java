@@ -54,7 +54,7 @@ public class MapAPI {
     public boolean getHTTP(String name){
         JsonObjectRequest jsonObjReq = null;
         requestQueue = Volley.newRequestQueue(context);
-        this.url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + name + "SG&key=AIzaSyDMO5XX-YHL66_9hzc9cF73yfwMrK6lfNE";
+        this.url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + name + "SG&key=AIzaSyDMO5XX-YHL66_9hzc9cF73yfwMrK6lfNE123";
         System.out.print(url);
         jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, (JSONObject) null, new Response.Listener<JSONObject>() {
 
