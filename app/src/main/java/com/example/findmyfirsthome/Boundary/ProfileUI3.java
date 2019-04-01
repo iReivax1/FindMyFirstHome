@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,6 +48,9 @@ public class ProfileUI3 extends AppCompatActivity implements View.OnFocusChangeL
         final int hMembersValue = Integer.parseInt(hMembersValueStr); //getting number of members
         final LinearLayout mainLayout=(LinearLayout)findViewById(R.id.profileUI3Linear); //setting main layout
 
+        ProfileControl pc = new ProfileControl();
+        pc.readProfile(this);
+        int counter =0;
         for(int i=0;i<hMembersValue;++i) { // creating layout programmatically depending on how many members
             // create a new textview
             TextView header = new TextView(this); //creating a textview for header
@@ -78,6 +82,13 @@ public class ProfileUI3 extends AppCompatActivity implements View.OnFocusChangeL
             horizontalLayout.addView(reqSalary); //include into horizontal layout
             horizontalLayout.addView(hMemberSalary); //include into horizontal layout
             mainLayout.addView(horizontalLayout); //include into main layout
+            if(pc.getUD()!=null) {
+                if(counter!=pc.getNoofhMembers()){
+                    counter += 1;
+                    double salaryDisplay = pc.getAllMembers().get(i);
+                    hMemberSalary.setText(Double.toString(salaryDisplay));
+                }
+            }
         }
 
 
@@ -148,5 +159,21 @@ public class ProfileUI3 extends AppCompatActivity implements View.OnFocusChangeL
                 }
             }
         }
+    }
+
+    //called whenever an item in your options menu is selected
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            //R.id.home is the back button at the action bar which is at the top of the app
+            case android.R.id.home:
+                //make it such that action bar's back button which is actually a Up button acts like back button
+                //Up button works by creating new task of the activity instead of actually back to previous activity
+                //onBackPressed() called 1st so the original method of Up button will not be called
+                onBackPressed();
+                return true;
+        }
+
+        return(super.onOptionsItemSelected(item));
     }
 }

@@ -47,9 +47,9 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
     private String ImgFernvale;
     private String ImgKallang;
     private String ImgTowerCrest;
-    ArrayList<String> centralImg = new ArrayList<>();
-    ArrayList<String> northEastImg = new ArrayList<>();
-    ArrayList<String> imageWest = new ArrayList<>();
+    private ArrayList<String> centralImg = new ArrayList<>();
+    private ArrayList<String> northEastImg = new ArrayList<>();
+    private ArrayList<String> imageWest = new ArrayList<>();
     private DatabaseController db;
 
     private Context mContext;

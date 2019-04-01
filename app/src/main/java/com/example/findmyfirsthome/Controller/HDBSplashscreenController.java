@@ -7,8 +7,8 @@ import com.example.findmyfirsthome.Boundary.DataGovAPI;
 
 public class HDBSplashscreenController extends Application {
 
-    HDBDetailsManager manager = new HDBDetailsManager(this);
-    DataGovAPI dg = new DataGovAPI(this);
+    private HDBDetailsManager manager = new HDBDetailsManager(this);
+    private DataGovAPI dg = new DataGovAPI(this);
     @Override
     public void onCreate() {
         super.onCreate();

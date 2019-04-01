@@ -67,6 +67,11 @@ public class HDBDevelopmentUI extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
+
     public Context getContext(){
         return this.getApplicationContext();
     }

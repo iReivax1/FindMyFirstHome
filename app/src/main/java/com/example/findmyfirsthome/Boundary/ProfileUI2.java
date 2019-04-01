@@ -3,6 +3,7 @@ package com.example.findmyfirsthome.Boundary;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,6 +49,18 @@ public class ProfileUI2 extends AppCompatActivity implements View.OnFocusChangeL
         coOA.setOnFocusChangeListener(this);
         hMembers.setOnFocusChangeListener(this);
 
+        ProfileControl pc = new ProfileControl();
+        pc.readProfile(this);
+        if(pc.getUD()!=null) {
+            carLoan.setText(Integer.toString(pc.getAge()));
+            creditDebt.setText(Double.toString(pc.getGrossMonthlySalary()));
+            studyLoan.setText(Integer.toString(pc.getAgePartner()));
+            otherCommits.setText(Double.toString(pc.getGrossMonthlySalaryPartner()));
+            mainOA.setText(Double.toString(pc.getMainOA()));
+            coOA.setText(Double.toString(pc.getCOOA()));
+            hMembers.setText(Integer.toString(pc.getNoofhMembers()));
+        }
+
         final Button skip = (Button) findViewById(R.id.skip);
         Button next2 = (Button) findViewById(R.id.next2);
 
@@ -90,8 +103,40 @@ public class ProfileUI2 extends AppCompatActivity implements View.OnFocusChangeL
         next2.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 int hMembersValue = Integer.parseInt(hMembers.getText().toString());
+
                 if(hMembersValue==0){
-                    skip.setOnClickListener(this);
+                    //save all values into database
+                    final ProfileControl pc = new ProfileControl();
+                    pc.setMaritalStatus(radioGroupMScheckedID);
+                    pc.setFirstTimeBuyer(radioGroupFTBcheckedID);
+                    pc.setCitizenship(radioGroupCiticheckedID);
+                    pc.setAge(ageInputStr);
+                    pc.setGrossMonthlySalary(grossMSalaryStr);
+
+                    pc.setFirstTimeBuyerPartner(radioGroupFTB2checkedID);
+                    pc.setCitizenshipPartner(radioGroupCiti2checkedID);
+                    pc.setAgePartner(ageInputStr2);
+                    pc.setGrossMonthlySalaryPartner(grossMSalaryStr2);
+
+                    pc.setCarLoan(carLoan.getText().toString());
+                    pc.setCreditDebt(creditDebt.getText().toString());
+                    pc.setStudyLoan(studyLoan.getText().toString());
+                    pc.setOtherCommits(otherCommits.getText().toString());
+                    pc.setMainOA(mainOA.getText().toString());
+                    pc.setCoOA(coOA.getText().toString());
+                    pc.setNoOfhMembers(hMembers.getText().toString());
+                    pc.writeProfile(activity);
+                    CalculateProfileControl cpc = new CalculateProfileControl(activity);
+                    //Must be set in this order!
+                    cpc.setMaxMortgagePeriod();
+                    cpc.setMonthlyInstallment();
+                    cpc.setMaxMortgage();
+                    cpc.setMaxPropertyPrice();
+                    cpc.setDownpayment();
+                    cpc.setAffordability();
+                    cpc.writeCalculatedProfile(activity);
+                    Intent skip = new Intent( ProfileUI2.this, HDBDevelopmentUI.class);
+                    startActivity(skip);
                 }
                 else {
                     Intent i = new Intent(ProfileUI2.this, ProfileUI3.class);
@@ -133,5 +178,21 @@ public class ProfileUI2 extends AppCompatActivity implements View.OnFocusChangeL
                 }
             }
         }
+    }
+
+    //called whenever an item in your options menu is selected
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            //R.id.home is the back button at the action bar which is at the top of the app
+            case android.R.id.home:
+                //make it such that action bar's back button which is actually a Up button acts like back button
+                //Up button works by creating new task of the activity instead of actually back to previous activity
+                //onBackPressed() called 1st so the original method of Up button will not be called
+                onBackPressed();
+                return true;
+        }
+
+        return(super.onOptionsItemSelected(item));
     }
 }

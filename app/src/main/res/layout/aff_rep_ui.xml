@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,14 +7,14 @@
     tools:context=".Boundary.AffordabilityReportUI">
 
     <TextView
+        android:id="@+id/report_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Affordability Report"
-        android:textStyle="bold"
-        android:textSize="20dp"
-        android:id="@+id/report_header"
+        android:gravity="center"
         android:padding="10dp"
-        android:gravity="center"/>
+        android:text="Affordability Report"
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,6 +22,7 @@
         android:layout_margin="10dp"
         android:orientation="vertical"
         android:padding="5dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="20dp"
@@ -30,89 +30,113 @@
             android:background="@drawable/textview_border"
             android:padding="2dp"
             android:text="Highest Eligibility" />
+
         <TextView
+            android:id="@+id/max_property_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Maximum Property Purchase Price: "
-            android:id="@+id/max_property_price"/>
+            android:text="Maximum Property Purchase Price: " />
+
         <TextView
+            android:id="@+id/max_mortgage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Maximum Mortgage Amount: "
-            android:id="@+id/max_mortgage"/>
+            android:text="Maximum Mortgage Amount: " />
+
         <TextView
+            android:id="@+id/max_tenure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Maximum Mortgage Tenure: "
-            android:id="@+id/max_tenure"/>
+            android:text="Maximum Mortgage Tenure: " />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_margin="10dp"
+        android:orientation="vertical"
         android:padding="5dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Eligible Grants"
-            android:background="@drawable/textview_border"
-            android:padding="2dp"
-            android:layout_marginBottom="5dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SHG: "
-            android:id="@+id/shg"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="AHG: "
-            android:id="@+id/ahg"/>
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="10dp"
-        android:padding="5dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Current Property: "
-            android:background="@drawable/textview_border"
-            android:padding="2dp"
             android:layout_marginBottom="5dp"
-            android:id="@+id/property_name"/>
+            android:background="@drawable/textview_border"
+            android:padding="2dp"
+            android:text="Eligible Grants" />
 
         <TextView
+            android:id="@+id/shg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Price: "
-            android:id="@+id/property_price"/>
+            android:text="SHG: " />
+
         <TextView
+            android:id="@+id/ahg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Flat Type: "
-            android:id="@+id/flat_type"/>
+            android:text="AHG: " />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:padding="5dp">
+
         <TextView
+            android:id="@+id/property_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Downpayment Required: $"
-            android:id="@+id/downpayment_req"/>
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/textview_border"
+            android:padding="2dp"
+            android:text="Current Property: " />
+
         <TextView
+            android:id="@+id/property_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Loan Amount Required: $"
+            android:text="Price: " />
+
+        <TextView
+            android:id="@+id/flat_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Flat Type: " />
+
+        <TextView
+            android:id="@+id/downpayment_req"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Downpayment Required: $" />
+
+        <TextView
+            android:id="@+id/loan_req"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+<<<<<<< HEAD
+            android:text="Mortgage Amount: $"
             android:id="@+id/loan_req"/>
+=======
+            android:text="Loan Amount Required: $" />
+
+>>>>>>> 4ad2b971d57f4d1c592f0a14970f9f41c2aa5979
         <TextView
+            android:id="@+id/repayment_sum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Monthly Repayment Sum: $"
-            android:id="@+id/repayment_sum"/>
+            android:text="Monthly Repayment Sum: $" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/button_generatepdf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="Generate PDF"
+        android:onClick="takeScreenshot"/>
 
 </LinearLayout>

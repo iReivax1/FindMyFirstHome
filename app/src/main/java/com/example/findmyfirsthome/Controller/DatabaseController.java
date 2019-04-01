@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import com.example.findmyfirsthome.Boundary.MapAPI;
 import com.example.findmyfirsthome.Entity.CalculatedProfile;
@@ -676,13 +677,13 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
 
             int index;
             index = cursor.getColumnIndexOrThrow("isMarried");
-            Boolean married = Boolean.parseBoolean(cursor.getString(index));
+            Boolean married = Integer.parseInt(cursor.getString(index))==1;
 
             index = cursor.getColumnIndexOrThrow("isFirstTimeBuyer");
-            Boolean firstTimeBuyer = Boolean.parseBoolean(cursor.getString(index));
+            Boolean firstTimeBuyer = Integer.parseInt(cursor.getString(index))==1;
 
             index = cursor.getColumnIndexOrThrow("isSingapore");
-            Boolean isSG = Boolean.parseBoolean(cursor.getString(index));
+            Boolean isSG = Integer.parseInt(cursor.getString(index))==1;
 
             index = cursor.getColumnIndexOrThrow("age");
             Integer age = Integer.parseInt(cursor.getString(index));
@@ -691,10 +692,10 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
             Double grossSalary = Double.parseDouble(cursor.getString(index));
 
             index = cursor.getColumnIndexOrThrow("isFirstTimeBuyerPartner");
-            Boolean partnerFirstTimeBuyer = Boolean.parseBoolean(cursor.getString(index));
+            Boolean partnerFirstTimeBuyer = Integer.parseInt(cursor.getString(index))==1;
 
             index = cursor.getColumnIndexOrThrow("isSingaporeanPartner");
-            Boolean partnerSG = Boolean.parseBoolean(cursor.getString(index));
+            Boolean partnerSG = Integer.parseInt(cursor.getString(index))==1;
 
             index = cursor.getColumnIndexOrThrow("agePartner");
             Integer partnerAge = Integer.parseInt(cursor.getString(index));
