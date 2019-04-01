@@ -7,7 +7,6 @@ import com.example.findmyfirsthome.Entity.HDBDevelopment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import static java.lang.Math.*;
 
 public class AffordabilityReportController {
     private DatabaseController dbc;
@@ -57,14 +56,14 @@ public class AffordabilityReportController {
         //loop through all the list of HDB Flats Types
         for(HashMap<String, Object> HDBFlatTypeDetails : HDBFlatTypeDetailsList) {
             //check if data is null and flat type must be the same
-            if(HDBFlatTypeDetails.get("flatType") != null && ((String) HDBFlatTypeDetails.get("flatType")) == this.flatType) {
+            if(HDBFlatTypeDetails.get("flatType") != null && ((String) HDBFlatTypeDetails.get("flatType")).equals(this.flatType)) {
                 double term = cp.getMaxMortgagePeriod();
                 //prior calculations of required values in double
                 double price = (Double) HDBFlatTypeDetails.get("price");
-
                 double downpay = 0.1 * price;
                 double loan = 0.9 * price;
-                double repay = price * 0.9 / (pow((1 + monthIR), (term * 12)) - 1) / monthIR * (pow((1 + monthIR), (term * 12)));
+                double repay = loan*(monthIR * (Math.pow((1+monthIR),(term*12))))/(Math.pow((1+monthIR),(term*12)) -1);
+
 
                 //add values in Strings to list and pass to view
                 String propertyPrice = String.valueOf(price);
@@ -82,4 +81,5 @@ public class AffordabilityReportController {
         }
         return temp;
     }
+
 }
