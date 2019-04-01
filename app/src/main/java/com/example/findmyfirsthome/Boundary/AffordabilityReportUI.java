@@ -2,20 +2,27 @@ package com.example.findmyfirsthome.Boundary;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.findmyfirsthome.Controller.AffordabilityReportController;
 import com.example.findmyfirsthome.R;
-
-import org.w3c.dom.Text;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.pdf.PdfTemplate;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 public class AffordabilityReportUI extends AppCompatActivity {
@@ -45,6 +52,14 @@ public class AffordabilityReportUI extends AppCompatActivity {
         tvFlattype.append(flatType);
         setFixedInfo();
         setHDBDependentInfo();
+
+        Button download = (Button) findViewById(R.id.button_generatepdf);
+        download.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                takeScreenshot(v);
+            }
+            });
     }
 
     //called whenever an item in your options menu is selected
@@ -99,29 +114,58 @@ public class AffordabilityReportUI extends AppCompatActivity {
     private void takeScreenshot(View view) {
         Date now = new Date();
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
-
+        Document document = new Document();
         try {
             // image naming and path  to include sd card  appending name you choose for file
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
-
+            File f = new File(Environment.getExternalStorageDirectory()+File.separator+"Download"+File.separator+now+".jpg");
+            f.getParentFile().mkdirs();
+            f.createNewFile();
+            FileOutputStream outputStream = new FileOutputStream(f);
             // create bitmap screen capture
             View v1 = getWindow().getDecorView().getRootView();
             v1.setDrawingCacheEnabled(true);
             Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
             v1.setDrawingCacheEnabled(false);
-            System.out.println("HERE");
-            File imageFile = new File(mPath);
-
-            FileOutputStream outputStream = new FileOutputStream(imageFile);
             int quality = 100;
             bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
             outputStream.flush();
             outputStream.close();
 
-            //openScreenshot(imageFile);
+            String directoryPath = (Environment.getExternalStorageDirectory()+File.separator+"Download"+File.separator+now+".pdf");
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(directoryPath));
+            document.open();
+            Image image = Image.getInstance(f.toString());
+            image = cropImage(writer,image,0,0,20,10);
+            image.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
+            document.add(image);
+            document.close();
+
+            Toast.makeText(getApplicationContext(), "Saved as PDF!", Toast.LENGTH_SHORT).show();
+
         } catch (Throwable e) {
+            Toast.makeText(getApplicationContext(), "Unable to save as PDF!", Toast.LENGTH_SHORT).show();
             // Several error may come out with file handling or DOM
             e.printStackTrace();
         }
+    }
+
+    private void openScreenshot(File imageFile) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        Uri uri = Uri.fromFile(imageFile);
+        intent.setDataAndType(uri, "image/*");
+        startActivity(intent);
+    }
+
+    public Image cropImage(PdfWriter writer, Image image, float leftReduction, float rightReduction, float topReduction, float bottomReduction) throws DocumentException {
+        float width = image.getScaledWidth();
+        float height = image.getScaledHeight();
+        PdfTemplate template = writer.getDirectContent().createTemplate(
+                width - leftReduction - rightReduction,
+                height - topReduction - bottomReduction);
+        template.addImage(image,
+                width, 0, 0,
+                height, -leftReduction, -bottomReduction);
+        return Image.getInstance(template);
     }
 }
