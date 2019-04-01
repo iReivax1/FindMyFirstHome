@@ -45,22 +45,22 @@ public class MapAPI {
     String url;
     RequestQueue requestQueue;
     LatLng coords = new LatLng(0,0);
+
     public MapAPI(Context context) {
         this.context = context;
     }
 
 
-    public void getHTTP(String name){
+    public boolean getHTTP(String name){
         JsonObjectRequest jsonObjReq = null;
         requestQueue = Volley.newRequestQueue(context);
         this.url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + name + "SG&key=AIzaSyDMO5XX-YHL66_9hzc9cF73yfwMrK6lfNE";
         System.out.print(url);
         jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, (JSONObject) null, new Response.Listener<JSONObject>() {
 
-
             @Override
             public void onResponse(JSONObject response) {
-                coords = parseMapJson(response);
+                parseMapJson(response);
                 setCoordinates(coords);
             }
         }, new Response.ErrorListener() {
@@ -70,13 +70,17 @@ public class MapAPI {
             }
         });
         requestQueue.add(jsonObjReq);
+        return true;
     }
 
 
     public LatLng getCoordinates(String name) {
-        getHTTP(name);
+        boolean done;
         LatLng coord = new LatLng(0,0);
-        coord = this.coords;
+        done = getHTTP(name);
+        if(done) {
+            coord = this.coords;
+        }
         return coord;
     }
 
@@ -85,7 +89,7 @@ public class MapAPI {
     }
 
 
-    protected LatLng parseMapJson(JSONObject obj) {
+    protected void parseMapJson(JSONObject obj) {
         LatLng coord = new LatLng(0,0);
         String response;
         try {
@@ -93,12 +97,10 @@ public class MapAPI {
             String lng = ((JSONArray) obj.get("results")).getJSONObject(0).getJSONObject("geometry").getJSONObject("location").get("lng").toString();
             Double latitiude = Double.parseDouble(lat);
             Double longtitude = Double.parseDouble(lng);
-            coord = new LatLng(latitiude, longtitude);
-            return coord;
+            this.coords = new LatLng(latitiude, longtitude);
         } catch (Exception ex) {
              ex.printStackTrace();
         }
-        return coord;
     }
 
 

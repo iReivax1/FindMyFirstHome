@@ -175,7 +175,7 @@ public class DataGovAPI {
                     info.put("AmenitiesName", centre_name);
 
                     //Using GEOCODING
-                    coordinates = mapAPI.getCoordinates(centre_address);
+                    coordinates = mapAPI.getCoordinates(centre_name);
                     System.out.println(coordinates.latitude + ", " + coordinates.longitude);
                     info.put("AmenitiesLat", coordinates.latitude);
                     info.put("AmenitiesLng", coordinates.longitude);
