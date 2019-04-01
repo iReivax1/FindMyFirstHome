@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 //Basically this is our DAO;
 //Need to refactor this class to an interface class.
@@ -113,7 +114,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
 
     public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + HDBFlatAffordability + " BOOLEAN, " + " FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
 
-    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + " (" +  AmenitiesName + " TEXT PRIMARY KEY, " +  AmenitiesType + " TEXT, " + AmenitiesLongitude + " REAL, " + AmenitiesLatitude + " REAL " + ");";
+    public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+  AmenitiesName + " TEXT, " +  AmenitiesType + " TEXT, " + AmenitiesLongitude + " REAL, " + AmenitiesLatitude + " REAL " + ");";
 
     public static final String SQL_Grants = "CREATE TABLE " + TABLE_NAME4 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + IncomeRequired + " TEXT, " + GrantType + " TEXT, " + GrantAmount + " REAL " + ");";
 
@@ -263,7 +264,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         db.close();
     }
 
-    public boolean writeAmenitiesData(HashMap<String, Object> infoList) {
+    public boolean writeAmenitiesData(LinkedHashMap<String, Object> infoList) {
 
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
@@ -351,23 +352,22 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         return false;
     }
 
-    public boolean writeTax(ArrayList<HashMap<String, String>> infoList){
+    public boolean writeTax(LinkedHashMap<String, String> info){
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
 
-        for (HashMap<String, String> i : infoList) {
-            for (String key : i.keySet()) {
+        for (String key : info.keySet()) {
                 if (key.equals("typeOfProperty")) {
-                    values.put(typeOfProperty, i.get(key));
+                    values.put(typeOfProperty, info.get(key));
                 } else if (key.equals("taxRate")) {
-                    values.put(taxRate, i.get(key));
+                    values.put(taxRate, info.get(key));
                 } else {
-                    values.put(annualValue, i.get(key));
+                    values.put(annualValue, info.get(key));
                 }
             }
-        }
+
 
         long newRowId = db.insert(TABLE_NAME7, null, values);
         db.close();
@@ -462,7 +462,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
                 //System.out.println("1.5 "+DevelopmentImgURL);
                 coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
                 //System.out.println("1.6 "+coord);
-                affordable = cursor.getInt(cursor.getColumnIndexOrThrow("HDBAffordability")) == 1;
+                affordable = (cursor.getInt(cursor.getColumnIndexOrThrow("HDBAffordability")) == 1);
                 mdList = readMapData(DevelopmentName);
                 HDBFTList = readHDBFlatType(DevelopmentName);
 
@@ -513,7 +513,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
 
                 DevelopmentImgURL = cursor.getString(cursor.getColumnIndexOrThrow("ImgURL"));
 
-                affordable = cursor.getInt(cursor.getColumnIndexOrThrow("HDBAffordability")) == 1;
+                affordable = (cursor.getInt(cursor.getColumnIndexOrThrow("HDBAffordability")) == 1);
                 mdList = readMapData(DevelopmentName);
                 HDBFTList = readHDBFlatType(DevelopmentName);
                 if(cursor.isLast()) break;
@@ -757,7 +757,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
     }
 
     private HDBDevelopment createHDBDevelopmentObject(ArrayList<HashMap<String, Object>> HDBFTList, String HDBDevelopmentName, String HDBDevelopmentDescription, boolean affordable, LatLng coordinates, ArrayList<MapData> amenities, String ImgURL) {
-        HDBDevelopment HDBD = new HDBDevelopment(HDBFTList, HDBDevelopmentName, HDBDevelopmentDescription, false, coordinates, amenities, ImgURL);
+        HDBDevelopment HDBD = new HDBDevelopment(HDBFTList, HDBDevelopmentName, HDBDevelopmentDescription, affordable, coordinates, amenities, ImgURL);
         return HDBD;
     }
 
