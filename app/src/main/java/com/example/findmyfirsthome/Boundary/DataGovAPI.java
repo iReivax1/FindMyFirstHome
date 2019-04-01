@@ -2,6 +2,7 @@ package com.example.findmyfirsthome.Boundary;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.CountDownTimer;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -50,10 +51,15 @@ public class DataGovAPI {
     ArrayList<LinkedHashMap<String, Object>> schoolList = new ArrayList<>();
     ArrayList<LinkedHashMap<String, String>> taxList = new ArrayList<>();
     RequestQueue requestQueue;
+    LatLng coord = new LatLng(0,0);
+
+    public void setCoord(LatLng coord) {
+        this.coord = coord;
+    }
 
     public DataGovAPI(Context cont) {
         this.context = cont;
-         this.mapAPI = new MapAPI(cont);
+         this.mapAPI = new MapAPI(cont, this);
     }
 
 
@@ -167,18 +173,21 @@ public class DataGovAPI {
                 for (int i = 0; i < records.length(); i++) {
                     JSONObject c = records.getJSONObject(i);
                     String centre_name = c.getString("centre_name");
-                    String centre_address = c.getString("centre_address");
-
                     // adding each child node to HashMap key => value
                     info = new LinkedHashMap<>();
                     info.put("AmenitiesType", "ChildCare");
                     info.put("AmenitiesName", centre_name);
+                    Boolean done;
+                    done = mapAPI.getCoordinates(centre_name);
+                    System.out.println(coord.latitude + ", " + coord.longitude);
+                    if(done){
+                        info.put("AmenitiesLat", mapAPI.getCoords().latitude);
+                        info.put("AmenitiesLng", mapAPI.getCoords().longitude);
+                    }else {
+                        info.put("AmenitiesLat", 0.0);
+                        info.put("AmenitiesLng", 0.0);
+                    }
 
-                    //Using GEOCODING
-                    coordinates = mapAPI.getCoordinates(centre_name);
-                    System.out.println(coordinates.latitude + ", " + coordinates.longitude);
-                    info.put("AmenitiesLat", coordinates.latitude);
-                    info.put("AmenitiesLng", coordinates.longitude);
                     list.add(info);
                 }
                 return list;
