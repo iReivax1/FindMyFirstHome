@@ -1,150 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Boundary.DevelopmentDetailUI">
-
-    <LinearLayout
-        android:id="@+id/mainLayout"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/text_estateName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:gravity="center"
-            android:layout_marginTop="40dp"
-            android:text="TextView"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textSize="20dp"/>
-
-        <ImageView
-            android:id="@+id/image_estatePic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            tools:srcCompat="@tools:sample/avatars"
-            android:contentDescription="TODO" />
-
-        <TextView
-            android:id="@+id/text_estateDescriptionHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="20dp"
-            android:text="Description"
-            android:textStyle="bold"
-            android:textColor="@color/black"/>
-
-        <TextView
-            android:id="@+id/text_estateDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:text="Test test test test test test" />
-
-        <TextView
-            android:id="@+id/text_propertyDetailsHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="20dp"
-            android:text="Property Details"
-            android:textStyle="bold"
-            android:textColor="@color/black"/>
-
-        <TableLayout
-            android:id="@+id/table_developmentTable"
+        <LinearLayout
+            android:id="@+id/mainLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
+            android:orientation="vertical">
 
-            <TableRow
+            <TextView
+                android:id="@+id/text_estateName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:gravity="center"
+                android:layout_marginTop="40dp"
+                android:text="TextView"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="20dp"/>
+
+            <ImageView
+                android:id="@+id/image_estatePic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                tools:srcCompat="@tools:sample/avatars"
+                android:contentDescription="TODO" />
+
+            <TextView
+                android:id="@+id/text_estateDescriptionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="Description"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/text_estateDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:text="Test test test test test test" />
+
+            <TextView
+                android:id="@+id/text_propertyDetailsHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="Property Details"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
+
+            <TableLayout
+                android:id="@+id/table_developmentTable"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center">
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
 
-                <TextView
-                    android:background="@color/lightOrange"
-                    android:text="Flat Type"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:padding="20dp"
-                    android:gravity="center"/>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
 
-                <TextView
-                    android:background="@color/lightOrange"
-                    android:text="Price"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:padding="20dp"
-                    android:gravity="center"/>
+                    <TextView
+                        android:background="@color/lightOrange"
+                        android:text="Flat Type"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:padding="20dp"
+                        android:gravity="center"/>
 
-                <TextView
-                    android:background="@color/lightOrange"
-                    android:text="Generate Report"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:padding="20dp"
-                    android:gravity="center"/>
+                    <TextView
+                        android:background="@color/lightOrange"
+                        android:text="Price"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:padding="20dp"
+                        android:gravity="center"/>
 
-            </TableRow>
+                    <TextView
+                        android:background="@color/lightOrange"
+                        android:text="Generate Report"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:padding="20dp"
+                        android:gravity="center"/>
 
-            <TableRow
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/text_mapHeader"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:gravity="center"
+                android:text="Map"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
-            <TableRow
+            <fragment
+                android:id="@+id/map_developmentDetails"
+                xmlns:map="http://schemas.android.com/apk/res-auto"
+                class="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="250dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                map:mapType="normal"
+                map:cameraZoom="16"
+                map:uiCompass="false"
+                map:uiRotateGestures="true"
+                map:uiTiltGestures="true"
+                map:uiZoomControls="true"
+                map:uiZoomGestures="true"
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </TableLayout>
+                />
 
-        <TextView
-            android:id="@+id/text_mapHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:gravity="center"
-            android:text="Map"
-            android:textStyle="bold"
-            android:textColor="@color/black"/>
-
-        <fragment
-            android:id="@+id/map_developmentDetails"
-            xmlns:map="http://schemas.android.com/apk/res-auto"
-            class="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            map:mapType="normal"
-            map:cameraZoom="16"
-            map:uiCompass="false"
-            map:uiRotateGestures="true"
-            map:uiTiltGestures="true"
-            map:uiZoomControls="true"
-            map:uiZoomGestures="true"
-
-            />
-
+        </LinearLayout>
+    </ScrollView>
         <include layout="@layout/footer"/>
-
-    </LinearLayout>
-</ScrollView>
+</RelativeLayout>

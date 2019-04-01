@@ -463,7 +463,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
                 //System.out.println("1.5 "+DevelopmentImgURL);
                 coord = new LatLng(DevelopmentLatitude, DevelopmentLongitude);
                 //System.out.println("1.6 "+coord);
-                affordable = cursor.getInt(cursor.getColumnIndexOrThrow("HDBAffordability")) == 1;
+                affordable = (cursor.getInt(cursor.getColumnIndexOrThrow("HDBAffordability")) == 1);
                 mdList = readMapData(DevelopmentName);
                 HDBFTList = readHDBFlatType(DevelopmentName);
 
@@ -514,7 +514,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
 
                 DevelopmentImgURL = cursor.getString(cursor.getColumnIndexOrThrow("ImgURL"));
 
-                affordable = cursor.getInt(cursor.getColumnIndexOrThrow("HDBAffordability")) == 1;
+                affordable = (cursor.getInt(cursor.getColumnIndexOrThrow("HDBAffordability")) == 1);
                 mdList = readMapData(DevelopmentName);
                 HDBFTList = readHDBFlatType(DevelopmentName);
                 if(cursor.isLast()) break;
@@ -758,15 +758,11 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
     }
 
     private HDBDevelopment createHDBDevelopmentObject(ArrayList<HashMap<String, Object>> HDBFTList, String HDBDevelopmentName, String HDBDevelopmentDescription, boolean affordable, LatLng coordinates, ArrayList<MapData> amenities, String ImgURL) {
-        HDBDevelopment HDBD = new HDBDevelopment(HDBFTList, HDBDevelopmentName, HDBDevelopmentDescription, false, coordinates, amenities, ImgURL);
+        HDBDevelopment HDBD = new HDBDevelopment(HDBFTList, HDBDevelopmentName, HDBDevelopmentDescription, affordable, coordinates, amenities, ImgURL);
         return HDBD;
     }
 
-    private LatLng getHDBDevelopmentCoordinates(String HDBDevelopmentName) {
-        MapAPI mapi = new MapAPI();
-        LatLng coord = mapi.getHDBCoordinates(HDBDevelopmentName);
-        return coord;
-    }
+
 
     ///////////////////////////////Delete Function////////////////////////////////////
     public void deleteHDBData() {
