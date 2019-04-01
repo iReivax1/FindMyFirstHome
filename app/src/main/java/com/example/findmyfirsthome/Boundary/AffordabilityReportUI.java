@@ -47,6 +47,22 @@ public class AffordabilityReportUI extends AppCompatActivity {
         setHDBDependentInfo();
     }
 
+    //called whenever an item in your options menu is selected
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            //R.id.home is the back button at the action bar which is at the top of the app
+            case android.R.id.home:
+                //make it such that action bar's back button which is actually a Up button acts like back button
+                //Up button works by creating new task of the activity instead of actually back to previous activity
+                //onBackPressed() called 1st so the original method of Up button will not be called
+                onBackPressed();
+                return true;
+        }
+
+        return(super.onOptionsItemSelected(item));
+    }
+
     private void setFixedInfo(){
         ArrayList<String> fixedInfo = arc.getFixedInfo();
         if (fixedInfo.size() == 0)
