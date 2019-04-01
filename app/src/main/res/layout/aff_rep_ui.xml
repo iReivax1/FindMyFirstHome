@@ -118,6 +118,7 @@
             android:layout_height="wrap_content"
             android:text="Mortgage Amount: $"/>
 
+
         <TextView
             android:id="@+id/repayment_sum"
             android:layout_width="wrap_content"
