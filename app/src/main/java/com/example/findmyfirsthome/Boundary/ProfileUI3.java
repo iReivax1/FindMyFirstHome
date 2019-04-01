@@ -48,6 +48,9 @@ public class ProfileUI3 extends AppCompatActivity implements View.OnFocusChangeL
         final int hMembersValue = Integer.parseInt(hMembersValueStr); //getting number of members
         final LinearLayout mainLayout=(LinearLayout)findViewById(R.id.profileUI3Linear); //setting main layout
 
+        ProfileControl pc = new ProfileControl();
+        pc.readProfile(this);
+        int counter =0;
         for(int i=0;i<hMembersValue;++i) { // creating layout programmatically depending on how many members
             // create a new textview
             TextView header = new TextView(this); //creating a textview for header
@@ -79,6 +82,13 @@ public class ProfileUI3 extends AppCompatActivity implements View.OnFocusChangeL
             horizontalLayout.addView(reqSalary); //include into horizontal layout
             horizontalLayout.addView(hMemberSalary); //include into horizontal layout
             mainLayout.addView(horizontalLayout); //include into main layout
+            if(pc.getUD()!=null) {
+                if(counter!=pc.getNoofhMembers()){ //compare to previous number of household member,to put back their previous salary
+                    counter += 1;
+                    double salaryDisplay = pc.getAllMembers().get(i);
+                    hMemberSalary.setText(Double.toString(salaryDisplay));
+                }
+            }
         }
 
 
@@ -100,7 +110,7 @@ public class ProfileUI3 extends AppCompatActivity implements View.OnFocusChangeL
                 pc.setMaritalStatus(radioGroupMScheckedID);
                 pc.setFirstTimeBuyer(radioGroupFTBcheckedID);
                 pc.setCitizenship(radioGroupCiticheckedID);
-                pc.setAge(ageInputStr);
+                            pc.setAge(ageInputStr);
                 pc.setGrossMonthlySalary(grossMSalaryStr);
 
                 pc.setFirstTimeBuyerPartner(radioGroupFTB2checkedID);

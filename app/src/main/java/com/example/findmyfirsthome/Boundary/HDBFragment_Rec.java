@@ -43,14 +43,13 @@ public class HDBFragment_Rec extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         fetchData();
+        super.onCreate(savedInstanceState);
+
     }
 
     public void fetchData(){
         HDBDevelopmentController hdbdc = new HDBDevelopmentController(getContext());
-        hdbNameList = new ArrayList<>();
-        hdbUrl = new ArrayList<>();
         hdbNameList = hdbdc.getRecHDBnames();
         hdbUrl = hdbdc.getRecHDBurl();
     }

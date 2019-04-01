@@ -139,7 +139,7 @@ public class DevelopmentDetailUI extends AppCompatActivity implements OnMapReady
             generateReportButton.setGravity(Gravity.CENTER);
             generateReportButton.setId(rowID);    //row ID starts from 0 which follows the index of list of HDBFlatTypeDetailsList
             generateReportButton.setText("Generate");
-            generateReportButton.setTextSize(5*(this.getResources().getDisplayMetrics().density));  //size of text
+            generateReportButton.setTextSize(10);  //size of text
             generateReportButton.setLayoutParams(new FrameLayout.LayoutParams(200, 75));    //size for button
             generateReportButton.setPadding(0, 0, 0, 0);    //to not crop the words because default have some padding
             generateReportButton.setTextColor(Color.parseColor("#FFFFFF")); //set text to white color

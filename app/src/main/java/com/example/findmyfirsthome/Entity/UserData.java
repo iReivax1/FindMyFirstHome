@@ -3,9 +3,9 @@ package com.example.findmyfirsthome.Entity;
 import java.util.ArrayList;
 
 public class UserData {
-    private boolean isMarried;
-    private boolean isFirstTimeBuyer;
-    private boolean isSingaporean; //if true is singaporean
+    private boolean isMarried = true;
+    private boolean isFirstTimeBuyer = true;
+    private boolean isSingaporean = true; //if true is singaporean
     private int age =-1;
     private double grossSalary = 0;
 
