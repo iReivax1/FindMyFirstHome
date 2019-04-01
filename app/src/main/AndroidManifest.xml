@@ -53,9 +53,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Boundary.DevelopmentDetailUI"/>
+            android:name=".Boundary.DevelopmentDetailUI"
+            android:parentActivityName=".Boundary.HDBDevelopmentUI"/>
         <activity
-            android:name=".Boundary.AffordabilityReportUI"/>
+            android:name=".Boundary.AffordabilityReportUI"
+            android:parentActivityName=".Boundary.DevelopmentDetailUI"/>
         <activity android:name=".Boundary.HDBDevelopmentUI" />
         <activity
             android:name=".Controller.MapsController"
