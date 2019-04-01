@@ -14,6 +14,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
 import com.example.findmyfirsthome.R;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,6 +35,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -52,24 +54,31 @@ public class MapAPI {
 
 
     public boolean getHTTP(String name){
-        JsonObjectRequest jsonObjReq = null;
+        JSONObject response;
         requestQueue = Volley.newRequestQueue(context);
         this.url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + name + "SG&key=AIzaSyDMO5XX-YHL66_9hzc9cF73yfwMrK6lfNE";
         System.out.print(url);
-        jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, (JSONObject) null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(url, null, future, future);
+        requestQueue.add(request);
 
-            @Override
-            public void onResponse(JSONObject response) {
-                parseMapJson(response);
-                setCoordinates(coords);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("test", "error");
-            }
-        });
-        requestQueue.add(jsonObjReq);
+        try {
+            Thread t1 = new Thread(new Runnable() {
+                public void run()
+                {
+                    RequestFuture<JSONObject> future = RequestFuture.newFuture();
+                    try {
+                        response = future.get();
+                    }
+                } catch (InterruptedException e) {
+                } catch (ExecutionException e) {
+                }
+                }
+            });
+            response = future.get();
+        } catch (InterruptedException e) {
+        } catch (ExecutionException e) {
+        }
+
         return true;
     }
 
