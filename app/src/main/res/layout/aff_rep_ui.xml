@@ -116,13 +116,8 @@
             android:id="@+id/loan_req"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-<<<<<<< HEAD
-            android:text="Mortgage Amount: $"
-            android:id="@+id/loan_req"/>
-=======
-            android:text="Loan Amount Required: $" />
+            android:text="Mortgage Amount: $"/>
 
->>>>>>> 4ad2b971d57f4d1c592f0a14970f9f41c2aa5979
         <TextView
             android:id="@+id/repayment_sum"
             android:layout_width="wrap_content"

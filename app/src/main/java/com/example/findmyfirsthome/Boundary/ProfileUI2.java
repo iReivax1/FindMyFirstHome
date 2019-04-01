@@ -52,10 +52,10 @@ public class ProfileUI2 extends AppCompatActivity implements View.OnFocusChangeL
         ProfileControl pc = new ProfileControl();
         pc.readProfile(this);
         if(pc.getUD()!=null) {
-            carLoan.setText(Integer.toString(pc.getAge()));
-            creditDebt.setText(Double.toString(pc.getGrossMonthlySalary()));
-            studyLoan.setText(Integer.toString(pc.getAgePartner()));
-            otherCommits.setText(Double.toString(pc.getGrossMonthlySalaryPartner()));
+            carLoan.setText(Double.toString(pc.getCarLoan()));
+            creditDebt.setText(Double.toString(pc.getCreditDebt()));
+            studyLoan.setText(Double.toString(pc.getStudyLoan()));
+            otherCommits.setText(Double.toString(pc.getOtherCommits()));
             mainOA.setText(Double.toString(pc.getMainOA()));
             coOA.setText(Double.toString(pc.getCOOA()));
             hMembers.setText(Integer.toString(pc.getNoofhMembers()));
