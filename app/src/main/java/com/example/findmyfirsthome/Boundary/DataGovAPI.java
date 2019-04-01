@@ -42,9 +42,9 @@ public class DataGovAPI {
     String url2;
     String url3;
     String url4;
-    // This will hold the full URL which will include the username entered in the etGitHubUser.
-    MapAPI mapAPI = new MapAPI();
+    // Each of these url will hold the full URL to get json object from respective website.
     Context context;
+    MapAPI mapAPI;
     ArrayList<LinkedHashMap<String, Object>> childCareList = new ArrayList<>();
     ArrayList<LinkedHashMap<String, Object>> marketList = new ArrayList<>();
     ArrayList<LinkedHashMap<String, Object>> schoolList = new ArrayList<>();
@@ -53,6 +53,7 @@ public class DataGovAPI {
 
     public DataGovAPI(Context cont) {
         this.context = cont;
+         this.mapAPI = new MapAPI(cont);
     }
 
 
@@ -175,7 +176,7 @@ public class DataGovAPI {
 
                     //Using GEOCODING
                     coordinates = mapAPI.getCoordinates(centre_address);
-                    System.out.println(coordinates.latitude + ", " +coordinates.longitude);
+                    System.out.println(coordinates.latitude + ", " + coordinates.longitude);
                     info.put("AmenitiesLat", coordinates.latitude);
                     info.put("AmenitiesLng", coordinates.longitude);
                     list.add(info);

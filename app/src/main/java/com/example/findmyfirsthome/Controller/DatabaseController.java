@@ -761,11 +761,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
         return HDBD;
     }
 
-    private LatLng getHDBDevelopmentCoordinates(String HDBDevelopmentName) {
-        MapAPI mapi = new MapAPI();
-        LatLng coord = mapi.getHDBCoordinates(HDBDevelopmentName);
-        return coord;
-    }
+
 
     ///////////////////////////////Delete Function////////////////////////////////////
     public void deleteHDBData() {

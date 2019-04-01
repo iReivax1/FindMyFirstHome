@@ -9,6 +9,12 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.findmyfirsthome.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -36,63 +42,55 @@ public class MapAPI {
 
 
     Context context;
-
-
-    public MapAPI() {
-
+    String url;
+    RequestQueue requestQueue;
+    LatLng coords = new LatLng(0,0);
+    public MapAPI(Context context) {
+        this.context = context;
     }
 
-    //Method to connect to html
-    public String getHTTPData(String requestURL) {
-        URL url;
-        String response = "";
-        try {
-            url = new URL(requestURL); //create a URL object
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection(); //open the connection
-            conn.setRequestMethod("GET"); //getting data so is Get method
-            conn.setReadTimeout(15000);
-            conn.setConnectTimeout(15000);
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            //binary (non-alphanumeric) data (or a significantly sized payload) to transmit, use multipart/form-data.
-            // Otherwise, use application/x-www-form-urlencoded
-            int responseCode = conn.getResponseCode();
-            if (responseCode == HttpsURLConnection.HTTP_OK) {
-                String line;
-                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream())); //read the file
-                while ((line = br.readLine()) != null) response += line;
-            } else response = ""; //if http response code != 200 then have an empty response
 
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return response;
+    public void getHTTP(String name){
+        JsonObjectRequest jsonObjReq = null;
+        requestQueue = Volley.newRequestQueue(context);
+        this.url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + name + "SG&key=AIzaSyDMO5XX-YHL66_9hzc9cF73yfwMrK6lfNE";
+        System.out.print(url);
+        jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, (JSONObject) null, new Response.Listener<JSONObject>() {
+
+
+            @Override
+            public void onResponse(JSONObject response) {
+                coords = parseMapJson(response);
+                setCoordinates(coords);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("test", "error");
+            }
+        });
+        requestQueue.add(jsonObjReq);
     }
 
 
     public LatLng getCoordinates(String name) {
+        getHTTP(name);
         LatLng coord = new LatLng(0,0);
-        coord = execute(name);
+        coord = this.coords;
         return coord;
     }
 
+    public void setCoordinates(LatLng coord){
+        this.coords = coord;
+    }
 
-    protected LatLng execute(String name) {
+
+    protected LatLng parseMapJson(JSONObject obj) {
         LatLng coord = new LatLng(0,0);
         String response;
         try {
-            String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + name + "SG&key=AIzaSyDMO5XX-YHL66_9hzc9cF73yfwMrK6lfNE";
-            System.out.print(url);
-            response = getHTTPData(url);
-            Log.d("response", response);
-            JSONObject jsonObject = new JSONObject(response); //ToDo Problem is here unable to get, change to use volley connection
-            String lat = ((JSONArray) jsonObject.get("results")).getJSONObject(0).getJSONObject("geometry").getJSONObject("location").get("lat").toString();
-            String lng = ((JSONArray) jsonObject.get("results")).getJSONObject(0).getJSONObject("geometry").getJSONObject("location").get("lng").toString();
+            String lat = ((JSONArray) obj.get("results")).getJSONObject(0).getJSONObject("geometry").getJSONObject("location").get("lat").toString();
+            String lng = ((JSONArray) obj.get("results")).getJSONObject(0).getJSONObject("geometry").getJSONObject("location").get("lng").toString();
             Double latitiude = Double.parseDouble(lat);
             Double longtitude = Double.parseDouble(lng);
             coord = new LatLng(latitiude, longtitude);
