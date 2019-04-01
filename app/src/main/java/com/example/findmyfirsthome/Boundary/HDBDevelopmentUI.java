@@ -2,6 +2,7 @@ package com.example.findmyfirsthome.Boundary;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -48,7 +49,7 @@ public class HDBDevelopmentUI extends AppCompatActivity implements View.OnClickL
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-
+        tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#000080"));
         //Remove Shadow from the action bar
         //ActionBar actionBar = getSupportActionBar();
         //actionBar.setElevation(0);
