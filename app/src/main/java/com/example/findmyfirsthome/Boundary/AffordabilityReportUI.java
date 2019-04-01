@@ -1,16 +1,22 @@
 package com.example.findmyfirsthome.Boundary;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import com.example.findmyfirsthome.Controller.AffordabilityReportController;
 import com.example.findmyfirsthome.R;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class AffordabilityReportUI extends AppCompatActivity {
 
@@ -18,6 +24,7 @@ public class AffordabilityReportUI extends AppCompatActivity {
             tvPropertyname, tvPropertyprice, tvFlattype, tvDownpaymentreq, tvLoanreq, tvRepaymentsum;
 
     private AffordabilityReportController arc;
+    private View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,5 +78,34 @@ public class AffordabilityReportUI extends AppCompatActivity {
         tvLoanreq.append(HDBDependentInfo.get(2));
         tvRepaymentsum = (TextView) findViewById(R.id.repayment_sum);
         tvRepaymentsum.append(HDBDependentInfo.get(3));
+    }
+
+    private void takeScreenshot(View view) {
+        Date now = new Date();
+        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+
+        try {
+            // image naming and path  to include sd card  appending name you choose for file
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
+
+            // create bitmap screen capture
+            View v1 = getWindow().getDecorView().getRootView();
+            v1.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            v1.setDrawingCacheEnabled(false);
+            System.out.println("HERE");
+            File imageFile = new File(mPath);
+
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 100;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+            //openScreenshot(imageFile);
+        } catch (Throwable e) {
+            // Several error may come out with file handling or DOM
+            e.printStackTrace();
+        }
     }
 }
