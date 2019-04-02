@@ -1,11 +1,9 @@
 package com.example.findmyfirsthome.Controller;
 
-import android.app.Application;
 import android.content.Context;
 
 import com.example.findmyfirsthome.Entity.CalculatedProfile;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
-import com.example.findmyfirsthome.Entity.MapData;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -13,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class DevelopmentDetailControl {
-    private DatabaseController databaseController;
+    private DataAccessInterfaceClass databaseController;
     private HDBDevelopment hdbd;
     private Context context;
     private ArrayList<HashMap<String, Object>> flatTypeListDetails;
@@ -21,7 +19,7 @@ public class DevelopmentDetailControl {
     public DevelopmentDetailControl(String estateName, Context context)
     {
         this.context = context;
-        databaseController = DatabaseController.getInstance(context);
+        databaseController = DataAccessFactory.getDatabaseCtrlInstance(context);
 
         //get data from Database Controller as entity object
         hdbd = databaseController.readHDBData(estateName);
