@@ -101,7 +101,7 @@ public class AffordabilityReportUI extends AppCompatActivity {
             return;
 
         tvPropertyprice = (TextView) findViewById(R.id.property_price);
-        tvPropertyname.append(HDBDependentInfo.get(0));
+        tvPropertyprice.append(HDBDependentInfo.get(0));
         tvDownpaymentreq = (TextView) findViewById(R.id.downpayment_req);
         tvDownpaymentreq.append(HDBDependentInfo.get(1));
         tvLoanreq = (TextView) findViewById(R.id.loan_req);
