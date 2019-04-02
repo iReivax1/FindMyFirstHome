@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.findmyfirsthome.Controller.CalculateProfileControl;
 import com.example.findmyfirsthome.Controller.ProfileControl;
@@ -111,7 +112,7 @@ public class ProfileUI3 extends AppCompatActivity implements View.OnFocusChangeL
                 pc.setMaritalStatus(radioGroupMScheckedID);
                 pc.setFirstTimeBuyer(radioGroupFTBcheckedID);
                 pc.setCitizenship(radioGroupCiticheckedID);
-                            pc.setAge(ageInputStr);
+                pc.setAge(ageInputStr);
                 pc.setGrossMonthlySalary(grossMSalaryStr);
 
                 pc.setFirstTimeBuyerPartner(radioGroupFTB2checkedID);
@@ -158,7 +159,12 @@ public class ProfileUI3 extends AppCompatActivity implements View.OnFocusChangeL
                 if (value.isEmpty() == true) {
                     x.setText("0");
                 }
+                else if (Integer.parseInt(x.getText().toString()) < 0) { //check if salary is negative
+                    Toast.makeText(getApplicationContext(), "Salary cannot be negative!", Toast.LENGTH_SHORT).show();
+                    x.setText("0");
+                }
             }
+
         }
     }
 

@@ -133,7 +133,7 @@ public class AffordabilityReportUI extends AppCompatActivity {
 
         try {
             // image naming and path  to include sd card  appending name you choose for file
-            File f = new File(Environment.getExternalStorageDirectory()+File.separator+"Download"+File.separator+now+".jpg");
+            File f = new File(Environment.getExternalStorageDirectory()+File.separator+"Download"+File.separator+"FindMyFirstHome"+now+".jpg");
             f.getParentFile().mkdirs();
             f.createNewFile();
             FileOutputStream outputStream = new FileOutputStream(f);
@@ -151,9 +151,9 @@ public class AffordabilityReportUI extends AppCompatActivity {
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(directoryPath));
             document.open();
             Image image = Image.getInstance(f.toString());
-            float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
-                    - document.rightMargin() +45) / image.getWidth()) * 100; // 0 means you have no indentation. If you have any, change it.
-            image.scalePercent(scaler);
+            /*float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
+                    - document.rightMargin() +100) / image.getWidth()) * 100; // 0 means you have no indentation. If you have any, change it.*/
+            image.scalePercent(55);
             image.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
 
             document.add(image);
