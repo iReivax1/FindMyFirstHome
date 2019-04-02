@@ -227,8 +227,34 @@ public class DevelopmentDetailUI extends AppCompatActivity implements OnMapReady
             mMap.addMarker(new MarkerOptions().position(developmentLoc).title(ddc.getDevelopmentName()));
 
             for(ArrayList amemity : amenitiesDetailsList) {
+                float markerColor = 0f;
+
+                //to set different color marker for different amenities types
+                switch ((String) amemity.get(MapData.AMENITYTYPE))
+                {
+                    case "CLINIC":
+                        markerColor = BitmapDescriptorFactory.HUE_BLUE;
+                        break;
+
+                    case "MARKET":
+                        markerColor = BitmapDescriptorFactory.HUE_ORANGE;
+                        break;
+
+                    case "Hawker":
+                        markerColor = BitmapDescriptorFactory.HUE_CYAN;
+                        break;
+
+                    case "ChildCare":
+                        markerColor = BitmapDescriptorFactory.HUE_YELLOW;
+                        break;
+
+                    case "School":
+                        markerColor = BitmapDescriptorFactory.HUE_GREEN;
+                        break;
+                }
+
                 mMap.addMarker(new MarkerOptions().position((LatLng) amemity.get(MapData.COORDINATES))
-                        .title((String) amemity.get(MapData.AMENITYTYPE)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                        .title((String) amemity.get(MapData.AMENITYTYPE)).icon(BitmapDescriptorFactory.defaultMarker(markerColor)));
 
             }
 
