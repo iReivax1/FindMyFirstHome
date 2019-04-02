@@ -1,8 +1,6 @@
 package com.example.findmyfirsthome.Controller;
 
 import android.app.Activity;
-import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.findmyfirsthome.Entity.CalculatedProfile;
@@ -18,11 +16,11 @@ public class CalculateProfileControl{
     final double monthIR = annualIR / 12;
     UserData udSaved;
     CalculatedProfile cp;
-    DatabaseController dbControl;
+    DataAccessInterfaceClass dbControl;
     ArrayList<HDBDevelopment> hdbDevelopments;
 
     public CalculateProfileControl(Activity activity) {
-        dbControl = DatabaseController.getInstance(activity.getApplicationContext());
+        dbControl = DataAccessFactory.getDatabaseCtrlInstance(activity.getApplicationContext());
         udSaved = dbControl.readUserData();              //retrieved from database NOT NEW
         hdbDevelopments = dbControl.readHDBData();        //returns ArrayList<HDBDevelopment>
         cp = new CalculatedProfile();     //new
@@ -188,7 +186,7 @@ public class CalculateProfileControl{
     }
 
     public void writeCalculatedProfile(Activity activity){
-        DatabaseController db = DatabaseController.getInstance(activity.getApplicationContext());
+        DataAccessInterfaceClass db = DataAccessFactory.getDatabaseCtrlInstance(activity.getApplicationContext());
         db.writeCalculatedProfile(cp);
     }
 
