@@ -1,8 +1,6 @@
 package com.example.findmyfirsthome.Boundary;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.os.CountDownTimer;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -26,8 +24,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 
@@ -59,7 +55,7 @@ public class DataGovAPI {
         getDataFromDataGov("market", 1); //107
         getDataFromDataGov("school", 1); //438
         getDataFromDataGov("tax",1); //change to 10
-//        parseKML();
+        parseKML();
 
 
     }
@@ -262,7 +258,7 @@ public class DataGovAPI {
     }
 
 
-    public ArrayList<ArrayList<LatLng>> parseKML() {
+    public void parseKML() {
         ArrayList<ArrayList<LatLng>> coOrds = new ArrayList<ArrayList<LatLng>>();
 
         try {
@@ -270,35 +266,40 @@ public class DataGovAPI {
             InputStream kml = context.getAssets().open("chas-clinics-kml.kml");
             //read file in buffer from file.
             BufferedReader in = new BufferedReader(new InputStreamReader(kml));
-            String str;
-            String buffer;
+            String str = in.readLine();
 
-            while ((str = in.readLine()) != null) {
+            while (str != null) {
                 buf.append(str);
+                str = in.readLine();
             }
-
             in.close();
             String html = buf.toString();
             Document doc = Jsoup.parse(html, "", Parser.xmlParser());
-            ArrayList<String> tracksString = new ArrayList<String>();
+            ArrayList<String> trackName = new ArrayList<>();
+            ArrayList<String> trackCoord = new ArrayList<String>();
+            for(Element element : doc.select("SimpleData[name='HCI_NAME']")){
+                trackName.add(element.toString().replace("<SimpleData name=\"HCI_NAME\">","").replace("</SimpleData>",""));
+            }
             for (Element e : doc.select("coordinates")) {
-                tracksString.add(e.toString().replace("<coordinates>", "").replace("</coordinates>", "")); //erase front and end
+                trackCoord.add(e.toString().replace("<coordinates>", "").replace("</coordinates>", "")); //erase front and end
             }
 
-            for (int i = 0; i < tracksString.size(); i++) {
-                ArrayList<LatLng> oneTrack = new ArrayList<LatLng>();
-                ArrayList<String> oneTrackString = new ArrayList<String>(Arrays.asList(tracksString.get(i).split("\\s+")));
-                for (int k = 1; k < oneTrackString.size(); k++) {
-                    LatLng latLng = new LatLng(Double.parseDouble(oneTrackString.get(k).split(",")[0]), Double.parseDouble(oneTrackString.get(k).split(",")[1]));
-                    oneTrack.add(latLng);
-                }
-                coOrds.add(oneTrack);
+            for (int i = 0; i < trackCoord.size(); i++) {
+                LinkedHashMap<String,Object> hashed = new LinkedHashMap<>();
+                String[] temp = trackCoord.get(i).split(",");
+                Double[] coord = new Double[]{Double.parseDouble(temp[0]), Double.parseDouble(temp[1])};
+                hashed.put("AmenitiesType","CLINIC");
+                hashed.put("AmenitiesName",trackName.get(i));
+                hashed.put("AmenitiesLng",coord[0]);
+                hashed.put("AmenitiesLat",coord[1]);
+                DatabaseController dbc = DatabaseController.getInstance(context);
+                dbc.writeAmenitiesData(hashed);
+                dbc.close();
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return coOrds;
     }
 
 
