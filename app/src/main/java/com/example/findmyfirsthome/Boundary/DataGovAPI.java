@@ -45,21 +45,11 @@ public class DataGovAPI {
     String url4;
     // Each of these url will hold the full URL to get json object from respective website.
     Context context;
-    MapAPI mapAPI;
-    ArrayList<LinkedHashMap<String, Object>> childCareList = new ArrayList<>();
-    ArrayList<LinkedHashMap<String, Object>> marketList = new ArrayList<>();
-    ArrayList<LinkedHashMap<String, Object>> schoolList = new ArrayList<>();
     ArrayList<LinkedHashMap<String, String>> taxList = new ArrayList<>();
     RequestQueue requestQueue;
-    LatLng coord = new LatLng(0,0);
-
-    public void setCoord(LatLng coord) {
-        this.coord = coord;
-    }
-
+    
     public DataGovAPI(Context cont) {
         this.context = cont;
-         this.mapAPI = new MapAPI(cont, this);
     }
 
 
@@ -92,8 +82,7 @@ public class DataGovAPI {
 
                 @Override
                 public void onResponse(JSONObject response) {
-                    childCareList = JSONParserChildCare(response); //here is fine
-                    writeAmenitiesToDB(childCareList);
+                    JSONParserChildCare(response); //here is fine
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -107,9 +96,8 @@ public class DataGovAPI {
 
                 @Override
                 public void onResponse(JSONObject response) {
-                    marketList = JSONParserMarket(response);
+                    JSONParserMarket(response);
                     //print(marketList);
-                    writeAmenitiesToDB(marketList);
 
                 }
             }, new Response.ErrorListener() {
@@ -124,8 +112,7 @@ public class DataGovAPI {
 
                 @Override
                 public void onResponse(JSONObject response) {
-                    schoolList = JSONParserSchool(response);
-                    writeAmenitiesToDB(schoolList);
+                    JSONParserSchool(response);
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -157,10 +144,8 @@ public class DataGovAPI {
 
     /////////////////////////////////ChildCare/////////////////////////////////
 
-    public ArrayList<LinkedHashMap<String, Object>> JSONParserChildCare(JSONObject obj) {
-        LatLng coordinates = new LatLng(0,0);
-        LinkedHashMap<String, Object> info;
-        ArrayList<LinkedHashMap<String, Object>> list = new ArrayList<>();
+    public void JSONParserChildCare(JSONObject obj) {
+        MapAPI maps = new MapAPI(context);
         if (obj != null) {
             try {
                 JSONObject jsonObj = obj;
@@ -169,28 +154,16 @@ public class DataGovAPI {
                 JSONObject result = jsonObj.getJSONObject("result");
                 JSONArray records = result.getJSONArray("records");
                 Log.d("Error", Integer.toString(records.length()));
-                // looping through All Contacts
+                // looping through all records
+                //each jobj represents one amenity
                 for (int i = 0; i < records.length(); i++) {
-                    JSONObject c = records.getJSONObject(i);
-                    String centre_name = c.getString("centre_name");
-                    // adding each child node to HashMap key => value
-                    info = new LinkedHashMap<>();
-                    info.put("AmenitiesType", "ChildCare");
-                    info.put("AmenitiesName", centre_name);
-                    Boolean done;
-                    done = mapAPI.getCoordinates(centre_name);
-                    System.out.println(coord.latitude + ", " + coord.longitude);
-                    if(done){
-                        info.put("AmenitiesLat", mapAPI.getCoords().latitude);
-                        info.put("AmenitiesLng", mapAPI.getCoords().longitude);
-                    }else {
-                        info.put("AmenitiesLat", 0.0);
-                        info.put("AmenitiesLng", 0.0);
-                    }
-
-                    list.add(info);
+                    JSONObject jobj = records.getJSONObject(i);
+                    String centre_name = jobj.getString("centre_name");
+                    //get the centre name //coordinates will be geocode using center_name
+                    //pass type and name to get coordinates
+                    //writing into db done by maps api
+                    maps.getCoordinates("ChildCare", centre_name);
                 }
-                return list;
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
             }
@@ -198,92 +171,50 @@ public class DataGovAPI {
             Log.e("ERROR", "Couldn't get json from server.");
         }
 
-        return list;
     }
 
-    /////////////////////////////////Market/////////////////////////////////
+    /////////////////////////////////Market///////////////////////////////// Method same as childcare just different name
 
-    public ArrayList<LinkedHashMap<String, Object>> JSONParserMarket(JSONObject obj) {
-        LatLng coordinates;
-        LinkedHashMap<String, Object> info;
-        ArrayList<LinkedHashMap<String, Object>> list = new ArrayList<>();
+    public void JSONParserMarket(JSONObject obj) {
+        MapAPI maps = new MapAPI(context);
         if (obj != null) {
             try {
                 JSONObject jsonObj = obj;
-                //Log.d("test", obj.toString());
-                // Getting JSON Array node
                 JSONObject result = jsonObj.getJSONObject("result");
                 JSONArray records = result.getJSONArray("records");
-                // looping through All Contacts
                 for (int i = 0; i < records.length(); i++) {
-                    JSONObject c = records.getJSONObject(i);
-
-                    String name_of_centre = c.getString("name_of_centre");
-                    String location_of_centre = c.getString("location_of_centre");
-                    // tmp hash map for single contact
-                    info = new LinkedHashMap<>();
-                    // adding each child node to HashMap key => value
-                    info.put("AmenitiesType", "Market");
-                    info.put("AmenitiesName", name_of_centre);
-                    info.put("AmenitiesLat", 0.0);
-                    info.put("AmenitiesLng", 0.0);
-                    ///Using GEOCODING
-//                    coordinates = maps.getAmenitiesCoordinates(location_of_centre);
-//                    info.put("AmenitiesLat", coordinates.latitude);
-//                    info.put("AmenitiesLng", coordinates.longitude);
-                    list.add(info);
+                    JSONObject jobj = records.getJSONObject(i);
+                    String name_of_centre = jobj.getString("name_of_centre");
+                    maps.getCoordinates("Market", name_of_centre);
                 }
-                // adding contact to contact list
-                return list;
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
             }
         } else {
             Log.e("ERROR", "Couldn't get json from server.");
         }
-        return list;
     }
 
-    /////////////////////////////////School/////////////////////////////////
+    /////////////////////////////////School/////////////////////////////////Method same as childcare just different name
 
-    public ArrayList<LinkedHashMap<String, Object>> JSONParserSchool(JSONObject obj) {
-        ArrayList<LinkedHashMap<String, Object>> list = new ArrayList<>();
-        LatLng coordinates;
+    public void JSONParserSchool(JSONObject obj) {
+        MapAPI maps = new MapAPI(context);
         if (obj != null) {
-            LinkedHashMap<String, Object> info;
             try {
                 JSONObject jsonObj = obj;
-                //Log.d("test", obj.toString());
-                // Getting JSON Array node
                 JSONObject result = jsonObj.getJSONObject("result");
                 JSONArray records = result.getJSONArray("records");
-                Log.d("Error", Integer.toString(records.length()));
-                // looping through All Contacts
                 for (int i = 0; i < records.length(); i++) {
-                    JSONObject c = records.getJSONObject(i);
-
-                    String schoolName = c.getString("school_name");
-                    String postalCode = c.getString("postal_code");
-                    // adding each child node to HashMap key => value
-                    info = new LinkedHashMap<>();
-                    info.put("AmenitiesType", "School");
-                    info.put("AmenitiesName", schoolName);
-                    info.put("AmenitiesLat", 0.0);
-                    info.put("AmenitiesLng", 0.0);
-                    //Using GEOCODING
-//                    coordinates = maps.getAmenitiesCoordinates(postalCode);
-//                    info.put("AmenitiesLat", coordinates.latitude);
-//                    info.put("AmenitiesLng", coordinates.longitude);
-                    list.add(info);
+                    JSONObject jobj = records.getJSONObject(i);
+                    String schoolName = jobj.getString("school_name");
+                    maps.getCoordinates("School", schoolName);
                 }
-                return list;
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
             }
         } else {
             Log.e("ERROR", "Couldn't get json from server.");
         }
-        return list;
     }
 
     /////////////////////////////////Parse Tax//////////////////////////////////
@@ -302,7 +233,6 @@ public class DataGovAPI {
                 // looping through All Contacts
                 for (int i = 0; i < records.length(); i++) {
                     JSONObject c = records.getJSONObject(i);
-
                     String typeOfProperty = c.getString("type_of_property");
                     String taxRate = c.getString("tax_rate");
                     String annualValue = c.getString("annual_value");
@@ -325,13 +255,6 @@ public class DataGovAPI {
         return list;
     }
 
-    public void writeAmenitiesToDB(ArrayList<LinkedHashMap<String, Object>> list) {
-        DatabaseController db = DatabaseController.getInstance(context);
-        for (LinkedHashMap<String, Object> hm : list) {
-            db.writeAmenitiesData(hm);
-        }
-
-    }
 
     public void writeTaxToDB(ArrayList<LinkedHashMap<String, String>> infoList) {
         DatabaseController db = DatabaseController.getInstance(context);

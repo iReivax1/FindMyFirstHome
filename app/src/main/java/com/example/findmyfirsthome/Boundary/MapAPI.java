@@ -13,12 +13,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
+import com.example.findmyfirsthome.Controller.DatabaseController;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -33,37 +36,33 @@ public class MapAPI {
     String url;
     RequestQueue requestQueue;
     LatLng coords = new LatLng(0, 0);
-    DataGovAPI d;
+    LinkedHashMap<String, Object> amenities;
 
-    public MapAPI(Context context,  DataGovAPI d) {
+
+    public MapAPI(Context context) {
         this.context = context;
-        this.d = d;
     }
 
-
-    public LatLng getCoords(){
-        return this.coords;
-    }
-
-    public boolean getCoordinates(String name) {
+    public void getCoordinates(String type, String name) {
+        amenities = new LinkedHashMap<String, Object>();
+        amenities.put("AmenitiesType", type);
+        amenities.put("AmenitiesName", name);
         getJSON(name);
-        while(coords.longitude == 0 && coords.latitude == 0)
-            return false;
-
-        return true;
     }
 
     public boolean getJSON(String name) {
         JsonObjectRequest jsonObjReq = null;
         requestQueue = Volley.newRequestQueue(context);
-        this.url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + name + "SG&key=AIzaSyDMO5XX-YHL66_9hzc9cF73yfwMrK6lfNE123";
+        this.url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + name + "SG&key=AIzaSyDMO5XX-YHL66_9hzc9cF73yfwMrK6lfNE";
         System.out.print(url);
         jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, (JSONObject) null, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
                 coords = parseMapJson(response);
-                d.setCoord(coords);
+                amenities.put("AmenitiesLat", coords.latitude);
+                amenities.put("AmenitiesLng", coords.longitude);
+                writeAmenitiesToDB(amenities);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -92,28 +91,11 @@ public class MapAPI {
         return new LatLng(0, 0);
     }
 
-
-    public LatLng getHDBCoordinates(String name) {
-        Geocoder coder = new Geocoder(context);
-        List<Address> address;
-        LatLng point = null;
-
-        try {
-            //will error if no address given
-            address = coder.getFromLocationName(name, 1);
-            if (address == null) {
-                return null;
-            }
-            //get only the first address cuz i say only got 1 address
-            Address location = address.get(0);
-            point = new LatLng(location.getLatitude(), location.getLongitude());
-
-        } catch (IOException ex) {
-
-            ex.printStackTrace();
-        }
-        return point;
+    public void writeAmenitiesToDB(LinkedHashMap<String, Object> oneAmenity) {
+        DatabaseController db = DatabaseController.getInstance(context);
+        db.writeAmenitiesData(oneAmenity);
     }
+
 
 
 }
