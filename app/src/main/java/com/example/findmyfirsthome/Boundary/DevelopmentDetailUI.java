@@ -228,7 +228,7 @@ public class DevelopmentDetailUI extends AppCompatActivity implements OnMapReady
 
             for(ArrayList amemity : amenitiesDetailsList) {
                 mMap.addMarker(new MarkerOptions().position((LatLng) amemity.get(MapData.COORDINATES))
-                        .title((String) amemity.get(MapData.AMENITIESNAME)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                        .title((String) amemity.get(MapData.AMENITYTYPE)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 
             }
 
