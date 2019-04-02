@@ -7,12 +7,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.example.findmyfirsthome.Controller.CalculateProfileControl;
 import com.example.findmyfirsthome.Controller.ProfileControl;
 import com.example.findmyfirsthome.R;
 
 public class ProfileUI2 extends AppCompatActivity implements View.OnFocusChangeListener {
+    double salary;
+    double salary2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,9 @@ public class ProfileUI2 extends AppCompatActivity implements View.OnFocusChangeL
         final EditText mainOA = (EditText) findViewById(R.id.mainOA);
         final EditText coOA = (EditText) findViewById(R.id.coOA);
         final EditText hMembers = (EditText) findViewById(R.id.hMembers);
+
+        salary = Double.parseDouble(grossMSalaryStr);
+        salary2 = Double.parseDouble(grossMSalaryStr2);
 
         carLoan.setOnFocusChangeListener(this); //To set field to 0 if empty
         creditDebt.setOnFocusChangeListener(this);
@@ -171,11 +178,26 @@ public class ProfileUI2 extends AppCompatActivity implements View.OnFocusChangeL
         if(v instanceof EditText) {
             EditText x = (EditText) v; //downcasting
             if (!hasFocus) {
-                // do something
                 String value = x.getText().toString();
                 if (value.isEmpty() == true) {
                     x.setText("0");
                 }
+                else if(Integer.parseInt(x.getText().toString())<0){
+                    Toast.makeText(getApplicationContext(), "Commitments cannot be negative!", Toast.LENGTH_SHORT).show();
+                    x.setText("0");
+                }
+
+                double grossTotal = salary+salary2;
+                EditText carLoan = findViewById(R.id.carLoan);
+                EditText creditDebt = findViewById(R.id.creditDebt);
+                EditText studyLoan = findViewById(R.id.studyLoan);
+                EditText otherCommits = findViewById(R.id.otherCommits);
+                double totalCommits = Double.parseDouble(carLoan.getText().toString()) +Double.parseDouble(creditDebt.getText().toString())+Double.parseDouble(studyLoan.getText().toString())+Double.parseDouble(otherCommits.getText().toString());
+                if(grossTotal< totalCommits){
+                    Toast.makeText(getApplicationContext(), "total Commitments cannot be less than total Income!", Toast.LENGTH_SHORT).show();
+                    x.setText("0");
+                }
+
             }
         }
     }

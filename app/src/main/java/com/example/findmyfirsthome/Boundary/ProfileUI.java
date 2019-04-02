@@ -15,6 +15,9 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeListener {
 
@@ -38,7 +41,7 @@ public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeLi
         grossMSalary.setOnFocusChangeListener(this);
         grossMSalary2.setOnFocusChangeListener(this);
 
-        ProfileControl pc = new ProfileControl();
+        ProfileControl pc = new ProfileControl(); //To get inputs from database if available.
         pc.readProfile(this);
         if(pc.getUD()!=null) {
             Log.d(Boolean.toString(pc.getMaritalStatus()),"222");
@@ -117,9 +120,11 @@ public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeLi
                     for (int i = 0; i < radioGroupFTB2.getChildCount(); i++) {
                         radioGroupFTB2.getChildAt(i).setEnabled(false);
                     }
-                    ageInput2.setText(null); //set partner's field to empty.
-                    grossMSalary2.setText(null);
-
+                    ageInput2.setText("0"); //set partner's field to empty.
+                    grossMSalary2.setText("0");
+                    if(Integer.parseInt(ageInput.getText().toString())<35){
+                        ageInput.setText("35");
+                    }
                 }
                 else if(checkedId==R.id.radioBtnMarried){
                     findViewById(R.id.ageInput2).setEnabled(true); //To enable inputs
@@ -130,6 +135,8 @@ public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeLi
                     for (int i = 0; i < radioGroupFTB2.getChildCount(); i++) {
                         radioGroupFTB2.getChildAt(i).setEnabled(true);
                     }
+                    ageInput2.setText("21"); //set partner's field to empty.
+                    grossMSalary2.setText("0");
                 }
             }
         });
@@ -159,18 +166,63 @@ public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeLi
         });
 
 
+
+
     }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) { //set field to 0 if empty
         if(v instanceof EditText) {
             EditText x = (EditText) v; //downcasting
+            String value = x.getText().toString();
+            if (value.isEmpty() == true) {
+                x.setText("0");
+            }
             if (!hasFocus) {
-                // do something
-                String value = x.getText().toString();
-                if (value.isEmpty() == true) {
-                    x.setText("0");
+                int id = x.getId();
+                if(id == findViewById(R.id.ageInput).getId()){ //if ageInput is edited
+                    RadioGroup radioGroupMS = findViewById(R.id.radioGroupMS);
+                    if((radioGroupMS.getCheckedRadioButtonId()==findViewById(R.id.radioBtnMarried).getId())){ //if button checked is married
+                        if(Integer.parseInt(x.getText().toString())<21){ //check is age is less than 21
+                            Toast.makeText(getApplicationContext(),"Please input age more than 21!",Toast.LENGTH_SHORT).show();
+                            x.setText("21");
+                        }
+                        else if(Integer.parseInt(x.getText().toString())>65){
+                            Toast.makeText(getApplicationContext(),"Please input age less than 65!",Toast.LENGTH_SHORT).show();
+                            x.setText("21");
+                        }
+                    }
+                    else if((radioGroupMS.getCheckedRadioButtonId()==findViewById(R.id.radioBtnSingle).getId())){
+                        if(Integer.parseInt(x.getText().toString())<35) { //check is age is less than 35
+                            Toast.makeText(getApplicationContext(), "Please input age more than 35!", Toast.LENGTH_SHORT).show();
+                            x.setText("35");
+                        }
+                    }
                 }
+                else if(id == findViewById(R.id.ageInput2).getId()) { //if ageInput2 is edited
+                    if(Integer.parseInt(x.getText().toString())<21) { //check is age is less than 21
+                        Toast.makeText(getApplicationContext(), "Please input age more than 21!", Toast.LENGTH_SHORT).show();
+                        x.setText("21");
+                    }
+                    else if(Integer.parseInt(x.getText().toString())>65){
+                        Toast.makeText(getApplicationContext(),"Please input age less than 65!",Toast.LENGTH_SHORT).show();
+                        x.setText("21");
+                    }
+                }
+                else if(id == findViewById(R.id.grossMSalary).getId()) { //if user salary is edited
+                    Log.d(x.getText().toString(),"11122");
+                    if (Integer.parseInt(x.getText().toString()) < 0) { //check if salary is negative
+                        Toast.makeText(getApplicationContext(), "Salary cannot be negative!", Toast.LENGTH_SHORT).show();
+                        x.setText("0");
+                    }
+                }
+                else if(id == findViewById(R.id.grossMSalary2).getId()) { //if partner salary is edited
+                    if (Integer.parseInt(x.getText().toString()) < 0) { //check if partner salary is negative
+                        Toast.makeText(getApplicationContext(), "Salary cannot be negative!", Toast.LENGTH_SHORT).show();
+                        x.setText("0");
+                    }
+                }
+
             }
         }
     }
