@@ -10,7 +10,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.findmyfirsthome.Controller.DatabaseController;
-import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +31,7 @@ public class DataGovAPI {
     // This is our requests queue to process our HTTP requests.
     String typeData;
     String childCareURL = "https://data.gov.sg/api/action/datastore_search?resource_id=4fc3fd79-64f2-4027-8d5b-ce0d7c279646&limit=";
-    String marketURL = "https://data.gov.sg/api/action/datastore_search?resource_id=8f6bba57-19fc-4f36-8dcf-c0bda382364d&limit=";
+    String hawkerURL = "https://data.gov.sg/api/action/datastore_search?resource_id=8f6bba57-19fc-4f36-8dcf-c0bda382364d&limit=";
     String schoolURL = "https://data.gov.sg/api/action/datastore_search?resource_id=ede26d32-01af-4228-b1ed-f05c45a1d8ee&limit=";
     String taxURL = "https://data.gov.sg/api/action/datastore_search?resource_id=bb6f5bf8-7d0b-4526-b020-b812ea7d7d89&limit=";
     String url1;
@@ -51,13 +50,12 @@ public class DataGovAPI {
 
     public void execute() {
         // This setups up a new request queue which we will need to make HTTP requests
-        getDataFromDataGov("childCare", 1);
-        getDataFromDataGov("market", 1);
-        getDataFromDataGov("school", 1);
-//         getDataFromDataGov("tax",5);
-        parseKML();
-
-
+        getDataFromDataGov("childCare", 10); //1537
+        getDataFromDataGov("hawker", 10); //107
+        getDataFromDataGov("school", 20); //438
+        getDataFromDataGov("tax",1); //change to 10
+        parseClinicKML();
+        parseMarketKML();
     }
 
 
@@ -86,13 +84,13 @@ public class DataGovAPI {
                     Log.d("test", "error");
                 }
             });
-        } else if (typeData.equals("market")) {
-            this.url2 = this.marketURL + limit;
+        } else if (typeData.equals("hawker")) {
+            this.url2 = this.hawkerURL + limit;
             jsonObjReq = new JsonObjectRequest(Request.Method.GET, url2, (JSONObject) null, new Response.Listener<JSONObject>() {
 
                 @Override
                 public void onResponse(JSONObject response) {
-                    JSONParserMarket(response);
+                    JSONParserHawker(response);
                     //print(marketList);
 
                 }
@@ -171,7 +169,7 @@ public class DataGovAPI {
 
     /////////////////////////////////Market///////////////////////////////// Method same as childcare just different name
 
-    public void JSONParserMarket(JSONObject obj) {
+    public void JSONParserHawker(JSONObject obj) {
         MapAPI maps = new MapAPI(context);
         if (obj != null) {
             try {
@@ -181,7 +179,7 @@ public class DataGovAPI {
                 for (int i = 0; i < records.length(); i++) {
                     JSONObject jobj = records.getJSONObject(i);
                     String name_of_centre = jobj.getString("name_of_centre");
-                    maps.getCoordinates("Market", name_of_centre);
+                    maps.getCoordinates("Hawker", name_of_centre);
                 }
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());
@@ -221,8 +219,6 @@ public class DataGovAPI {
             LinkedHashMap<String, String> info;
             try {
                 JSONObject jsonObj = obj;
-                //Log.d("test", obj.toString());
-                // Getting JSON Array node
                 JSONObject result = jsonObj.getJSONObject("result");
                 JSONArray records = result.getJSONArray("records");
                 Log.d("Error", Integer.toString(records.length()));
@@ -260,9 +256,7 @@ public class DataGovAPI {
     }
 
 
-    public void parseKML() {
-        ArrayList<ArrayList<LatLng>> coOrds = new ArrayList<ArrayList<LatLng>>();
-
+    public void parseClinicKML() {
         try {
             StringBuilder buf = new StringBuilder();
             InputStream kml = context.getAssets().open("chas-clinics-kml.kml");
@@ -291,6 +285,48 @@ public class DataGovAPI {
                 String[] temp = trackCoord.get(i).split(",");
                 Double[] coord = new Double[]{Double.parseDouble(temp[0]), Double.parseDouble(temp[1])};
                 hashed.put("AmenitiesType","CLINIC");
+                hashed.put("AmenitiesName",trackName.get(i));
+                hashed.put("AmenitiesLng",coord[0]);
+                hashed.put("AmenitiesLat",coord[1]);
+                DatabaseController dbc = DatabaseController.getInstance(context);
+                dbc.writeAmenitiesData(hashed);
+                dbc.close();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void parseMarketKML() {
+        try {
+            StringBuilder buf = new StringBuilder();
+            InputStream kml = context.getAssets().open("market-food-centre.kml");
+            //read file in buffer from file.
+            BufferedReader in = new BufferedReader(new InputStreamReader(kml));
+            String str = in.readLine();
+
+            while (str != null) {
+                buf.append(str);
+                str = in.readLine();
+            }
+            in.close();
+            String html = buf.toString();
+            Document doc = Jsoup.parse(html, "", Parser.xmlParser());
+            ArrayList<String> trackName = new ArrayList<>();
+            ArrayList<String> trackCoord = new ArrayList<String>();
+            for(Element element : doc.select("SimpleData[name='NAME_OF_CENTRE']")){
+                trackName.add(element.toString().replace("<SimpleData name=\"NAME_OF_CENTRE\">","").replace("</SimpleData>",""));
+            }
+            for (Element e : doc.select("coordinates")) {
+                trackCoord.add(e.toString().replace("<coordinates>", "").replace("</coordinates>", "")); //erase front and end
+            }
+
+            for (int i = 0; i < trackCoord.size(); i++) {
+                LinkedHashMap<String,Object> hashed = new LinkedHashMap<>();
+                String[] temp = trackCoord.get(i).split(",");
+                Double[] coord = new Double[]{Double.parseDouble(temp[0]), Double.parseDouble(temp[1])};
+                hashed.put("AmenitiesType","MARKET");
                 hashed.put("AmenitiesName",trackName.get(i));
                 hashed.put("AmenitiesLng",coord[0]);
                 hashed.put("AmenitiesLat",coord[1]);

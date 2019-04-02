@@ -35,13 +35,13 @@
             android:id="@+id/max_property_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Maximum Property Purchase Price: " />
+            android:text="Maximum Property Purchase Price: $" />
 
         <TextView
             android:id="@+id/max_mortgage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Maximum Mortgage Amount: " />
+            android:text="Maximum Mortgage Amount: $" />
 
         <TextView
             android:id="@+id/max_tenure"
@@ -69,13 +69,13 @@
             android:id="@+id/shg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SHG: " />
+            android:text="SHG: $" />
 
         <TextView
             android:id="@+id/ahg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="AHG: " />
+            android:text="AHG: $" />
     </LinearLayout>
 
     <LinearLayout
@@ -98,7 +98,7 @@
             android:id="@+id/property_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Price: " />
+            android:text="Price: $" />
 
         <TextView
             android:id="@+id/flat_type"
