@@ -6,9 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
-import android.util.Log;
 
-import com.example.findmyfirsthome.Boundary.MapAPI;
 import com.example.findmyfirsthome.Entity.CalculatedProfile;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
 import com.example.findmyfirsthome.Entity.MapData;
@@ -25,7 +23,7 @@ import java.util.LinkedHashMap;
 //Database controller is a singleton object
 
 //TODO: add writeGrants, and getGrants
-public class DatabaseController extends SQLiteOpenHelper implements BaseColumns {
+public class SqliteDatabaseController extends SQLiteOpenHelper implements BaseColumns, DataAccessInterfaceClass {
 
 
     //Change version if schema changed;
@@ -140,19 +138,13 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
     private static final String SQL_DELETE_ENTRIES8 = "DROP TABLE IF EXISTS " + TABLE_NAME8;
 
     //getContext() - Returns the context view only current running activity.
-    private DatabaseController(Context context) {
+    public SqliteDatabaseController(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        deleteTables();
     }
 
-    private static volatile DatabaseController instance = null;
+    private static volatile SqliteDatabaseController instance = null;
 
-    public static DatabaseController getInstance(Context cont) {
-        if (instance == null) {
-            instance = new DatabaseController(cont);
-            instance.deleteTables();
-        }
-        return instance;
-    }
     //Create all the tables
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {

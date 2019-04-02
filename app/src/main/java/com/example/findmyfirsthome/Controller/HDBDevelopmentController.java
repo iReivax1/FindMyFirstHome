@@ -1,7 +1,6 @@
 package com.example.findmyfirsthome.Controller;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.findmyfirsthome.Entity.CalculatedProfile;
 import com.example.findmyfirsthome.Entity.HDBDevelopment;
@@ -11,11 +10,11 @@ import java.util.List;
 
 public class HDBDevelopmentController {
 
-    private DatabaseController db;
+    private DataAccessInterfaceClass db;
     ArrayList<String> listHDBName;
     ArrayList<String> listHDBurl;
     public HDBDevelopmentController(Context currentContext){
-        db = DatabaseController.getInstance(currentContext);
+        db = DataAccessFactory.getDatabaseCtrlInstance(currentContext);
     }
 
     public List<String> getAllHDBnames(){

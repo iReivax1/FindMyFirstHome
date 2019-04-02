@@ -9,7 +9,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.findmyfirsthome.Controller.DatabaseController;
+import com.example.findmyfirsthome.Controller.DataAccessFactory;
+import com.example.findmyfirsthome.Controller.DataAccessInterfaceClass;
+import com.example.findmyfirsthome.Controller.SqliteDatabaseController;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,9 +52,9 @@ public class DataGovAPI {
 
     public void execute() {
         // This setups up a new request queue which we will need to make HTTP requests
-        getDataFromDataGov("childCare", 10); //1537
-        getDataFromDataGov("hawker", 10); //107
-        getDataFromDataGov("school", 20); //438
+        getDataFromDataGov("childCare", 5); //1537
+        getDataFromDataGov("hawker", 5); //107
+        getDataFromDataGov("school", 5); //438
         getDataFromDataGov("tax",1); //change to 10
         parseClinicKML();
         parseMarketKML();
@@ -249,7 +251,7 @@ public class DataGovAPI {
 
 
     public void writeTaxToDB(ArrayList<LinkedHashMap<String, String>> infoList) {
-        DatabaseController db = DatabaseController.getInstance(context);
+        DataAccessInterfaceClass db = DataAccessFactory.getDatabaseCtrlInstance(context);
         for (LinkedHashMap<String, String> hm : infoList) {
             db.writeTax(hm);
         }
@@ -288,7 +290,7 @@ public class DataGovAPI {
                 hashed.put("AmenitiesName",trackName.get(i));
                 hashed.put("AmenitiesLng",coord[0]);
                 hashed.put("AmenitiesLat",coord[1]);
-                DatabaseController dbc = DatabaseController.getInstance(context);
+                DataAccessInterfaceClass dbc = DataAccessFactory.getDatabaseCtrlInstance(context);
                 dbc.writeAmenitiesData(hashed);
                 dbc.close();
             }
@@ -330,7 +332,7 @@ public class DataGovAPI {
                 hashed.put("AmenitiesName",trackName.get(i));
                 hashed.put("AmenitiesLng",coord[0]);
                 hashed.put("AmenitiesLat",coord[1]);
-                DatabaseController dbc = DatabaseController.getInstance(context);
+                DataAccessInterfaceClass dbc = DataAccessFactory.getDatabaseCtrlInstance(context);
                 dbc.writeAmenitiesData(hashed);
                 dbc.close();
             }

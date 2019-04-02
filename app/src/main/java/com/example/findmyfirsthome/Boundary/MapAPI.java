@@ -1,9 +1,6 @@
 package com.example.findmyfirsthome.Boundary;
 
 import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
-import android.os.CountDownTimer;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -11,22 +8,16 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
-import com.example.findmyfirsthome.Controller.DatabaseController;
+import com.example.findmyfirsthome.Controller.DataAccessFactory;
+import com.example.findmyfirsthome.Controller.DataAccessInterfaceClass;
+import com.example.findmyfirsthome.Controller.SqliteDatabaseController;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 
 public class MapAPI {
@@ -120,12 +111,12 @@ public class MapAPI {
     //write to the database
 
     public void writeAmenitiesToDB(LinkedHashMap<String, Object> oneAmenity) {
-        DatabaseController db = DatabaseController.getInstance(context);
+        DataAccessInterfaceClass db = DataAccessFactory.getDatabaseCtrlInstance(context);
         db.writeAmenitiesData(oneAmenity);
     }
 
     public void writeHDBToDB(String HDBDevelopmentName, String descriptionText,String ImgURL, Boolean affordable, Double lat, Double lng){
-        DatabaseController db = DatabaseController.getInstance(context);
+        DataAccessInterfaceClass db = DataAccessFactory.getDatabaseCtrlInstance(context);
         db.writeHDBData(HDBDevelopmentName,descriptionText,ImgURL, affordable, lat , lng);
     }
 }
