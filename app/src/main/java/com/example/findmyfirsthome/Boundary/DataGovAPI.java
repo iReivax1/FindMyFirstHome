@@ -51,10 +51,10 @@ public class DataGovAPI {
 
     public void execute() {
         // This setups up a new request queue which we will need to make HTTP requests
-        getDataFromDataGov("childCare", 1);
-        getDataFromDataGov("market", 1);
-        getDataFromDataGov("school", 1);
-//         getDataFromDataGov("tax",5);
+        getDataFromDataGov("childCare", 1); //1537
+        getDataFromDataGov("market", 1); //107
+        getDataFromDataGov("school", 1); //438
+        getDataFromDataGov("tax",1); //change to 10
         parseKML();
 
 
@@ -221,8 +221,6 @@ public class DataGovAPI {
             LinkedHashMap<String, String> info;
             try {
                 JSONObject jsonObj = obj;
-                //Log.d("test", obj.toString());
-                // Getting JSON Array node
                 JSONObject result = jsonObj.getJSONObject("result");
                 JSONArray records = result.getJSONArray("records");
                 Log.d("Error", Integer.toString(records.length()));

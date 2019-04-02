@@ -50,6 +50,32 @@ public class MapAPI {
         getJSON(name);
     }
 
+    public boolean getHDBCoord(final String HDBDevelopmentName, final String descriptionText,final String ImgURL, final Boolean affordable) {
+        JsonObjectRequest jsonObjReq = null;
+        requestQueue = Volley.newRequestQueue(context);
+        this.url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + HDBDevelopmentName + "SG&key=AIzaSyDMO5XX-YHL66_9hzc9cF73yfwMrK6lfNE123";
+        System.out.print(url);
+        jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, (JSONObject) null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                coords = parseMapJson(response);
+                if(HDBDevelopmentName.contains("Fernvale")){
+                    writeHDBToDB(HDBDevelopmentName, descriptionText, ImgURL, affordable, 1.398122, 103.876214);
+                }else{
+                    writeHDBToDB(HDBDevelopmentName, descriptionText, ImgURL, affordable, coords.latitude, coords.longitude);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("test", "error");
+            }
+        });
+        requestQueue.add(jsonObjReq);
+        return true;
+    }
+
     public boolean getJSON(String name) {
         JsonObjectRequest jsonObjReq = null;
         requestQueue = Volley.newRequestQueue(context);
@@ -74,7 +100,7 @@ public class MapAPI {
         return true;
     }
 
-
+    //Parse JSON objects received from GoogleMaps API via get method
     protected LatLng parseMapJson(JSONObject obj) {
         String response;
         try {
@@ -90,6 +116,8 @@ public class MapAPI {
         }
         return new LatLng(0, 0);
     }
+
+    //write to the database
 
     public void writeAmenitiesToDB(LinkedHashMap<String, Object> oneAmenity) {
         DatabaseController db = DatabaseController.getInstance(context);
@@ -126,9 +154,5 @@ public class MapAPI {
         requestQueue.add(jsonObjReq);
         return true;
     }
-
-
-
-
 }
 
