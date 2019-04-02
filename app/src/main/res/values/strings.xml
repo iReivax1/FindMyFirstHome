@@ -2,7 +2,7 @@
     <string name="app_name">FindMyFirstHome</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_maps">Map</string>
-    <string name="google_map_api_key">AIzaSyBuFEW_GfVUfCq0fMytLRyyGD4hs2AwSwI</string>
+    <string name="google_map_api_key">AIzaSyC0ENVSN8x7-3OvvSQjLckO_j7Jxn18JYM</string>
     <string name="title_activity_maps_test">Map</string>
     <string name="title_activity_gov_data_api">Map</string>
 </resources>
