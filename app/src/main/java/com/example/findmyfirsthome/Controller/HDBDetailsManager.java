@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.findmyfirsthome.Boundary.MapAPI;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -146,7 +148,7 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
         //For each of the HDBDevelopmenet
         int index = 0;
         for (String name : HDBDevelopmentNames) {
-            writeHDBData(name, descriptionText.get(index), ImgURL.get(index), false);
+            writeHDBDataPlusGetCoord(name, descriptionText.get(index), ImgURL.get(index), false);
             for(int i=0;i<ListFlatType.size();i++) {
                 HashMap<String, Object> ftNew = new HashMap<String, Object>();
                 for(String ft : ListFlatType.get(i).keySet()) {
@@ -176,10 +178,9 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
 
 //  ----------------------------------------Write functions to database object--------------------------------------------
 
-    public void writeHDBData(String HDBDevelopmentNames, String descriptionText, String ImgURL, Boolean affordable){
-        db = DatabaseController.getInstance(mContext);
-        db.writeHDBData(HDBDevelopmentNames,descriptionText,ImgURL, affordable);
-
+    public void writeHDBDataPlusGetCoord (String HDBDevelopmentNames, String descriptionText, String ImgURL, Boolean affordable){
+        MapAPI map = new MapAPI(mContext);
+        map.getHDBCoord(HDBDevelopmentNames,descriptionText,ImgURL,affordable);
     }
 
     public void writeHDBFlatData(String HDBDevelopmentNames, HashMap<String, Object> ListFlatType){
