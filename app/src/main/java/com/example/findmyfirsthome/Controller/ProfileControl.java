@@ -1,7 +1,6 @@
 package com.example.findmyfirsthome.Controller;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -213,12 +212,12 @@ public class ProfileControl{
     }
 
     public void writeProfile(Activity activity){
-        DatabaseController db = DatabaseController.getInstance(activity.getApplicationContext());
+        DataAccessInterfaceClass db = DataAccessFactory.getDatabaseCtrlInstance(activity.getApplicationContext());
         db.writeUserData(ud);
     }
 
     public void readProfile(Activity activity){
-        DatabaseController db = DatabaseController.getInstance(activity.getApplicationContext());
+        DataAccessInterfaceClass db = DataAccessFactory.getDatabaseCtrlInstance(activity.getApplicationContext());
         ud = db.readUserData();
     }
     public UserData getUD(){

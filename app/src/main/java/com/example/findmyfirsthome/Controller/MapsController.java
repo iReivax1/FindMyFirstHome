@@ -15,7 +15,7 @@ import java.util.HashMap;
 public class MapsController extends AppCompatActivity {
     //object and var init;
     //create DAO;
-    DatabaseController db = DatabaseController.getInstance(getContext());
+    DataAccessInterfaceClass db = DataAccessFactory.getDatabaseCtrlInstance(getContext());
     HashMap<String, LatLng> HDBDevelopmentlist;
     public Context getContext() {
         return this.getBaseContext();

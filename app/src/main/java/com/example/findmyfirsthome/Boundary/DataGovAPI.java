@@ -9,7 +9,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.findmyfirsthome.Controller.DatabaseController;
+import com.example.findmyfirsthome.Controller.DataAccessFactory;
+import com.example.findmyfirsthome.Controller.DataAccessInterfaceClass;
+import com.example.findmyfirsthome.Controller.SqliteDatabaseController;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -249,7 +251,7 @@ public class DataGovAPI {
 
 
     public void writeTaxToDB(ArrayList<LinkedHashMap<String, String>> infoList) {
-        DatabaseController db = DatabaseController.getInstance(context);
+        DataAccessInterfaceClass db = DataAccessFactory.getDatabaseCtrlInstance(context);
         for (LinkedHashMap<String, String> hm : infoList) {
             db.writeTax(hm);
         }
@@ -288,7 +290,7 @@ public class DataGovAPI {
                 hashed.put("AmenitiesName",trackName.get(i));
                 hashed.put("AmenitiesLng",coord[0]);
                 hashed.put("AmenitiesLat",coord[1]);
-                DatabaseController dbc = DatabaseController.getInstance(context);
+                DataAccessInterfaceClass dbc = DataAccessFactory.getDatabaseCtrlInstance(context);
                 dbc.writeAmenitiesData(hashed);
                 dbc.close();
             }
@@ -330,7 +332,7 @@ public class DataGovAPI {
                 hashed.put("AmenitiesName",trackName.get(i));
                 hashed.put("AmenitiesLng",coord[0]);
                 hashed.put("AmenitiesLat",coord[1]);
-                DatabaseController dbc = DatabaseController.getInstance(context);
+                DataAccessInterfaceClass dbc = DataAccessFactory.getDatabaseCtrlInstance(context);
                 dbc.writeAmenitiesData(hashed);
                 dbc.close();
             }
