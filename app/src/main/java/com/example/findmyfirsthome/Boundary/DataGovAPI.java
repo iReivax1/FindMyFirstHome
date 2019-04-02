@@ -31,7 +31,7 @@ public class DataGovAPI {
     // This is our requests queue to process our HTTP requests.
     String typeData;
     String childCareURL = "https://data.gov.sg/api/action/datastore_search?resource_id=4fc3fd79-64f2-4027-8d5b-ce0d7c279646&limit=";
-    String marketURL = "https://data.gov.sg/api/action/datastore_search?resource_id=8f6bba57-19fc-4f36-8dcf-c0bda382364d&limit=";
+    String hawkerURL = "https://data.gov.sg/api/action/datastore_search?resource_id=8f6bba57-19fc-4f36-8dcf-c0bda382364d&limit=";
     String schoolURL = "https://data.gov.sg/api/action/datastore_search?resource_id=ede26d32-01af-4228-b1ed-f05c45a1d8ee&limit=";
     String taxURL = "https://data.gov.sg/api/action/datastore_search?resource_id=bb6f5bf8-7d0b-4526-b020-b812ea7d7d89&limit=";
     String url1;
@@ -51,7 +51,7 @@ public class DataGovAPI {
     public void execute() {
         // This setups up a new request queue which we will need to make HTTP requests
         getDataFromDataGov("childCare", 1); //1537
-        getDataFromDataGov("market", 1); //107
+        getDataFromDataGov("hawker", 1); //107
         getDataFromDataGov("school", 1); //438
         getDataFromDataGov("tax",1); //change to 10
         parseClinicKML();
@@ -84,13 +84,13 @@ public class DataGovAPI {
                     Log.d("test", "error");
                 }
             });
-        } else if (typeData.equals("market")) {
-            this.url2 = this.marketURL + limit;
+        } else if (typeData.equals("hawker")) {
+            this.url2 = this.hawkerURL + limit;
             jsonObjReq = new JsonObjectRequest(Request.Method.GET, url2, (JSONObject) null, new Response.Listener<JSONObject>() {
 
                 @Override
                 public void onResponse(JSONObject response) {
-                    JSONParserMarket(response);
+                    JSONParserHawker(response);
                     //print(marketList);
 
                 }
@@ -169,7 +169,7 @@ public class DataGovAPI {
 
     /////////////////////////////////Market///////////////////////////////// Method same as childcare just different name
 
-    public void JSONParserMarket(JSONObject obj) {
+    public void JSONParserHawker(JSONObject obj) {
         MapAPI maps = new MapAPI(context);
         if (obj != null) {
             try {
@@ -179,7 +179,7 @@ public class DataGovAPI {
                 for (int i = 0; i < records.length(); i++) {
                     JSONObject jobj = records.getJSONObject(i);
                     String name_of_centre = jobj.getString("name_of_centre");
-                    maps.getCoordinates("Market", name_of_centre);
+                    maps.getCoordinates("Hawker", name_of_centre);
                 }
             } catch (final JSONException e) {
                 Log.e("ERROR", "Json parsing error: " + e.getMessage());

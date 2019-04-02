@@ -32,15 +32,15 @@ public class AffordabilityReportController {
             return temp;
 
         //add calculated profile into list and pass to view
-        String maxMortgage = String.valueOf(cp.getMaxMortgage());
+        String maxMortgage = String.format ("%,.2f", cp.getMaxMortgage());
         temp.add(maxMortgage);
         String maxTenure = String.valueOf(cp.getMaxMortgagePeriod());
         temp.add(maxTenure);
-        String maxPropertyPrice = String.valueOf(cp.getMaxPropertyPrice());
+        String maxPropertyPrice = String.format ("%,.2f", cp.getMaxPropertyPrice());
         temp.add(maxPropertyPrice);
-        String ahg = String.valueOf(cp.getAHG());
+        String ahg = String.format ("%,.2f", cp.getAHG());
         temp.add(ahg);
-        String shg = String.valueOf(cp.getSHG());
+        String shg = String.format ("%,.2f", cp.getSHG());
         temp.add(shg);
         return temp;
     }
@@ -66,13 +66,13 @@ public class AffordabilityReportController {
 
 
                 //add values in Strings to list and pass to view
-                String propertyPrice = String.valueOf(price);
+                String propertyPrice = String.format ("%,.2f", price);
                 temp.add(propertyPrice);
-                String downpaymentReq = String.valueOf(downpay);
+                String downpaymentReq = String.format ("%,.2f", downpay);
                 temp.add(downpaymentReq);
-                String loanReq = String.valueOf(loan);
+                String loanReq = String.format ("%,.2f", loan);
                 temp.add(loanReq);
-                String repaymentSum = String.valueOf(repay);
+                String repaymentSum = String.format ("%,.2f", repay);
                 temp.add(repaymentSum);
 
                 //get out of FOR LOOP since got the data we needed
