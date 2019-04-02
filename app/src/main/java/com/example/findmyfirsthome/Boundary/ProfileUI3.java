@@ -70,6 +70,7 @@ public class ProfileUI3 extends AppCompatActivity implements View.OnFocusChangeL
             hMemberSalary.setId(i);
             hMemberSalary.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED); //set to request for positive integers only
             hMemberSalary.setBackgroundResource(R.drawable.textbox);
+            hMemberSalary.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             hMemberSalary.setTextSize(14);
             hMemberSalary.setText("0");
             LinearLayout.LayoutParams Params1 = new LinearLayout.LayoutParams(220,100); //setting size of textbox
