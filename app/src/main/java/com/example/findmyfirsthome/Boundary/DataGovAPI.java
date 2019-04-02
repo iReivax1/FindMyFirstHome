@@ -47,7 +47,7 @@ public class DataGovAPI {
     Context context;
     ArrayList<LinkedHashMap<String, String>> taxList = new ArrayList<>();
     RequestQueue requestQueue;
-    
+
     public DataGovAPI(Context cont) {
         this.context = cont;
     }
