@@ -47,7 +47,7 @@
             android:id="@+id/max_tenure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Maximum Mortgage Tenure: $" />
+            android:text="Maximum Mortgage Tenure: " />
     </LinearLayout>
 
     <LinearLayout
