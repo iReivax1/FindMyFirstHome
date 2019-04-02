@@ -1,9 +1,12 @@
 package com.example.findmyfirsthome.Boundary;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +35,14 @@ public class AffordabilityReportUI extends AppCompatActivity {
     private AffordabilityReportController arc;
     private View view;
 
+    int PERMISSION_ALL = 1;
+    String[] PERMISSIONS = {
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+    };
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -39,6 +50,7 @@ public class AffordabilityReportUI extends AppCompatActivity {
         setContentView(R.layout.aff_rep_ui);
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
+
         String hdbName = extras.getString("estateName");
         String flatType = extras.getString("FlatType");
 
@@ -101,7 +113,7 @@ public class AffordabilityReportUI extends AppCompatActivity {
             return;
 
         tvPropertyprice = (TextView) findViewById(R.id.property_price);
-        tvPropertyname.append(HDBDependentInfo.get(0));
+        tvPropertyprice.append(HDBDependentInfo.get(0));
         tvDownpaymentreq = (TextView) findViewById(R.id.downpayment_req);
         tvDownpaymentreq.append(HDBDependentInfo.get(1));
         tvLoanreq = (TextView) findViewById(R.id.loan_req);
@@ -114,6 +126,11 @@ public class AffordabilityReportUI extends AppCompatActivity {
         Date now = new Date();
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
         Document document = new Document();
+
+        if(!hasPermissions(this, PERMISSIONS)){
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+        }
+
         try {
             // image naming and path  to include sd card  appending name you choose for file
             File f = new File(Environment.getExternalStorageDirectory()+File.separator+"Download"+File.separator+now+".jpg");
@@ -161,5 +178,16 @@ public class AffordabilityReportUI extends AppCompatActivity {
                 width, 0, 0,
                 height, -leftReduction, -bottomReduction);
         return Image.getInstance(template);
+    }
+
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

@@ -128,6 +128,5 @@ public class MapAPI {
         DatabaseController db = DatabaseController.getInstance(context);
         db.writeHDBData(HDBDevelopmentName,descriptionText,ImgURL, affordable, lat , lng);
     }
-
 }
 
