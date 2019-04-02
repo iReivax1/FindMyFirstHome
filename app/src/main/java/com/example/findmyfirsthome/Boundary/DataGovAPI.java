@@ -10,7 +10,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.findmyfirsthome.Controller.DatabaseController;
-import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,9 +54,8 @@ public class DataGovAPI {
         getDataFromDataGov("market", 1); //107
         getDataFromDataGov("school", 1); //438
         getDataFromDataGov("tax",1); //change to 10
-        parseKML();
-
-
+        parseClinicKML();
+        parseMarketKML();
     }
 
 
@@ -258,9 +256,7 @@ public class DataGovAPI {
     }
 
 
-    public void parseKML() {
-        ArrayList<ArrayList<LatLng>> coOrds = new ArrayList<ArrayList<LatLng>>();
-
+    public void parseClinicKML() {
         try {
             StringBuilder buf = new StringBuilder();
             InputStream kml = context.getAssets().open("chas-clinics-kml.kml");
@@ -289,6 +285,48 @@ public class DataGovAPI {
                 String[] temp = trackCoord.get(i).split(",");
                 Double[] coord = new Double[]{Double.parseDouble(temp[0]), Double.parseDouble(temp[1])};
                 hashed.put("AmenitiesType","CLINIC");
+                hashed.put("AmenitiesName",trackName.get(i));
+                hashed.put("AmenitiesLng",coord[0]);
+                hashed.put("AmenitiesLat",coord[1]);
+                DatabaseController dbc = DatabaseController.getInstance(context);
+                dbc.writeAmenitiesData(hashed);
+                dbc.close();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void parseMarketKML() {
+        try {
+            StringBuilder buf = new StringBuilder();
+            InputStream kml = context.getAssets().open("market-food-centre.kml");
+            //read file in buffer from file.
+            BufferedReader in = new BufferedReader(new InputStreamReader(kml));
+            String str = in.readLine();
+
+            while (str != null) {
+                buf.append(str);
+                str = in.readLine();
+            }
+            in.close();
+            String html = buf.toString();
+            Document doc = Jsoup.parse(html, "", Parser.xmlParser());
+            ArrayList<String> trackName = new ArrayList<>();
+            ArrayList<String> trackCoord = new ArrayList<String>();
+            for(Element element : doc.select("SimpleData[name='NAME_OF_CENTRE']")){
+                trackName.add(element.toString().replace("<SimpleData name=\"NAME_OF_CENTRE\">","").replace("</SimpleData>",""));
+            }
+            for (Element e : doc.select("coordinates")) {
+                trackCoord.add(e.toString().replace("<coordinates>", "").replace("</coordinates>", "")); //erase front and end
+            }
+
+            for (int i = 0; i < trackCoord.size(); i++) {
+                LinkedHashMap<String,Object> hashed = new LinkedHashMap<>();
+                String[] temp = trackCoord.get(i).split(",");
+                Double[] coord = new Double[]{Double.parseDouble(temp[0]), Double.parseDouble(temp[1])};
+                hashed.put("AmenitiesType","MARKET");
                 hashed.put("AmenitiesName",trackName.get(i));
                 hashed.put("AmenitiesLng",coord[0]);
                 hashed.put("AmenitiesLat",coord[1]);
