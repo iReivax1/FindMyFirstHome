@@ -52,8 +52,8 @@ public class DataGovAPI {
         // This setups up a new request queue which we will need to make HTTP requests
         getDataFromDataGov("childCare", 10); //1537
         getDataFromDataGov("hawker", 10); //107
-        getDataFromDataGov("school", 10); //438
-        getDataFromDataGov("tax",10); //change to 10
+        getDataFromDataGov("school", 20); //438
+        getDataFromDataGov("tax",1); //change to 10
         parseClinicKML();
         parseMarketKML();
     }
