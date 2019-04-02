@@ -96,6 +96,38 @@ public class MapAPI {
         db.writeAmenitiesData(oneAmenity);
     }
 
+    public void writeHDBToDB(String HDBDevelopmentName, String descriptionText,String ImgURL, Boolean affordable, Double lat, Double lng){
+        DatabaseController db = DatabaseController.getInstance(context);
+        db.writeHDBData(HDBDevelopmentName,descriptionText,ImgURL, affordable, lat , lng);
+    }
+
+    public boolean getHDBCoord(final String HDBDevelopmentName, final String descriptionText,final String ImgURL, final Boolean affordable) {
+        JsonObjectRequest jsonObjReq = null;
+        requestQueue = Volley.newRequestQueue(context);
+        this.url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + HDBDevelopmentName + "SG&key=AIzaSyDMO5XX-YHL66_9hzc9cF73yfwMrK6lfNE123";
+        System.out.print(url);
+        jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, (JSONObject) null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                coords = parseMapJson(response);
+                if(HDBDevelopmentName.contains("Fernvale")){
+                    writeHDBToDB(HDBDevelopmentName, descriptionText, ImgURL, affordable, 1.398122, 103.876214);
+                }else{
+                    writeHDBToDB(HDBDevelopmentName, descriptionText, ImgURL, affordable, coords.latitude, coords.longitude);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("test", "error");
+            }
+        });
+        requestQueue.add(jsonObjReq);
+        return true;
+    }
+
+
 
 
 }

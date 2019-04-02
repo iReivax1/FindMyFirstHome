@@ -210,7 +210,7 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
      such as with AsyncTask or IntentService. */
 
 
-    public boolean writeHDBData(String name, String descriptionText, String ImgUrl, Boolean affordable) {
+    public boolean writeHDBData(String name, String descriptionText, String ImgUrl, Boolean affordable, Double lat, Double lng) {
         // Gets the data repository in write mode , getWritableDatabase is sqlite function
         SQLiteDatabase db = getWritableDatabase();
         // Create a new map of values, where column names are the keys
@@ -218,10 +218,8 @@ public class DatabaseController extends SQLiteOpenHelper implements BaseColumns 
 
         values.put(HDBDevelopmentName, name);
         values.put(HDBDevelopmentDescription, descriptionText);
-        //String HDBlat = Double.toString(getHDBDevelopmentCoordinates(HDBDevelopmentName).latitude);
-        //String HDBlon = Double.toString(getHDBDevelopmentCoordinates(HDBDevelopmentName).longitude);
-        values.put(HDBDevelopmentLatitude, 0.0);
-        values.put(HDBDevelopmentLongitude, 0.0);
+        values.put(HDBDevelopmentLatitude, lat);
+        values.put(HDBDevelopmentLongitude, lng);
         values.put(HDBDevelopmentImgURL, ImgUrl);
         values.put(HDBDevelopmentAffordability, affordable);
 
