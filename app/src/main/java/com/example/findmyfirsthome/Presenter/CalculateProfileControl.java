@@ -25,9 +25,8 @@ public class CalculateProfileControl{
         udSaved = dbControl.readUserData();              //retrieved from database NOT NEW
         hdbDevelopments = dbControl.readHDBData();        //returns ArrayList<HDBDevelopment>
         cp = new CalculatedProfile();     //new
-
-
     }
+
     public void setAffordability(){
         dbControl.deleteHDBData(); //clear content in database
 
