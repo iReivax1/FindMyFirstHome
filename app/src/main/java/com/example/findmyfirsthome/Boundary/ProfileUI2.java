@@ -182,7 +182,7 @@ public class ProfileUI2 extends AppCompatActivity implements View.OnFocusChangeL
                 if (value.isEmpty() == true) {
                     x.setText("0");
                 }
-                else if(Integer.parseInt(x.getText().toString())<0){
+                else if(Double.parseDouble(x.getText().toString())<0){
                     Toast.makeText(getApplicationContext(), "Commitments cannot be negative!", Toast.LENGTH_SHORT).show();
                     x.setText("0");
                 }
