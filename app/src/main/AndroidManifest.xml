@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
-        android:name=".Controller.HDBSplashscreenController"
+        android:name=".Presenter.HDBSplashscreenController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -23,12 +23,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".Boundary.ProfileUI3"
-            android:parentActivityName=".Boundary.ProfileUI2" />
+            android:name=".View.ProfileUI3"
+            android:parentActivityName=".View.ProfileUI2" />
         <activity
-            android:name=".Boundary.ProfileUI2"
-            android:parentActivityName=".Boundary.ProfileUI" />
-        <activity android:name=".Boundary.ProfileUI" />
+            android:name=".View.ProfileUI2"
+            android:parentActivityName=".View.ProfileUI" />
+        <activity android:name=".View.ProfileUI" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -44,7 +44,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <activity
-            android:name=".Boundary.SplashScreenUI"
+            android:name=".View.SplashScreenUI"
             android:label="@string/app_name"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -53,14 +53,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Boundary.DevelopmentDetailUI"
-            android:parentActivityName=".Boundary.HDBDevelopmentUI"/>
+            android:name=".View.DevelopmentDetailUI"
+            android:parentActivityName=".View.HDBDevelopmentUI"/>
         <activity
-            android:name=".Boundary.AffordabilityReportUI"
-            android:parentActivityName=".Boundary.DevelopmentDetailUI"/>
-        <activity android:name=".Boundary.HDBDevelopmentUI" />
+            android:name=".View.AffordabilityReportUI"
+            android:parentActivityName=".View.DevelopmentDetailUI"/>
+        <activity android:name=".View.HDBDevelopmentUI" />
         <activity
-            android:name=".Controller.MapsController"
+            android:name=".Presenter.MapsController"
             android:usesCleartextTraffic="true" />
     </application>
 
