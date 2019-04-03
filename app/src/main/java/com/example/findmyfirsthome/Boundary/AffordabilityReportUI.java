@@ -19,6 +19,7 @@ import com.example.findmyfirsthome.R;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 
@@ -153,7 +154,7 @@ public class AffordabilityReportUI extends AppCompatActivity {
             Image image = Image.getInstance(f.toString());
             /*float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
                     - document.rightMargin() +100) / image.getWidth()) * 100; // 0 means you have no indentation. If you have any, change it.*/
-            image.scalePercent(55);
+            image.scaleToFit(PageSize.A4.getWidth(), PageSize.A4.getHeight());
             image.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
 
             document.add(image);
