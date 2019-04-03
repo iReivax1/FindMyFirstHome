@@ -139,7 +139,7 @@ public class DataGovAPI {
 
     /////////////////////////////////ChildCare/////////////////////////////////
 
-    public void JSONParserChildCare(JSONObject obj) {
+    private void JSONParserChildCare(JSONObject obj) {
         MapAPI maps = new MapAPI(context);
         if (obj != null) {
             try {
@@ -170,7 +170,7 @@ public class DataGovAPI {
 
     /////////////////////////////////Market///////////////////////////////// Method same as childcare just different name
 
-    public void JSONParserHawker(JSONObject obj) {
+    private void JSONParserHawker(JSONObject obj) {
         MapAPI maps = new MapAPI(context);
         if (obj != null) {
             try {
@@ -192,7 +192,7 @@ public class DataGovAPI {
 
     /////////////////////////////////School/////////////////////////////////Method same as childcare just different name
 
-    public void JSONParserSchool(JSONObject obj) {
+    private void JSONParserSchool(JSONObject obj) {
         MapAPI maps = new MapAPI(context);
         if (obj != null) {
             try {
@@ -214,7 +214,7 @@ public class DataGovAPI {
 
     /////////////////////////////////Parse Tax//////////////////////////////////
 
-    public ArrayList<LinkedHashMap<String, String>> JSONParserTax(JSONObject obj) {
+    private ArrayList<LinkedHashMap<String, String>> JSONParserTax(JSONObject obj) {
         ArrayList<LinkedHashMap<String, String>> list = new ArrayList<>();
         if (obj != null) {
             LinkedHashMap<String, String> info;
@@ -249,7 +249,7 @@ public class DataGovAPI {
     }
 
 
-    public void writeTaxToDB(ArrayList<LinkedHashMap<String, String>> infoList) {
+    private void writeTaxToDB(ArrayList<LinkedHashMap<String, String>> infoList) {
         DataAccessInterfaceClass db = DataAccessFactory.getDatabaseCtrlInstance(context);
         for (LinkedHashMap<String, String> hm : infoList) {
             db.writeTax(hm);
@@ -257,7 +257,7 @@ public class DataGovAPI {
     }
 
 
-    public void parseClinicKML() {
+    private void parseClinicKML() {
         try {
             StringBuilder buf = new StringBuilder();
             InputStream kml = context.getAssets().open("chas-clinics-kml.kml");
@@ -299,7 +299,7 @@ public class DataGovAPI {
         }
     }
 
-    public void parseMarketKML() {
+    private void parseMarketKML() {
         try {
             StringBuilder buf = new StringBuilder();
             InputStream kml = context.getAssets().open("market-food-centre.kml");
@@ -342,7 +342,7 @@ public class DataGovAPI {
     }
 
 
-    public void print(ArrayList<LinkedHashMap<String, Object>> hashList) {
+    private void print(ArrayList<LinkedHashMap<String, Object>> hashList) {
         System.out.println("-----------------Inside the hashmap-----------------");
         for (LinkedHashMap<String, Object> i : hashList) {
             for (String key : i.keySet()) {
