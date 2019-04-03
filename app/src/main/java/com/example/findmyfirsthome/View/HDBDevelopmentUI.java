@@ -24,7 +24,7 @@ public class HDBDevelopmentUI extends AppCompatActivity implements View.OnClickL
     private HDBViewPagerAdapter adapter;
     private Button recalculate;
     private TextView footerText;
-    HDBDevelopmentController hdbc;
+    private HDBDevelopmentController hdbc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
