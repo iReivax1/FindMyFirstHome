@@ -14,8 +14,8 @@ import com.example.findmyfirsthome.Presenter.ProfileControl;
 import com.example.findmyfirsthome.R;
 
 public class ProfileUI2 extends AppCompatActivity implements View.OnFocusChangeListener {
-    double salary;
-    double salary2;
+    private double salary;
+    private double salary2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

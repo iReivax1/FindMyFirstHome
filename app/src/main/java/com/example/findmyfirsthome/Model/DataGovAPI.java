@@ -30,19 +30,19 @@ import java.util.LinkedHashMap;
 public class DataGovAPI {
 
     // This is our requests queue to process our HTTP requests.
-    String typeData;
-    String childCareURL = "https://data.gov.sg/api/action/datastore_search?resource_id=4fc3fd79-64f2-4027-8d5b-ce0d7c279646&limit=";
-    String hawkerURL = "https://data.gov.sg/api/action/datastore_search?resource_id=8f6bba57-19fc-4f36-8dcf-c0bda382364d&limit=";
-    String schoolURL = "https://data.gov.sg/api/action/datastore_search?resource_id=ede26d32-01af-4228-b1ed-f05c45a1d8ee&limit=";
-    String taxURL = "https://data.gov.sg/api/action/datastore_search?resource_id=bb6f5bf8-7d0b-4526-b020-b812ea7d7d89&limit=";
-    String url1;
-    String url2;
-    String url3;
-    String url4;
+    private String typeData;
+    private String childCareURL = "https://data.gov.sg/api/action/datastore_search?resource_id=4fc3fd79-64f2-4027-8d5b-ce0d7c279646&limit=";
+    private String hawkerURL = "https://data.gov.sg/api/action/datastore_search?resource_id=8f6bba57-19fc-4f36-8dcf-c0bda382364d&limit=";
+    private String schoolURL = "https://data.gov.sg/api/action/datastore_search?resource_id=ede26d32-01af-4228-b1ed-f05c45a1d8ee&limit=";
+    private String taxURL = "https://data.gov.sg/api/action/datastore_search?resource_id=bb6f5bf8-7d0b-4526-b020-b812ea7d7d89&limit=";
+    private String url1;
+    private String url2;
+    private String url3;
+    private String url4;
     // Each of these url will hold the full URL to get json object from respective website.
-    Context context;
-    ArrayList<LinkedHashMap<String, String>> taxList = new ArrayList<>();
-    RequestQueue requestQueue;
+    private Context context;
+    private ArrayList<LinkedHashMap<String, String>> taxList = new ArrayList<>();
+    private RequestQueue requestQueue;
 
     public DataGovAPI(Context cont) {
         this.context = cont;
