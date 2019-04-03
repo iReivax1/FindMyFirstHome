@@ -34,7 +34,6 @@ public class CalculateProfileControlTest {
         flatType2.put("flatType", "4-room");
         flatType2.put("price", 352300);
         flatType2.put("affordability", false);
-        amenities.add(amenitiy);
         flatTypeList.add(flatType);
         flatTypeList.add(flatType2);
         hdbDevelopments.add(hdb);

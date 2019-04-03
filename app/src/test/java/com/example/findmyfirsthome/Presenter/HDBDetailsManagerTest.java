@@ -47,7 +47,7 @@ public class HDBDetailsManagerTest {
     }
 
     @Test
-    public void adaptHDBD(ArrayList<String> HDBDevelopmentNames, ArrayList<HashMap<String, Object>> flatTypeList, ArrayList<String> descriptionText, ArrayList<String> ImgURL) {
+    public void adaptHDBD() {
         int index = 0;
         for (String name : HDBDevelopmentNames) {
             writeHDBDataPlusGetCoord(name, descriptionText.get(index), ImgURL.get(index), false);
@@ -63,7 +63,7 @@ public class HDBDetailsManagerTest {
     }
 
     public void execute(){
-        adaptHDBD(HDBDevelopmentNames, flatTypeList, descriptionText, ImgURL);
+        adaptHDBD();
     }
 
     public void writeHDBDataPlusGetCoord (String HDBDevelopmentNames, String descriptionText, String ImgURL, Boolean affordable){
