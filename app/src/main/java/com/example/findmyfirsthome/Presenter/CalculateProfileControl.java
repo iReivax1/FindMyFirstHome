@@ -53,6 +53,7 @@ public class CalculateProfileControl{
             //true if at least one affordable flat type then set hdb development to true too
             if(numOfTrue>0) dbControl.writeHDBData(hdbDevelopments.get(i).getDevelopmentName(),hdbDevelopments.get(i).getDevelopmentDescription(),hdbDevelopments.get(i).getImgUrl(),true, hdbDevelopments.get(i).getCoordinates().latitude, hdbDevelopments.get(i).getCoordinates().longitude);
             else dbControl.writeHDBData(hdbDevelopments.get(i).getDevelopmentName(),hdbDevelopments.get(i).getDevelopmentDescription(),hdbDevelopments.get(i).getImgUrl(),false, hdbDevelopments.get(i).getCoordinates().latitude, hdbDevelopments.get(i).getCoordinates().longitude);
+
             for(int m=0;m<readHDBFlatType.size();m++) {
                 dbControl.writeHDBFlatTypeData(hdbDevelopments.get(i).getDevelopmentName(), readHDBFlatType.get(m));
             }
