@@ -141,7 +141,7 @@ public class AffordabilityReportUI extends AppCompatActivity {
             // create bitmap screen capture
             View v1 = getWindow().getDecorView().getRootView();
             v1.setDrawingCacheEnabled(true);
-            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache(),0,((int)(v1.getDrawingCache().getHeight()*0.11)),v1.getDrawingCache().getWidth(),((int)(v1.getDrawingCache().getHeight()*0.3)));
+            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache(),0,((int)(v1.getDrawingCache().getHeight()*0.11)),v1.getDrawingCache().getWidth(),((int)(v1.getDrawingCache().getHeight()*0.65)));
             v1.setDrawingCacheEnabled(false);
             int quality = 100;
             bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
