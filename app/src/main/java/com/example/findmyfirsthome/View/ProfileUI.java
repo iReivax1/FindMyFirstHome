@@ -7,6 +7,7 @@ import com.example.findmyfirsthome.Presenter.ProfileControl;
 import com.example.findmyfirsthome.R;
 import android.content.Intent;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,7 +16,9 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
 
 public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeListener {
-
+    double totalSalary;
+    double salary1;
+    double salary2;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,6 +170,8 @@ public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeLi
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) { //set field to 0 if empty
+        double salarySingle = 0;
+        double salaryPartner = 0;
         if(v instanceof EditText) {
             EditText x = (EditText) v; //downcasting
             String value = x.getText().toString();
@@ -206,16 +211,34 @@ public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeLi
                 }
                 else if(id == findViewById(R.id.grossMSalary).getId()) { //if user salary is edited
                     Log.d(x.getText().toString(),"11122");
+                    salarySingle = Double.parseDouble(x.getText().toString());
                     if (Double.parseDouble(x.getText().toString()) < 0) { //check if salary is negative
                         Toast.makeText(getApplicationContext(), "Salary cannot be negative!", Toast.LENGTH_SHORT).show();
                         x.setText("0");
                     }
+                    if(salaryPartner + salarySingle > 12000){
+                        Toast toast = Toast.makeText(getApplicationContext(), "You are not eligible to buy HDB", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                        x.setText("0");
+                    }
                 }
                 else if(id == findViewById(R.id.grossMSalary2).getId()) { //if partner salary is edited
+                    salaryPartner = Double.parseDouble(x.getText().toString());
                     if (Double.parseDouble(x.getText().toString()) < 0) { //check if partner salary is negative
                         Toast.makeText(getApplicationContext(), "Salary cannot be negative!", Toast.LENGTH_SHORT).show();
                         x.setText("0");
                     }
+                    if(salaryPartner + salarySingle > 12000){
+                        Toast toast = Toast.makeText(getApplicationContext(), "You are not eligible to buy HDB", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                        x.setText("0");
+
+                    }
+                }
+                if (id  == findViewById(R.id.grossMonthlySalary2).getId()){
+
                 }
 
             }
