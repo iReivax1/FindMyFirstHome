@@ -211,13 +211,13 @@ public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeLi
                 }
                 else if(id == findViewById(R.id.grossMSalary).getId()) { //if user salary is edited
                     Log.d(x.getText().toString(),"11122");
-                    if (Integer.parseInt(x.getText().toString()) < 0) { //check if salary is negative
+                    if (Double.parseDouble(x.getText().toString()) < 0) { //check if salary is negative
                         Toast.makeText(getApplicationContext(), "Salary cannot be negative!", Toast.LENGTH_SHORT).show();
                         x.setText("0");
                     }
                 }
                 else if(id == findViewById(R.id.grossMSalary2).getId()) { //if partner salary is edited
-                    if (Integer.parseInt(x.getText().toString()) < 0) { //check if partner salary is negative
+                    if (Double.parseDouble(x.getText().toString()) < 0) { //check if partner salary is negative
                         Toast.makeText(getApplicationContext(), "Salary cannot be negative!", Toast.LENGTH_SHORT).show();
                         x.setText("0");
                     }

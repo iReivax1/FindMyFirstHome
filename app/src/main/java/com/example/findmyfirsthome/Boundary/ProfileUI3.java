@@ -159,7 +159,7 @@ public class ProfileUI3 extends AppCompatActivity implements View.OnFocusChangeL
                 if (value.isEmpty() == true) {
                     x.setText("0");
                 }
-                else if (Integer.parseInt(x.getText().toString()) < 0) { //check if salary is negative
+                else if (Double.parseDouble(x.getText().toString()) < 0) { //check if salary is negative
                     Toast.makeText(getApplicationContext(), "Salary cannot be negative!", Toast.LENGTH_SHORT).show();
                     x.setText("0");
                 }
