@@ -3,7 +3,7 @@ package com.example.findmyfirsthome.Controller;
 import android.content.Context;
 
 public class DataAccessFactory {
-    private static DataAccessInterfaceClass databaseController = null;
+    private static volatile DataAccessInterfaceClass databaseController = null;
 
     public static DataAccessInterfaceClass getDatabaseCtrlInstance(Context context)
     {
