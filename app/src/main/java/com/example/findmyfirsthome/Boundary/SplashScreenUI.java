@@ -16,6 +16,7 @@ public class SplashScreenUI extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
+        
         //Initialize the back-end controller classes, i.e database, hdbmanager, and do all the get data
         new Handler().postDelayed(new Runnable() {
             //run in another thread
