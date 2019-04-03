@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class ProfileControl{
     private UserData ud = new UserData();
+    private DataAccessInterfaceClass db;
 
     public void setMaritalStatus(int marriedID){
         if(marriedID== R.id.radioBtnMarried){
@@ -213,12 +214,12 @@ public class ProfileControl{
     }
 
     public void writeProfile(Activity activity){
-        DataAccessInterfaceClass db = DataAccessFactory.getDatabaseCtrlInstance(activity.getApplicationContext());
+        db = DataAccessFactory.getDatabaseCtrlInstance(activity.getApplicationContext());
         db.writeUserData(ud);
     }
 
     public void readProfile(Activity activity){
-        DataAccessInterfaceClass db = DataAccessFactory.getDatabaseCtrlInstance(activity.getApplicationContext());
+        db = DataAccessFactory.getDatabaseCtrlInstance(activity.getApplicationContext());
         ud = db.readUserData();
     }
     public UserData getUD(){

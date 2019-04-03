@@ -16,9 +16,10 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
 
 public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeListener {
-    double totalSalary;
-    double salary1;
-    double salary2;
+    private double totalSalary;
+    private double salary1;
+    private double salary2;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
