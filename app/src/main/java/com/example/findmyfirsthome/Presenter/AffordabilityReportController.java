@@ -21,10 +21,8 @@ public class AffordabilityReportController {
 
         this.cp = dbc.readCalculatedProfile();
         this.hdbd = dbc.readHDBData(hdbName);
-
         this.hdbName = hdbName;
         this.flatType = flatType;
-
     }
 
     public ArrayList<String> getFixedInfo(){

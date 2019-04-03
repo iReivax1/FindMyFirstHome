@@ -59,9 +59,7 @@
             android:name=".View.AffordabilityReportUI"
             android:parentActivityName=".View.DevelopmentDetailUI"/>
         <activity android:name=".View.HDBDevelopmentUI" />
-        <activity
-            android:name=".Presenter.MapsController"
-            android:usesCleartextTraffic="true" />
+
     </application>
 
 </manifest>
