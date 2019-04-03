@@ -171,17 +171,19 @@ public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeLi
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) { //set field to 0 if empty
-        EditText grossMSalary = findViewById(R.id.grossMSalary);
-        EditText grossMSalary2 = findViewById(R.id.grossMSalary2);
-
-        double salarySingle = Double.parseDouble(grossMSalary.getText().toString());
-        double salaryPartner = Double.parseDouble(grossMSalary2.getText().toString());
         if(v instanceof EditText) {
             EditText x = (EditText) v; //downcasting
             String value = x.getText().toString();
             if (value.isEmpty() == true) {
                 x.setText("0");
             }
+
+            EditText grossMSalary = findViewById(R.id.grossMSalary);
+            EditText grossMSalary2 = findViewById(R.id.grossMSalary2);
+
+            double salarySingle = Double.parseDouble(grossMSalary.getText().toString());
+            double salaryPartner = Double.parseDouble(grossMSalary2.getText().toString());
+
             if (!hasFocus) {
                 int id = x.getId();
                 if(id == findViewById(R.id.ageInput).getId()){ //if ageInput is edited
