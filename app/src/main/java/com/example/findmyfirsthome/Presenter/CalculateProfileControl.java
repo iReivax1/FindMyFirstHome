@@ -13,12 +13,12 @@ import java.util.HashMap;
 
 
 public class CalculateProfileControl{
-    final double annualIR = 0.026;
-    final double monthIR = annualIR / 12;
-    UserData udSaved;
-    CalculatedProfile cp;
-    DataAccessInterfaceClass dbControl;
-    ArrayList<HDBDevelopment> hdbDevelopments;
+    private final double annualIR = 0.026;
+    private final double monthIR = annualIR / 12;
+    private UserData udSaved;
+    private CalculatedProfile cp;
+    private DataAccessInterfaceClass dbControl;
+    private ArrayList<HDBDevelopment> hdbDevelopments;
 
     public CalculateProfileControl(Activity activity) {
         dbControl = DataAccessFactory.getDatabaseCtrlInstance(activity.getApplicationContext());

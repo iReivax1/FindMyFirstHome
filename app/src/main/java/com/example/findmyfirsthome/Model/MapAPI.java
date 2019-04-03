@@ -22,11 +22,12 @@ import java.util.LinkedHashMap;
 public class MapAPI {
 
 
-    Context context;
-    String url;
-    RequestQueue requestQueue;
-    LatLng coords = new LatLng(0, 0);
-    LinkedHashMap<String, Object> amenities;
+    private Context context;
+    private String url;
+    private RequestQueue requestQueue;
+    private LatLng coords = new LatLng(0, 0);
+    private LinkedHashMap<String, Object> amenities;
+    private DataAccessInterfaceClass db;
 
 
     public MapAPI(Context context) {
@@ -110,12 +111,12 @@ public class MapAPI {
     //write to the database
 
     public void writeAmenitiesToDB(LinkedHashMap<String, Object> oneAmenity) {
-        DataAccessInterfaceClass db = DataAccessFactory.getDatabaseCtrlInstance(context);
+        db = DataAccessFactory.getDatabaseCtrlInstance(context);
         db.writeAmenitiesData(oneAmenity);
     }
 
     public void writeHDBToDB(String HDBDevelopmentName, String descriptionText,String ImgURL, Boolean affordable, Double lat, Double lng){
-        DataAccessInterfaceClass db = DataAccessFactory.getDatabaseCtrlInstance(context);
+        db = DataAccessFactory.getDatabaseCtrlInstance(context);
         db.writeHDBData(HDBDevelopmentName,descriptionText,ImgURL, affordable, lat , lng);
     }
 }

@@ -112,7 +112,7 @@ public class SqliteDatabaseController extends SQLiteOpenHelper implements BaseCo
     //Draw the table
     private static final String SQL_HDBDevelopment = "CREATE TABLE " + TABLE_NAME + " (" + HDBDevelopmentName + " TEXT PRIMARY KEY, " + HDBDevelopmentDescription + " TEXT, " + HDBDevelopmentLongitude + " REAL, " + HDBDevelopmentLatitude + " REAL, " + HDBDevelopmentImgURL + " TEXT, " + HDBDevelopmentAffordability + " BOOLEAN " +");";
 
-    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + HDBFlatAffordability + " BOOLEAN, " + " FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName +  "));";
+    public static final String SQL_FlatType = "CREATE TABLE " + TABLE_NAME2 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + HDBDevelopmentName + " TEXT, " + HDBFlatType + " TEXT, " + HDBFlatPrice + " REAL, " + HDBFlatAffordability + " BOOLEAN, " + " FOREIGN KEY (" + HDBDevelopmentName + ") REFERENCES " + TABLE_NAME + "(" + HDBDevelopmentName + "));";
 
     public static final String SQL_Amenities = "CREATE TABLE " + TABLE_NAME3 + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+  AmenitiesName + " TEXT, " +  AmenitiesType + " TEXT, " + AmenitiesLongitude + " REAL, " + AmenitiesLatitude + " REAL " + ");";
 
@@ -143,8 +143,6 @@ public class SqliteDatabaseController extends SQLiteOpenHelper implements BaseCo
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         deleteTables();
     }
-
-    private static volatile SqliteDatabaseController instance = null;
 
     //Create all the tables
     @Override
@@ -471,7 +469,7 @@ public class SqliteDatabaseController extends SQLiteOpenHelper implements BaseCo
 
     }
 
-    public HDBDevelopment readHDBData(String developmentName) {
+        public HDBDevelopment readHDBData(String developmentName) {
         SQLiteDatabase db = getReadableDatabase();
 
         // How you want the results sorted in the resulting Cursor
