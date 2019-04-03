@@ -5,6 +5,7 @@ import android.content.Context;
 import com.example.findmyfirsthome.Interface.DataAccessInterfaceClass;
 
 public class DataAccessFactory {
+
     private static volatile DataAccessInterfaceClass databaseController = null;
 
     public static DataAccessInterfaceClass getDatabaseCtrlInstance(Context context)

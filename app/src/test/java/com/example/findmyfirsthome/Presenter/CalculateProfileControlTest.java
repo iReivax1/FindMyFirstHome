@@ -65,5 +65,9 @@ public class CalculateProfileControlTest {
             }
         }
     }
+    public void execute()
+    {
+        setAffordability();
+    }
 
 }
