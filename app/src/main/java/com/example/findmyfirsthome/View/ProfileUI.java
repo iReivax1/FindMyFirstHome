@@ -171,8 +171,11 @@ public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeLi
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) { //set field to 0 if empty
-        double salarySingle = 0;
-        double salaryPartner = 0;
+        EditText grossMSalary = findViewById(R.id.grossMSalary);
+        EditText grossMSalary2 = findViewById(R.id.grossMSalary2);
+
+        double salarySingle = Double.parseDouble(grossMSalary.getText().toString());
+        double salaryPartner = Double.parseDouble(grossMSalary2.getText().toString());
         if(v instanceof EditText) {
             EditText x = (EditText) v; //downcasting
             String value = x.getText().toString();
@@ -218,7 +221,7 @@ public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeLi
                         x.setText("0");
                     }
                     if(salaryPartner + salarySingle > 12000){
-                        Toast toast = Toast.makeText(getApplicationContext(), "You are not eligible to buy HDB", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(getApplicationContext(), "Your total salary is too high to be eligible for purchasing HDB", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
                         x.setText("0");
@@ -231,7 +234,7 @@ public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeLi
                         x.setText("0");
                     }
                     if(salaryPartner + salarySingle > 12000){
-                        Toast toast = Toast.makeText(getApplicationContext(), "You are not eligible to buy HDB", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(getApplicationContext(), "Your total salary is too high to be eligible for purchasing HDB", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
                         x.setText("0");
