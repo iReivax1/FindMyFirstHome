@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:id="@+id/profileUI3"
-    tools:context=".Boundary.ProfileUI3"
+    tools:context=".View.ProfileUI3"
     >
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
