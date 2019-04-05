@@ -51,9 +51,9 @@ public class DataGovAPI {
 
     public void execute() {
         // This setups up a new request queue which we will need to make HTTP requests
-        getDataFromDataGov("childCare", 30); //1537
+        getDataFromDataGov("childCare", 15); //1537
         getDataFromDataGov("hawker", 30); //107
-        getDataFromDataGov("school", 30); //438
+        getDataFromDataGov("school", 50); //438
         getDataFromDataGov("tax",8); //change to 10
         parseClinicKML();
         parseMarketKML();
