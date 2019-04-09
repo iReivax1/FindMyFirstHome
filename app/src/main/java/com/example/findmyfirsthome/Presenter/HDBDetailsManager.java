@@ -216,7 +216,6 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
                 String[] textArray = text.split("<br>");
                 for (int i = 0; i < textArray.length; i++) {
                     textList.add(textArray[i]);
-                    System.out.println(textArray);
                 }
             }
             if (text.contains("<sup>")) {
@@ -400,7 +399,6 @@ public class HDBDetailsManager extends AsyncTask<String, Void, Void> {
             Document document = Jsoup.connect(url).get();
                 Element image = document.select("img").get(index);
                 imgUrl = image.absUrl("src");
-                System.out.println(imgUrl);
                 //FIRST IS boon  lay glade
                 //SECOND IS Jurong west jewel
                 //third fernvale

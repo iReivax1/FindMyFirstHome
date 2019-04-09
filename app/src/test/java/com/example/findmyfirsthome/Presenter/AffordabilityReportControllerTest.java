@@ -41,7 +41,6 @@ public class AffordabilityReportControllerTest {
         ArrayList<String> temp = new ArrayList<>();
         if (cp == null)
             print(temp);
-
         //add calculated profile into list and pass to view
         String maxMortgage = String.format ("%,.2f", cp.getMaxMortgage());
         temp.add(maxMortgage);

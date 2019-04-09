@@ -209,7 +209,7 @@ public class ProfileControl{
     public void printSalaries(){
         ArrayList<Double> list = ud.getMembersSalaryList();
         for (int i = 0; i < list.size(); i++) {
-            Log.d("123",Double.toString(list.get(i)));
+            Log.d("test",Double.toString(list.get(i)));
         }
     }
 

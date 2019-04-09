@@ -148,7 +148,6 @@ public class DataGovAPI {
                 // Getting JSON Array node
                 JSONObject result = jsonObj.getJSONObject("result");
                 JSONArray records = result.getJSONArray("records");
-                Log.d("Error", Integer.toString(records.length()));
                 // looping through all records
                 //each jobj represents one amenity
                 for (int i = 0; i < records.length(); i++) {
@@ -222,7 +221,6 @@ public class DataGovAPI {
                 JSONObject jsonObj = obj;
                 JSONObject result = jsonObj.getJSONObject("result");
                 JSONArray records = result.getJSONArray("records");
-                Log.d("Error", Integer.toString(records.length()));
                 // looping through All Contacts
                 for (int i = 0; i < records.length(); i++) {
                     JSONObject c = records.getJSONObject(i);

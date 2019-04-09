@@ -63,7 +63,6 @@ public class CalculateProfileControl{
     public void setMaxMortgage(){
         double loanPeriod = cp.getMaxMortgagePeriod();
         double maxMortgage = (cp.getMonthlyInstallment()) * (Math.pow((1+monthIR),(loanPeriod*12)) -1)/(monthIR * (Math.pow((1+monthIR),(loanPeriod*12))));
-        Log.d("WHY", Double.toString(maxMortgage));
         cp.setMaxMortgage(maxMortgage);
     }
 

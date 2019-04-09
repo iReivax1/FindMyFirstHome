@@ -758,7 +758,6 @@ public class SqliteDatabaseController extends SQLiteOpenHelper implements BaseCo
         SQLiteDatabase db = getWritableDatabase();
         int a = db.delete(TABLE_NAME,null,null);
         int b = db.delete(TABLE_NAME2,null,null);
-        System.out.println(a + ", " + b);
         db.close();
     }
 }

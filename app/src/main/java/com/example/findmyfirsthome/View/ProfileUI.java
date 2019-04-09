@@ -6,7 +6,6 @@ import android.os.Bundle;
 import com.example.findmyfirsthome.Presenter.ProfileControl;
 import com.example.findmyfirsthome.R;
 import android.content.Intent;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -40,7 +39,6 @@ public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeLi
         ProfileControl pc = new ProfileControl(); //To get inputs from database if available.
         pc.readProfile(this);
         if(pc.getUD()!=null) {
-            Log.d(Boolean.toString(pc.getMaritalStatus()),"222");
             if (pc.getMaritalStatus()) {
                 radioGroupMS.check(R.id.radioBtnMarried);
             }
@@ -213,7 +211,6 @@ public class ProfileUI extends AppCompatActivity implements View.OnFocusChangeLi
                     }
                 }
                 else if(id == findViewById(R.id.grossMSalary).getId()) { //if user salary is edited
-                    Log.d(x.getText().toString(),"11122");
                     salarySingle = Double.parseDouble(x.getText().toString());
                     if (Double.parseDouble(x.getText().toString()) < 0) { //check if salary is negative
                         Toast.makeText(getApplicationContext(), "Salary cannot be negative!", Toast.LENGTH_SHORT).show();

@@ -45,7 +45,6 @@ public class MapAPI {
         JsonObjectRequest jsonObjReq = null;
         requestQueue = Volley.newRequestQueue(context);
         this.url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + HDBDevelopmentName + "SG&key=AIzaSyC0ENVSN8x7-3OvvSQjLckO_j7Jxn18JYM";
-        System.out.print(url);
         jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, (JSONObject) null, new Response.Listener<JSONObject>() {
 
             @Override
@@ -71,7 +70,6 @@ public class MapAPI {
         JsonObjectRequest jsonObjReq = null;
         requestQueue = Volley.newRequestQueue(context);
         this.url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + name + "SG&key=AIzaSyC0ENVSN8x7-3OvvSQjLckO_j7Jxn18JYM";
-        System.out.print(url);
         jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, (JSONObject) null, new Response.Listener<JSONObject>() {
 
             @Override

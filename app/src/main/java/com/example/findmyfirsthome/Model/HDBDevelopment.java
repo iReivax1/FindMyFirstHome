@@ -55,7 +55,6 @@ public class  HDBDevelopment {
 
         for(HDBFlatType flat: hdbFlatTypeList ){
             this.hdbFlatTypeDetailsList.add(flat.getFlatTypeDetails());
-            //Log.i("Get Price from flat type Debug", (String)(flat.getFlatTypeDetails().get("price")));
         }
 
         return this.hdbFlatTypeDetailsList;
